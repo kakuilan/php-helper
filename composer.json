@@ -1,0 +1,30 @@
+{
+  "name": "kakuilan/php-helper",
+  "description": "lkk's php helper",
+  "keywords": [
+    "php helper",
+    "php library"
+  ],
+  "homepage": "https://github.com/kakuilan/php-helper",
+  "license": "Apache License",
+  "authors": [
+    {
+      "name": "kakuilan",
+      "email": "kakuilan@163.com",
+      "homepage": "https://github.com/kakuilan"
+    }
+  ],
+  "require": {
+    "php": "^7.2",
+    "phpunit/phpunit": "^7.0",
+    "fzaninotto/faker": "^1.8.0"
+  },
+  "require-dev": {
+  },
+  "autoload": {
+    "psr-4": {
+      "Kph\\": "src",
+      "Kph\\Tests\\": "tests"
+    }
+  }
+}
