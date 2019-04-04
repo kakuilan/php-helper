@@ -4,7 +4,7 @@
  * User: kakuilan@163.com
  * Date: 2019/4/3
  * Time: 17:03
- * Desc:
+ * Desc: 基本对象
  */
 
 namespace Kph;

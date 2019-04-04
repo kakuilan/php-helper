@@ -14,5 +14,11 @@ use Kph\BaseObject;
 use Kph\StrictObject;
 
 class BaseTest extends TestCase {
-    
+
+    public function testBase() {
+        $obj = new StrictObject();
+
+
+    }
+
 }
