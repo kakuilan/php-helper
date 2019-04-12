@@ -7,7 +7,7 @@
  * Desc: 基本对象
  */
 
-namespace Kph;
+namespace Kph\Objects;
 
 class BaseObject {
 

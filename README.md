@@ -37,5 +37,12 @@ https://github.com/jstewmc/php-helpers
 https://github.com/ppabcd/Helpers
 https://github.com/whm19940308/phpTools
 https://github.com/swoole/library
+https://github.com/tkhatibi/php-helper
+https://github.com/codepso/php-helper
+https://github.com/gyselroth/php-helper
+https://gitee.com/3433/php-helper
+https://bitbucket.org/justusmeyer/php-helper
+https://gitee.com/wuwenbin/php-helper
+https://gitee.com/chinayy/PHP-helper-class
 
 

@@ -7,7 +7,7 @@
  * Desc: 严格对象
  */
 
-namespace Kph;
+namespace Kph\Objects;
 
 use Closure;
 use Exception;
