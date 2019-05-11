@@ -48,6 +48,46 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
 
 
     /**
+     * 魔术get
+     * @param $key
+     * @return mixed|null
+     */
+    public function __get($key) {
+        return $this->__datas[$key] ?? null;
+    }
+
+
+    /**
+     * 魔术set
+     * @param $key
+     * @param $value
+     */
+    public function __set($key, $value) {
+        $this->__datas[$key] = $value;
+    }
+
+
+    /**
+     * 获取键值
+     * @param $key
+     * @return mixed|null
+     */
+    public function get($key) {
+        return $this->__datas[$key] ?? null;
+    }
+
+
+    /**
+     * 设置键值
+     * @param $key
+     * @param $value
+     */
+    public function set($key, $value) {
+        $this->__datas[$key] = $value;
+    }
+
+
+    /**
      * 键是否存在
      * @param mixed $offset
      * @return bool
@@ -229,47 +269,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
 
 
     /**
-     * 魔术get
-     * @param $key
-     * @return mixed|null
-     */
-    public function __get($key) {
-        return $this->__datas[$key] ?? null;
-    }
-
-
-    /**
-     * 魔术set
-     * @param $key
-     * @param $value
-     */
-    public function __set($key, $value) {
-        $this->__datas[$key] = $value;
-    }
-
-
-    /**
-     * 获取键值
-     * @param $key
-     * @return mixed|null
-     */
-    public function get($key) {
-        return $this->__datas[$key] ?? null;
-    }
-
-
-    /**
-     * 设置键值
-     * @param $key
-     * @param $value
-     */
-    public function set($key, $value) {
-        $this->__datas[$key] = $value;
-    }
-
-
-    /**
-     * 删除键值
+     * 删除元素(根据键)
      * @param $key
      * @return bool
      */
@@ -281,6 +281,21 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
         }
 
         return $res;
+    }
+
+
+    /**
+     * 移除元素(根据值)
+     * @param $value
+     * @return $this
+     */
+    public function remove($value) {
+        $key = $this->search($value);
+        if ($key !==false) {
+            unset($this->__datas[$key]);
+        }
+
+        return $this;
     }
 
 
@@ -426,21 +441,6 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
 
 
     /**
-     * 移除(一个)元素
-     * @param $value
-     * @return $this
-     */
-    public function remove($value) {
-        $key = $this->search($value);
-        if ($key) {
-            unset($this->__datas[$key]);
-        }
-
-        return $this;
-    }
-
-
-    /**
      * 遍历数组
      * @param callable $fn 处理函数
      * @return $this
@@ -501,7 +501,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @return ArrayObject
      */
     public function column($column_key, $index = null) {
-        return new static(array_column($this->array, $column_key, $index));
+        return new static(array_column($this->__datas, $column_key, $index));
     }
 
 
@@ -512,6 +512,17 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      */
     public function unique($sort_flags = SORT_STRING) {
         return new static(array_unique($this->__datas, $sort_flags));
+    }
+
+
+    /**
+     * 获取重复的元素
+     * @param int $sort_flags
+     * @return ArrayObject
+     */
+    public function multiple($sort_flags = SORT_STRING) {
+        $arr = array_unique($this->__datas, $sort_flags);
+        return new static(array_merge(array_diff($this->__datas, $arr)));
     }
 
 
