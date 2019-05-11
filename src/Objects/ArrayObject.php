@@ -495,6 +495,17 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
 
 
     /**
+     * 返回列
+     * @param $column_key
+     * @param null $index
+     * @return ArrayObject
+     */
+    public function column($column_key, $index = null) {
+        return new static(array_column($this->array, $column_key, $index));
+    }
+
+
+    /**
      * 去重
      * @param int $sort_flags
      * @return ArrayObject
