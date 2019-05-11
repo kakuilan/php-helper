@@ -149,7 +149,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param string $serialized
      */
     public function unserialize($serialized) {
-        $this->__datas = $this->unserialize($serialized);
+        $this->__datas = unserialize($serialized);
     }
 
 
