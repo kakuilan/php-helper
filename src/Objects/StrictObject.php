@@ -14,11 +14,13 @@ use Closure;
 use Error;
 use Exception;
 use JsonSerializable;
+use Kph\Interfaces\Arrayable;
+use Kph\Interfaces\Jsonable;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
 
-class StrictObject extends BaseObject implements JsonSerializable {
+class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Jsonable {
 
 
     /**
@@ -194,31 +196,54 @@ class StrictObject extends BaseObject implements JsonSerializable {
 
 
     /**
-     * json序列化
-     * @return array|mixed
+     * json序列化(仅public、protected的属性)
+     * @return array
      * @throws ReflectionException
      */
     public function jsonSerialize() {
+        $arr = [];
         $fields = $this->getJsonFields();
         if (count($fields) === 0) {
             $ref = $this->getReflectionObject();
-            $json = array_map(function (ReflectionProperty $fieldObj) {
+            array_map(function (ReflectionProperty $fieldObj) use(&$arr) {
                 $field = $fieldObj->getName();
                 array_push($this->jsonFields, $field);
-                return $this->{$field};
+                $arr[$field] = $this->{$field};
             }, array_filter($ref->getProperties(ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC), function (ReflectionProperty $field) {
                 return !$field->isStatic();
             }));
         } else {
-            $json = array_map(function ($field) {
-                if ($field instanceof Closure) {
-                    return $field();
-                }
-                return $this->{$field};
+            array_map(function ($field) use(&$arr) {
+                $arr[$field] = $this->{$field};
             }, $fields);
         }
+        unset($fields);
 
-        return $json;
+        return $arr;
     }
+
+
+    /**
+     * 转为数组
+     * @return array
+     * @throws ReflectionException
+     */
+    public function toArray() {
+        return $this->jsonSerialize();
+    }
+
+
+    /**
+     * 转为json串
+     * @param int $options
+     * @param bool $assoc
+     * @param int $depth
+     * @return mixed|string
+     * @throws ReflectionException
+     */
+    public function toJson(int $options=0, bool $assoc=false, int $depth = 512) {
+        return json_decode($this->jsonSerialize(), $assoc, $depth, $options);
+    }
+
 
 }
