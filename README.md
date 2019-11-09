@@ -1,6 +1,11 @@
 # php-helper
 k`s php helper
 
+### 测试
+```shell
+cd tests
+phpunit
+```
 
 ### 常用函数库  
 https://bitbucket.org/justusmeyer/php-helper

@@ -46,7 +46,7 @@ class ObjectsTest extends TestCase {
         $json = json_encode($striObj);
         $arr = json_decode($json);
         $this->assertTrue(is_string($json));
-        $this->assertTrue(is_array($arr));
+        $this->assertTrue(is_object($arr));
 
     }
 
