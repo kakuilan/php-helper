@@ -120,9 +120,9 @@ class BaseService extends BaseObject {
     /**
      * 设置服务错误
      * @param string $error 错误信息
-     * @param string $errno 错误代码
+     * @param string|number $errno 错误代码
      */
-    public function setError($error='', $errno='') {
+    public function setError(string $error='', $errno=null) {
         $this->error = $error;
         $this->errno = $errno;
     }

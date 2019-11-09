@@ -26,8 +26,6 @@ phpunit
 
 ### 常用函数库  
 https://bitbucket.org/justusmeyer/php-helper
-https://gitee.com/3433/php-helper
-https://gitee.com/chinayy/PHP-helper-class
 https://gitee.com/wuwenbin/php-helper
 https://github.com/HustGuoHeng/library
 https://github.com/Intervention/helper
@@ -64,5 +62,12 @@ https://github.com/whm19940308/phpTools
 https://github.com/wycto/helper
 https://github.com/yunkaiyueming/php_lib_code_center
 https://github.com/zhosoft/tools
+
+promise
+https://github.com/hprose/hprose-php
+https://github.com/streamcommon/promise
+https://github.com/php-promise/promise
+https://docs.aws.amazon.com/zh_cn/sdk-for-php/v3/developer-guide/guide_promises.html
+
 
 
