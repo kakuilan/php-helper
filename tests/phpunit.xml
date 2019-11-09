@@ -35,6 +35,7 @@
     <filter>
         <whitelist  processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./Unit</directory>
+            <directory suffix=".php">../src</directory>
         </whitelist>
     </filter>
     <!-- 生成单元测试覆盖率-->
