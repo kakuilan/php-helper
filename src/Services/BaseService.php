@@ -44,7 +44,7 @@ class BaseService extends BaseObject {
 
     /**
      * 构造函数
-     * LkkService constructor.
+     * BaseService constructor.
      * @param array $vars
      */
     public function __construct($vars=[]) {
