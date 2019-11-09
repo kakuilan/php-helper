@@ -3,7 +3,8 @@
   "description": "lkk's php helper",
   "keywords": [
     "php helper",
-    "php library"
+    "php library",
+    "php utils"
   ],
   "homepage": "https://github.com/kakuilan/php-helper",
   "license": "Apache License",
