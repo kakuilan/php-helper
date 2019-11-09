@@ -22,6 +22,7 @@
         timeoutForMediumTests="10"
         timeoutForLargeTests="60"
         verbose="false">
+    <!-- testsuites 指定测试目录集-->
     <testsuites>
         <testsuite name="Unit">
             <directory suffix="Test.php">./Unit</directory>
@@ -30,6 +31,16 @@
             <directory suffix="Test.php">./Feature</directory>
         </testsuite>
     </testsuites>
+    <!-- 覆盖率的测试文件，blacklist 黑名单(不需要统计覆盖率的文件)，whitelist 白名单(统计覆盖率的测试文件) 当黑名单与白名单文件重复时，白名单起作用 -->
+    <filter>
+        <whitelist  processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./Unit</directory>
+        </whitelist>
+        <whitelist  processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./Objects</directory>
+        </whitelist>
+    </filter>
+    <!-- 生成单元测试覆盖率-->
     <logging>
         <log type="coverage-clover" target="clover.xml"/>
     </logging>
