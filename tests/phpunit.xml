@@ -34,7 +34,6 @@
     <!-- 覆盖率的测试文件，whitelist 白名单(统计覆盖率的测试文件)  -->
     <filter>
         <whitelist  processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./Unit</directory>
             <directory suffix=".php">../src</directory>
         </whitelist>
     </filter>
