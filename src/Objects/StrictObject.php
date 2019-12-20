@@ -166,21 +166,30 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
 
 
     /**
-     * 属性是否存在且非NULL
+     * 属性是否存在(包括NULL值)
      * @param $name
      * @return bool
      */
     public function isset($name){
-        return isset($this->$name);
+        $res = isset($this->$name);
+        if(!$res) {
+            try {
+                $res = is_null($this->$name);
+            }catch (Error $e) {
+            }catch (Exception $e) {
+            }
+        }
+
+        return $res;
     }
 
 
     /**
-     * 释放属性
+     * 销毁属性
      * @param $name
      */
     public function unset($name){
-        $this->$name = null;
+        unset($this->$name, $this->jsonFields[$name]);
     }
 
 
@@ -215,7 +224,10 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
         if(!empty($fields)) {
             array_map(function ($field) use(&$arr) {
                 $arr[$field] = $this->{$field};
-            }, $fields);
+            }, array_filter($fields, function (string $field) {
+                //过滤已销毁的属性
+                return $this->isset($field);
+            }));
         }
         unset($fields);
 
