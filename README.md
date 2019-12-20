@@ -10,7 +10,6 @@ php 函数库/工具集,仅测试支持php 7.2/7.3
 [![Code Size](https://img.shields.io/github/languages/code-size/kakuilan/php-helper.svg?style=flat-square)](https://github.com/kakuilan/php-helper)
 [![Starts](https://img.shields.io/github/stars/kakuilan/php-helper.svg)](https://github.com/kakuilan/php-helper)
 [![Latest Version](https://img.shields.io/packagist/v/kakuilan/php-helper.svg)](https://packagist.org/packages/kakuilan/php-helper)
-[![Downloads](https://img.shields.io/github/downloads/kakuilan/php-helper/total.svg)](https://github.com/kakuilan/php-helper/releases)
 
 
 ### 安装
