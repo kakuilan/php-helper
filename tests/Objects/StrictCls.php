@@ -15,11 +15,11 @@ class StrictCls extends StrictObject {
 
     public $name;
 
-    protected $gender = 0;
+    protected $gender = 'man';
 
     protected $nick = 'boot';
 
-    private $id;
+    private $id = 1;
 
 
     protected function getNick() {
@@ -30,11 +30,11 @@ class StrictCls extends StrictObject {
         $this->nick = $nick;
     }
 
-    private function setId($id) {
+    protected function setId($id) {
         $this->id = $id;
     }
 
-    private function getId() {
+    protected function getId() {
         return $this->id;
     }
 

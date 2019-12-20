@@ -45,21 +45,39 @@ class ObjectsTest extends TestCase {
         $ref = $striObj->getReflectionObject();
         $this->assertTrue($ref instanceof ReflectionClass);
 
-        try {
-            $gender = $striObj->gender;
-        }catch (Error $e) {
-            var_dump('------------', $e);
-        }
+        // 访问protected属性
+        $gender = $striObj->get('gender');
+        $this->assertEquals($gender, 'man');
+
+        $nick = $striObj->get('nick');
+        $this->assertEquals($nick, 'boot');
+
+        // 访问private属性
+        $id = $striObj->get('id');
+        $this->assertEquals($id, 1);
+
+        // 设置protected属性
+        $gender = 'woman';
+        $striObj->set('gender', $gender);
+        $this->assertEquals($gender, $striObj->get('gender'));
+
+        $nick = 'hello';
+        $striObj->set('nick', $nick);
+        $this->assertEquals($nick, $striObj->get('nick'));
+
+        // 设置private属性
+        $id = 5;
+        $striObj->set('id', $id);
+        $this->assertEquals($id, $striObj->get('id'));
 
         //$nick = $striObj->nick;
 
-        try {
-            $id = $striObj->id;
-        }catch (Exception $e) {
-            $this->assertTrue(stripos($e->getMessage(), 'Undefined readable property')!==false);
-        }
-
-        // 测试调用setNick
+//        try {
+//            $id = $striObj->id;
+//        }catch (Exception $e) {
+//            $this->assertTrue(stripos($e->getMessage(), 'Undefined readable property')!==false);
+//        }
+//
 //        $striObj->nick = 'nihao';
 //
 //        try {
