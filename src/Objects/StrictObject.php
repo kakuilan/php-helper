@@ -20,6 +20,10 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
 
+/**
+ * Class StrictObject
+ * @package Kph\Objects
+ */
 class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Jsonable {
 
 
@@ -34,7 +38,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
      * 类json字段(属性)
      * @var array
      */
-    private $jsonFields = [];
+    private $jsonFields = null;
 
 
     /**
@@ -102,6 +106,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
     final public function get(string $name) {
         $this->__checkEmptyProperty($name);
 
+        // 获取public、protected属性
         if(property_exists($this, $name)) {
             try {
                 return $this->$name;
@@ -109,6 +114,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
             }
         }
 
+        // 对private属性,调用getXXX方法
         $methodName = 'get' . ucfirst($name);
         if(method_exists($this, $methodName)) {
             try {
@@ -122,15 +128,6 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
     }
 
 
-    /**
-     * Get value with getter via magic method
-     * @param $name
-     * @throws Exception
-     */
-    public function __get($name) {
-        return $this->get($name);
-    }
-
 
     /**
      * 设置属性值或调用设置方法,如 set(name,val) => setName(val)
@@ -142,15 +139,16 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
     final public function set(string $name, $value=null) {
         $this->__checkEmptyProperty($name);
 
+        // 设置public、protected属性
         if(property_exists($this, $name)) {
             try {
-                $tmp = $this->$name;
                 $this->$name = $value;
                 return true;
             }catch (Exception $e) {
             }
         }
 
+        // 对private属性,调用setXXX方法
         $methodName = 'set' . ucfirst($name);
         if(method_exists($this, $methodName)) {
             try {
@@ -166,31 +164,40 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
 
 
     /**
-     * Set value with setter via magic method
+     * 属性是否存在且非NULL
      * @param $name
-     * @param $value
-     * @throws Exception
+     * @return bool
      */
-    public function __set($name, $value) {
-        $this->set($name, $value);
-    }
-
-
-    public function __isset($name){
+    public function isset($name){
         return isset($this->$name);
     }
 
 
-    public function __unset($name){
-        unset($this->$name);
+    /**
+     * 释放属性
+     * @param $name
+     */
+    public function unset($name){
+        $this->$name = null;
     }
 
 
     /**
      * 获取可json字段
      * @return array
+     * @throws ReflectionException
      */
     protected function getJsonFields() {
+        if(is_null($this->jsonFields)) {
+            $this->jsonFields = [];
+            $ref = $this->getReflectionObject();
+            array_map(function (ReflectionProperty $fieldObj) {
+                array_push($this->jsonFields, $fieldObj->getName());
+            }, array_filter($ref->getProperties(ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC), function (ReflectionProperty $field) {
+                return !$field->isStatic();
+            }));
+        }
+
         return $this->jsonFields;
     }
 
@@ -203,16 +210,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
     public function jsonSerialize() {
         $arr = [];
         $fields = $this->getJsonFields();
-        if (count($fields) === 0) {
-            $ref = $this->getReflectionObject();
-            array_map(function (ReflectionProperty $fieldObj) use(&$arr) {
-                $field = $fieldObj->getName();
-                array_push($this->jsonFields, $field);
-                $arr[$field] = $this->{$field};
-            }, array_filter($ref->getProperties(ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC), function (ReflectionProperty $field) {
-                return !$field->isStatic();
-            }));
-        } else {
+        if(!empty($fields)) {
             array_map(function ($field) use(&$arr) {
                 $arr[$field] = $this->{$field};
             }, $fields);

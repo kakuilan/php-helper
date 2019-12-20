@@ -15,10 +15,16 @@ class StrictCls extends StrictObject {
 
     public $name;
 
+    protected $gender = 0;
+
     protected $nick = 'boot';
 
     private $id;
 
+
+    protected function getNick() {
+        return $this->nick;
+    }
 
     protected function setNick(string $nick) {
         $this->nick = $nick;
