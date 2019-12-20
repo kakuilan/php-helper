@@ -21,6 +21,8 @@ class StrictCls extends StrictObject {
 
     private $id = 1;
 
+    private $no;
+
 
     protected function getNick() {
         return $this->nick;
@@ -36,6 +38,16 @@ class StrictCls extends StrictObject {
 
     protected function getId() {
         return $this->id;
+    }
+
+
+    private function setNo($no) {
+        $this->no = $no;
+    }
+
+
+    private function getNo() {
+        return $this->no;
     }
 
 

@@ -44,6 +44,13 @@ class ObjectsTest extends TestCase {
         $ref = $striObj->getReflectionObject();
         $this->assertTrue($ref instanceof ReflectionClass);
 
+        // 空属性
+        try {
+            $striObj->get('');
+        }catch (Exception $e) {
+            $this->assertTrue(stripos($e->getMessage(), 'empty property')!==false);
+        }
+
         // 访问protected属性
         $gender = $striObj->get('gender');
         $this->assertEquals($gender, 'man');

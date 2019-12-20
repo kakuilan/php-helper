@@ -92,7 +92,8 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
      * @throws Exception
      */
     protected function __checkEmptyProperty(string $name) {
-        if(is_null($name) || $name==='') {
+        if(is_null($name) || trim($name)==='') {
+            echo 11111111111;
             throw new Exception('empty property: ' . static::class . '::');
         }
     }
@@ -246,13 +247,12 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
     /**
      * 转为json串
      * @param int $options
-     * @param bool $assoc
      * @param int $depth
      * @return mixed|string
      * @throws ReflectionException
      */
-    public function toJson(int $options=0, bool $assoc=false, int $depth = 512) {
-        return json_decode($this->jsonSerialize(), $assoc, $depth, $options);
+    public function toJson(int $options=0, int $depth = 512) {
+        return json_encode($this->jsonSerialize(), $options, $depth);
     }
 
 
