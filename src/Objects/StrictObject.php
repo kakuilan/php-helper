@@ -111,7 +111,6 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
             try {
                 return $this->$name;
             }catch (Error $e) {
-            }catch (Exception $e) {
             }
         }
 
@@ -146,7 +145,6 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
                 $this->$name = $value;
                 return true;
             }catch (Error $e) {
-            }catch (Exception $e) {
             }
         }
 

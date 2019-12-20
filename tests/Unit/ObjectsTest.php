@@ -40,8 +40,7 @@ class ObjectsTest extends TestCase {
      * @throws ReflectionException
      */
     public function testStrict() {
-        $striObj = new StrictCls();
-        $striObj->name = 'zhang3';
+        $striObj = new StrictCls(['name'=>'zhang3']);
         $ref = $striObj->getReflectionObject();
         $this->assertTrue($ref instanceof ReflectionClass);
 
