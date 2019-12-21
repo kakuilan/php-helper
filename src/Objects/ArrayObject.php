@@ -221,12 +221,11 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
     /**
      * 返回json串
      * @param int $options
-     * @param bool $assoc
      * @param int $depth
      * @return mixed|string
      */
-    public function toJson(int $options=0, bool $assoc=false, int $depth = 512) {
-        return json_decode($this->__datas, $assoc, $depth, $options);
+    public function toJson(int $options=0, int $depth = 512) {
+        return json_encode($this->__datas, $options, $depth);
     }
 
 
