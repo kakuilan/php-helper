@@ -99,14 +99,12 @@ class ObjectsTest extends TestCase {
 
         // json化
         $json1 = json_encode($striObj);
-        $arr1 = json_decode($json1);
-
+        $arr1 = json_decode($json1, true);
         $json2 = $striObj->toJson();
         $arr2 = $striObj->toArray();
 
-        $this->assertTrue(is_string($json1));
-        $this->assertTrue(is_object($arr1));
-
+        $this->assertEquals($json1, $json2);
+        $this->assertEqualsCanonicalizing($arr1, $arr2);
 
     }
 

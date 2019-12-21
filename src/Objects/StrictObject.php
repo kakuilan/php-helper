@@ -93,7 +93,6 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
      */
     protected function __checkEmptyProperty(string $name) {
         if(is_null($name) || trim($name)==='') {
-            echo 11111111111;
             throw new Exception('empty property: ' . static::class . '::');
         }
     }
