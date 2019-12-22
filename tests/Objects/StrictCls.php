@@ -10,6 +10,7 @@
 namespace Kph\Tests\Objects;
 
 use Kph\Objects\StrictObject;
+use Exception;
 
 class StrictCls extends StrictObject {
 
@@ -49,8 +50,6 @@ class StrictCls extends StrictObject {
     private function getNo() {
         return $this->no;
     }
-
-
-
+    
 
 }

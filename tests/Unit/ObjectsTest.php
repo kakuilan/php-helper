@@ -69,6 +69,13 @@ class ObjectsTest extends TestCase {
             $this->assertTrue(stripos($e->getMessage(), 'Undefined readable property')!==false);
         }
 
+        // 访问属性存在,但getXXX方法私有
+        try {
+            $no = $striObj->get('no');
+        }catch (Exception $e) {
+            $this->assertTrue(stripos($e->getMessage(), 'Undefined readable property')!==false);
+        }
+
         // 设置protected属性
         $gender = 'woman';
         $striObj->set('gender', $gender);
@@ -86,6 +93,13 @@ class ObjectsTest extends TestCase {
         // 设置不存在的属性
         try {
             $striObj->set('none', true);
+        }catch (Exception $e) {
+            $this->assertTrue(stripos($e->getMessage(), 'Undefined writable property')!==false);
+        }
+
+        // 设置属性存在,但getXXX方法私有
+        try {
+            $striObj->set('no', 2);
         }catch (Exception $e) {
             $this->assertTrue(stripos($e->getMessage(), 'Undefined writable property')!==false);
         }
