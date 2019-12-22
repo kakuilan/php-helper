@@ -1,6 +1,6 @@
 # php-helper
 k`s php helper/library/utils  
-php 函数库/工具集,仅测试支持php 7.2/7.3
+php 函数库/工具集,仅测试支持php 7.2/7.3/7.4
 
 
 ### 相关

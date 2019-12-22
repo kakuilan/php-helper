@@ -40,7 +40,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * ArrayObject constructor.
      * @param array $datas
      */
-    public function __construct(array $datas) {
+    public function __construct(array $datas = null) {
         if(!empty($datas)) {
             $this->__datas = $datas;
         }

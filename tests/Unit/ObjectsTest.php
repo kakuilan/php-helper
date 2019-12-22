@@ -10,6 +10,7 @@
 namespace Kph\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use Kph\Objects\ArrayObject;
 use Kph\Tests\Objects\BaseCls;
 use Kph\Tests\Objects\StrictCls;
 use ReflectionClass;
@@ -123,6 +124,38 @@ class ObjectsTest extends TestCase {
     }
 
 
+
+    public function testArray() {
+        $arrObj = new ArrayObject(['a'=>1, 'b'=>2, 'c'=>3]);
+
+        $this->assertEquals($arrObj->a, 1);
+
+        $arrObj->d = 4;
+        $this->assertTrue($arrObj->offsetExists('d'));
+
+        $arrObj->offsetSet('d', 5);
+        $this->assertEquals($arrObj->offsetGet('d'), 5);
+
+        $arrObj->set('e', 5);
+        $this->assertEquals($arrObj->get('e'), 5);
+
+        //json
+        $json1 = json_encode($arrObj);
+        $json2 = $arrObj->toJson();
+        $this->assertEquals($json1, $json2);
+
+        $count1 = $arrObj->count();
+        $seri = $arrObj->serialize();
+        $arrObj->unserialize($seri);
+        $count2 = $arrObj->count();
+        $this->assertEquals($count1, $count2);
+
+
+
+
+
+
+    }
 
 
 
