@@ -528,7 +528,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      */
     public function multiple($sort_flags = SORT_STRING) {
         $arr = array_unique($this->__datas, $sort_flags);
-        return new static(array_merge(array_diff($this->__datas, $arr)));
+        return new static(array_merge(array_diff_assoc($this->__datas, $arr)));
     }
 
 
@@ -574,7 +574,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
     /**
      * 将一个数组分割成多个数组
      * @param $size
-     * @param bool $preserve_keys
+     * @param bool $preserve_keys 是否保留键名
      * @return ArrayObject
      */
     public function chunk($size, $preserve_keys = false) {

@@ -222,10 +222,33 @@ class ObjectsTest extends TestCase {
         $keys = $arrObj->keys();
         $this->assertEquals($values->count(), $keys->count());
 
+        $arrObj->prepend(2);
+        $arrObj->prepend(3);
+        $arrObj->prepend(9);
 
+        $obj4 = $arrObj->unique();
+        $this->assertTrue($obj4->count() < $arrObj->count());
 
+        $obj5 = $arrObj->multiple();
+        $this->assertEquals($obj5->count(), 2);
 
+        $arrObj->sort();
+        $this->assertEquals($arrObj->current(), 1);
 
+        $arrObj->reverse();
+        $this->assertEquals($arrObj->current(), 9);
+
+        $arrObj->shuffle();
+        $obj6 = $arrObj->chunk(3);
+        $this->assertEquals($obj6->count(), 2);
+
+        $obj7 = $obj4->flip();
+        $this->assertEquals($obj7->current(), 0);
+
+        $obj8 = $arrObj->filter(function ($val) {
+            return $val>4;
+        });
+        $this->assertEquals($obj8->count(), 2);
 
     }
 
