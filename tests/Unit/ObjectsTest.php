@@ -171,6 +171,9 @@ class ObjectsTest extends TestCase {
         $idx3 = $arrObj->lastIndexOf(5);
         $this->assertEquals($idx3, 'e');
 
+        $keys = $arrObj->keys(5);
+        $this->assertEquals($keys->count(), 2);
+
         $this->assertTrue($arrObj->delete('e'));
 
         $arrObj->remove(5);
@@ -186,6 +189,7 @@ class ObjectsTest extends TestCase {
         $this->assertTrue($arrObj->isEmpty());
 
         $arrObj->insert(0, 2);
+        $arrObj->insert(2, 6);
         $arrObj->append(3);
         $arrObj->prepend(1);
 
@@ -222,10 +226,53 @@ class ObjectsTest extends TestCase {
         $keys = $arrObj->keys();
         $this->assertEquals($values->count(), $keys->count());
 
+        $arrObj->prepend(2);
+        $arrObj->prepend(3);
+        $arrObj->prepend(9);
 
+        $obj4 = $arrObj->unique();
+        $this->assertTrue($obj4->count() < $arrObj->count());
 
+        $obj5 = $arrObj->multiple();
+        $this->assertEquals($obj5->count(), 2);
 
+        $arrObj->sort();
+        $this->assertEquals($arrObj->current(), 1);
 
+        $arrObj->reverse();
+        $this->assertEquals($arrObj->current(), 9);
+
+        $arrObj->shuffle();
+        $obj6 = $arrObj->chunk(3);
+        $this->assertEquals($obj6->count(), 2);
+
+        $obj7 = $obj4->flip();
+        $this->assertEquals($obj7->current(), 0);
+
+        $obj8 = $arrObj->filter(function ($val) {
+            return $val>4;
+        });
+        $this->assertEquals($obj8->count(), 2);
+
+        $arrObj->clear();
+        $arrObj->append([
+            'name' => 'zhang3',
+            'age' => '20',
+        ]);
+        $arrObj->append([
+            'name' => 'li4',
+            'age' => '22',
+        ]);
+        $arrObj->append([
+            'name' => 'zhao5',
+            'age' => '33',
+        ]);
+        $arrObj->append([
+            'name' => 'wang6',
+            'age' => '45',
+        ]);
+        $names = $arrObj->column('name');
+        $this->assertEquals($names->count(), 4);
 
     }
 
