@@ -381,6 +381,16 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
 
 
     /**
+     * 用回调函数迭代地将数组简化为单一的值
+     * @param callable $fn
+     * @return mixed
+     */
+    public function reduce(callable $fn, $initial = null) {
+        return array_reduce($this->__datas, $fn, $initial);
+    }
+
+
+    /**
      * 向数组尾部追加元素
      * @param $val
      * @return int
@@ -463,15 +473,6 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
     }
 
 
-    /**
-     * 用回调函数迭代地将数组简化为单一的值
-     * @param callable $fn
-     * @return ArrayObject
-     */
-    public function reduce(callable $fn) {
-        return new static(array_reduce($this->__datas, $fn));
-    }
-
 
     /**
      * 所有值
@@ -489,7 +490,13 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @return ArrayObject
      */
     public function keys($search_value = null, $strict = false) {
-        return new static(array_keys($this->__datas, $search_value, $strict));
+        if(is_null($search_value)) {
+            $keys = array_keys($this->__datas);
+        }else{
+            $keys = array_keys($this->__datas, $search_value, $strict);
+        }
+
+        return new static($keys);
     }
 
 

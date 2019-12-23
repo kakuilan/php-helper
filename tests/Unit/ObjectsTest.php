@@ -124,7 +124,9 @@ class ObjectsTest extends TestCase {
     }
 
 
-
+    /**
+     * 数组对象测试
+     */
     public function testArray() {
         $arrObj = new ArrayObject(['a'=>1, 'b'=>2, 'c'=>3]);
 
@@ -172,7 +174,9 @@ class ObjectsTest extends TestCase {
         $this->assertTrue($arrObj->delete('e'));
 
         $arrObj->remove(5);
+        $arrObj->offsetUnset('c');
         $this->assertFalse($arrObj->exists('e'));
+        $this->assertFalse($arrObj->exists('c'));
         $this->assertFalse($arrObj->contains(5));
 
         $str = $arrObj->join(',');
@@ -180,6 +184,46 @@ class ObjectsTest extends TestCase {
 
         $arrObj->clear();
         $this->assertTrue($arrObj->isEmpty());
+
+        $arrObj->insert(0, 2);
+        $arrObj->append(3);
+        $arrObj->prepend(1);
+
+        $sum = $arrObj->sum();
+        $pro = $arrObj->product();
+        $sum2 = $arrObj->reduce(function ($carry, $item) {
+            $carry += $item;
+            return $carry;
+        });
+        $this->assertEquals($sum, $pro);
+        $this->assertEquals($sum, $sum2);
+
+        $obj2 = $arrObj->slice(0, 2);
+        $this->assertEquals($obj2->count(), 2);
+
+        $obj2->pop();
+        $obj2->shift();
+        $this->assertEquals($obj2->count(), 0);
+
+        $item = $arrObj->rand();
+        $this->assertTrue($arrObj->contains($item));
+
+        $arrObj->each(function (&$val, $key) {
+            $val = pow($val, $key);
+        });
+        $this->assertEquals($arrObj->sum(), 12);
+
+        $obj3 = $arrObj->map(function ($val) {
+            return $val * 2;
+        });
+        $this->assertEquals($obj3->sum(), 24);
+
+        $values = $arrObj->values();
+        $keys = $arrObj->keys();
+        $this->assertEquals($values->count(), $keys->count());
+
+
+
 
 
 
