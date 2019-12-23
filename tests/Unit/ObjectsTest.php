@@ -150,8 +150,36 @@ class ObjectsTest extends TestCase {
         $count2 = $arrObj->count();
         $this->assertEquals($count1, $count2);
 
+        $this->assertEquals($arrObj->current(), 1);
+        $this->assertEquals($arrObj->next(), 2);
 
+        $this->assertEquals($arrObj->key(), 'b');
+        $this->assertTrue($arrObj->valid());
 
+        $arrObj->rewind();
+        $this->assertEquals($arrObj->key(), 'a');
+
+        $arr = $arrObj->toArray();
+        $this->assertEquals($arrObj->count(), count($arr));
+
+        $idx = $arrObj->search(3);
+        $idx2 = $arrObj->indexOf(3);
+        $this->assertEquals($idx, $idx2);
+
+        $idx3 = $arrObj->lastIndexOf(5);
+        $this->assertEquals($idx3, 'e');
+
+        $this->assertTrue($arrObj->delete('e'));
+
+        $arrObj->remove(5);
+        $this->assertFalse($arrObj->exists('e'));
+        $this->assertFalse($arrObj->contains(5));
+
+        $str = $arrObj->join(',');
+        $this->assertFalse(empty($str));
+
+        $arrObj->clear();
+        $this->assertTrue($arrObj->isEmpty());
 
 
 
