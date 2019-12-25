@@ -455,8 +455,8 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @return $this
      */
     public function each(callable $fn) {
-        if (array_walk($this->__datas, $fn) === false) {
-            throw new RuntimeException("array_walk() failed!");
+        if($this->count()>0) {
+            array_walk($this->__datas, $fn);
         }
 
         return $this;
@@ -561,10 +561,8 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @return $this
      */
     public function shuffle() {
-        if($this->count()>0) {
-            if (shuffle($this->__datas) === false) {
-                throw new RuntimeException("shuffle() failed!");
-            }
+        if ($this->count()>0) {
+            shuffle($this->__datas);
         }
 
         return $this;
