@@ -4,7 +4,7 @@
  * User: blaine
  * Date: 2019/6/26
  * Time: 19:15
- * Desc:
+ * Desc: 参考 https://github.com/hprose/hprose-php/wiki/03-Promise-%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B
  */
 
 
@@ -51,6 +51,13 @@ class Promise {
     protected $reason;
 
 
+    /**
+     * 订阅者
+     * @var array
+     */
+    protected $subscribers = [];
+
+
     public function __construct($computation = null) {
         if(is_callable($computation)) {
             try {
@@ -66,6 +73,32 @@ class Promise {
 
     }
 
+    // pending->fulfilled
+    public function resolve($value) {
+
+    }
+
+    // pending->rejected
+    public function reject($reason) {
+
+    }
+
+    // 将当前 promise 对象的值充填到参数所表示的 promise 对象中
+    protected function fill($future) {
+
+    }
+
+    public function then($onfulfill, $onreject = null) {
+
+    }
+
+    public function get(string $property) {
+        return isset($this->$property) ? $this->$property : null;
+    }
+
+    public function getResult() {
+        return $this->value;
+    }
 
 
 }
