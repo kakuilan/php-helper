@@ -73,6 +73,22 @@ class Promise {
 
     }
 
+
+    private function privateCall($callback, $next, $params) {
+
+    }
+
+
+    private function privateResolve($onfulfill, $next, $params) {
+
+    }
+
+
+    private function privateReject($onreject, $next, $e) {
+
+    }
+
+
     // pending->fulfilled
     public function resolve($value) {
 
