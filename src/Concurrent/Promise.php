@@ -117,4 +117,26 @@ class Promise {
     }
 
 
+    public static function isPromise($obj) {
+        return $obj instanceof Promise;
+    }
+
+
+    public static function value($v) {
+        $future = new Promise();
+        $future->resolve($v);
+        return $future;
+    }
+
+    public static function toPromise($obj) {
+        if ($obj instanceof Promise) {
+            return $obj;
+        }
+        if ($obj instanceof Generator) {
+
+        }
+        return self::value($obj);
+    }
+
+
 }
