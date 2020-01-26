@@ -213,7 +213,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * 返回数组
      * @return array
      */
-    public function toArray() {
+    public function toArray():array {
         return $this->__datas;
     }
 
@@ -224,7 +224,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param int $depth
      * @return mixed|string
      */
-    public function toJson(int $options=0, int $depth = 512) {
+    public function toJson(int $options=0, int $depth = 512):string {
         return json_encode($this->__datas, $options, $depth);
     }
 

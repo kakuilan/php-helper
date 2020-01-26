@@ -58,9 +58,9 @@ class BaseService extends StrictObject {
 
     /**
      * 获取错误信息
-     * @return mixed
+     * @return string
      */
-    public function getError() {
+    public function getError():string {
         return $this->error;
     }
 
@@ -80,7 +80,7 @@ class BaseService extends StrictObject {
      * 获取服务错误信息
      * @return array
      */
-    public function getErrorInfo() {
+    public function getErrorInfo():array {
         return [
             'errno' => $this->errno,
             'error' => $this->error,
