@@ -58,7 +58,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
      * @throws ReflectionException
      */
     public function getReflectionObject() {
-        if(is_null($this->__refCls)) {
+        if (is_null($this->__refCls)) {
             $this->__refCls = new ReflectionClass($this);
         }
 
@@ -92,7 +92,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
      * @throws Exception
      */
     protected function __checkEmptyProperty(string $name) {
-        if(is_null($name) || trim($name)==='') {
+        if (is_null($name) || trim($name) === '') {
             throw new Exception('empty property: ' . static::class . '::');
         }
     }
@@ -107,25 +107,24 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
         $this->__checkEmptyProperty($name);
 
         // 获取public、protected属性
-        if(property_exists($this, $name)) {
+        if (property_exists($this, $name)) {
             try {
                 return $this->$name;
-            }catch (Error $e) {
+            } catch (Error $e) {
             }
         }
 
         // 对private属性,调用getXXX方法
         $methodName = 'get' . ucfirst($name);
-        if(method_exists($this, $methodName)) {
+        if (method_exists($this, $methodName)) {
             try {
                 return $this->$methodName();
-            }catch (Error $e) {
+            } catch (Error $e) {
             }
         }
 
         return $this->__undefinedGetWarn($name);
     }
-
 
 
     /**
@@ -135,25 +134,25 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
      * @return bool|void
      * @throws Exception
      */
-    final public function set(string $name, $value=null) {
+    final public function set(string $name, $value = null) {
         $this->__checkEmptyProperty($name);
 
         // 设置public、protected属性
-        if(property_exists($this, $name)) {
+        if (property_exists($this, $name)) {
             try {
                 $this->$name = $value;
                 return true;
-            }catch (Error $e) {
+            } catch (Error $e) {
             }
         }
 
         // 对private属性,调用setXXX方法
         $methodName = 'set' . ucfirst($name);
-        if(method_exists($this, $methodName)) {
+        if (method_exists($this, $methodName)) {
             try {
                 $this->$methodName($value);
                 return true;
-            }catch (Error $e) {
+            } catch (Error $e) {
             }
         }
 
@@ -166,13 +165,13 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
      * @param $name
      * @return bool
      */
-    public function isset($name){
+    public function isset($name) {
         $res = isset($this->$name);
-        if(!$res) {
+        if (!$res) {
             try {
                 $res = is_null($this->$name);
-            }catch (Error $e) {
-            }catch (Exception $e) {
+            } catch (Error $e) {
+            } catch (Exception $e) {
             }
         }
 
@@ -184,7 +183,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
      * 销毁属性
      * @param $name
      */
-    public function unset($name){
+    public function unset($name) {
         unset($this->$name, $this->jsonFields[$name]);
     }
 
@@ -195,9 +194,9 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
      * @throws ReflectionException
      */
     protected function getJsonFields() {
-        if(is_null($this->jsonFields)) {
+        if (is_null($this->jsonFields)) {
             $this->jsonFields = [];
-            $ref = $this->getReflectionObject();
+            $ref              = $this->getReflectionObject();
             array_map(function (ReflectionProperty $fieldObj) {
                 array_push($this->jsonFields, $fieldObj->getName());
             }, array_filter($ref->getProperties(ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC), function (ReflectionProperty $field) {
@@ -215,10 +214,10 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
      * @throws ReflectionException
      */
     public function jsonSerialize() {
-        $arr = [];
+        $arr    = [];
         $fields = $this->getJsonFields();
-        if(!empty($fields)) {
-            array_map(function ($field) use(&$arr) {
+        if (!empty($fields)) {
+            array_map(function ($field) use (&$arr) {
                 $arr[$field] = $this->{$field};
             }, array_filter($fields, function (string $field) {
                 //过滤已销毁的属性
@@ -248,7 +247,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
      * @return mixed|string
      * @throws ReflectionException
      */
-    public function toJson(int $options=0, int $depth = 512) {
+    public function toJson(int $options = 0, int $depth = 512) {
         return json_encode($this->jsonSerialize(), $options, $depth);
     }
 

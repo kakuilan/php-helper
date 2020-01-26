@@ -41,7 +41,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param array $datas
      */
     public function __construct(array $datas = null) {
-        if(!empty($datas)) {
+        if (!empty($datas)) {
             $this->__datas = $datas;
         }
     }
@@ -130,7 +130,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * json序列化
      * @return array|mixed
      */
-    public function jsonSerialize () {
+    public function jsonSerialize() {
         return $this->__datas;
     }
 
@@ -213,7 +213,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * 返回数组
      * @return array
      */
-    public function toArray():array {
+    public function toArray(): array {
         return $this->__datas;
     }
 
@@ -224,7 +224,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param int $depth
      * @return mixed|string
      */
-    public function toJson(int $options=0, int $depth = 512):string {
+    public function toJson(int $options = 0, int $depth = 512): string {
         return json_encode($this->__datas, $options, $depth);
     }
 
@@ -257,8 +257,8 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      */
     public function lastIndexOf($needle) {
         $res = false;
-        foreach ($this->__datas as $k=>$it) {
-            if($needle == $it) {
+        foreach ($this->__datas as $k => $it) {
+            if ($needle == $it) {
                 $res = $k;
             }
         }
@@ -274,7 +274,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      */
     public function delete($key) {
         $res = false;
-        if(isset($this->__datas[$key])) {
+        if (isset($this->__datas[$key])) {
             unset($this->__datas[$key]);
             $res = true;
         }
@@ -290,7 +290,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      */
     public function remove($value) {
         $key = $this->search($value);
-        if ($key !==false) {
+        if ($key !== false) {
             unset($this->__datas[$key]);
         }
 
@@ -302,7 +302,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * 清空
      */
     public function clear() {
-        $this->__datas  = [];
+        $this->__datas = [];
     }
 
 
@@ -331,7 +331,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param string $str
      * @return string
      */
-    public function join($str='') {
+    public function join($str = '') {
         return implode($str, $this->__datas);
     }
 
@@ -343,7 +343,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @return bool
      */
     public function insert($offset, $val) {
-        if($offset > $this->count()) {
+        if ($offset > $this->count()) {
             return false;
         }
 
@@ -455,7 +455,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @return $this
      */
     public function each(callable $fn) {
-        if($this->count()>0) {
+        if ($this->count() > 0) {
             array_walk($this->__datas, $fn);
         }
 
@@ -471,7 +471,6 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
     public function map(callable $fn) {
         return new static(array_map($fn, $this->__datas));
     }
-
 
 
     /**
@@ -490,9 +489,9 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @return ArrayObject
      */
     public function keys($search_value = null, $strict = false) {
-        if(is_null($search_value)) {
+        if (is_null($search_value)) {
             $keys = array_keys($this->__datas);
-        }else{
+        } else {
             $keys = array_keys($this->__datas, $search_value, $strict);
         }
 
@@ -561,7 +560,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @return $this
      */
     public function shuffle() {
-        if ($this->count()>0) {
+        if ($this->count() > 0) {
             shuffle($this->__datas);
         }
 
@@ -598,8 +597,6 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
     public function filter(callable $fn, $flag = 0) {
         return new static(array_filter($this->__datas, $fn, $flag));
     }
-
-
 
 
 }

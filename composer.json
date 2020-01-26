@@ -20,7 +20,8 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^7.0",
-    "fzaninotto/faker": "^1.8.0"
+    "fzaninotto/faker": "^1.8.0",
+    "phpstan/phpstan": "^0.12.7"
   },
   "autoload": {
     "psr-4": {

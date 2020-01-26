@@ -18,6 +18,6 @@ interface Jsonable {
      * @param int $depth
      * @return string
      */
-    public function toJson(int $options=0, int $depth = 512):string ;
+    public function toJson(int $options = 0, int $depth = 512): string;
 
 }

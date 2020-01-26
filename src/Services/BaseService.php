@@ -28,13 +28,12 @@ class BaseService extends StrictObject {
     public $error;
 
 
-
     /**
      * 构造函数
      * BaseService constructor.
      * @param array $vars
      */
-    public function __construct($vars=[]) {
+    public function __construct($vars = []) {
         parent::__construct($vars);
     }
 
@@ -60,7 +59,7 @@ class BaseService extends StrictObject {
      * 获取错误信息
      * @return string
      */
-    public function getError():string {
+    public function getError(): string {
         return $this->error;
     }
 
@@ -70,7 +69,7 @@ class BaseService extends StrictObject {
      * @param string $error 错误信息
      * @param string|number $errno 错误代码
      */
-    public function setErrorInfo(string $error='', $errno=null) {
+    public function setErrorInfo(string $error = '', $errno = null) {
         $this->error = $error;
         $this->errno = $errno;
     }
@@ -80,11 +79,8 @@ class BaseService extends StrictObject {
      * 获取服务错误信息
      * @return array
      */
-    public function getErrorInfo():array {
-        return [
-            'errno' => $this->errno,
-            'error' => $this->error,
-        ];
+    public function getErrorInfo(): array {
+        return ['errno' => $this->errno, 'error' => $this->error,];
     }
 
 

@@ -29,7 +29,7 @@ class BaseObject {
      * 打印时转字符串
      * @return string
      */
-    public function __toString(){
+    public function __toString() {
         return get_class($this);
     }
 
@@ -50,7 +50,7 @@ class BaseObject {
      * @return object
      */
     final public static function getSelfInstance() {
-        if(is_null(static::$_self) || !is_object(static::$_self) || !(static::$_self instanceof static)) {
+        if (is_null(static::$_self) || !is_object(static::$_self) || !(static::$_self instanceof static)) {
             //静态延迟绑定
             static::$_self = new static();
         }
@@ -85,7 +85,7 @@ class BaseObject {
      * @return BaseObject
      */
     public static function getFinalInstance() {
-        if(is_null(self::$_final) || !is_object(self::$_final) || !(self::$_final instanceof self)) {
+        if (is_null(self::$_final) || !is_object(self::$_final) || !(self::$_final instanceof self)) {
             self::$_final = new self();
         }
 
@@ -110,8 +110,6 @@ class BaseObject {
     public static function destroyFinalInstance() {
         self::$_final = null;
     }
-
-
 
 
 }
