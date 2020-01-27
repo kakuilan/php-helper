@@ -19,8 +19,11 @@ composer require kakuilan/php-helper
 
 ### 测试
 ```sh
+php-helper]$ phpunit --bootstrap=tests/bootstrap.php ./tests/
+
+# 或者
 cd tests
-phpunit
+tests]$ phpunit
 ```
 
 ### 静态检查

@@ -13,9 +13,7 @@ use Exception;
 
 
 /**
- * Class UnCatchableException
+ * Class UncatchableException
  * @package Kph\Concurrent\Exception
  */
-class UnCatchableException extends Exception {
-
-}
+class UncatchableException extends Exception {}

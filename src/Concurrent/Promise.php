@@ -10,7 +10,7 @@
 
 namespace Kph\Concurrent;
 
-use Kph\Concurrent\Exception\UnCatchableException;
+use Kph\Concurrent\Exception\UncatchableException;
 use Kph\Objects\BaseObject;
 use Closure;
 use Error;
@@ -85,7 +85,7 @@ class Promise extends BaseObject {
         if (is_callable($computation)) {
             try {
                 $this->resolve(call_user_func($computation));
-            } catch (UnCatchableException $e) {
+            } catch (UncatchableException $e) {
                 throw $e->getPrevious();
             } catch (Exception $e) {
                 $this->reject($e);
@@ -108,7 +108,7 @@ class Promise extends BaseObject {
         try {
             $r = call_user_func($callback, $params);
             $next->resolve($r);
-        } catch (UnCatchableException $e) {
+        } catch (UncatchableException $e) {
             throw $e->getPrevious();
         } catch (Exception $e) {
             $next->reject($e);
@@ -183,7 +183,7 @@ class Promise extends BaseObject {
                             $self->reject($r);
                         }
                     });
-                } catch (UnCatchableException $e) {
+                } catch (UncatchableException $e) {
                     throw $e->getPrevious();
                 } catch (Exception $e) {
                     if ($notrun) {
