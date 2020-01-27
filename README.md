@@ -18,9 +18,14 @@ composer require kakuilan/php-helper
 ```
 
 ### 测试
-```shell
+```sh
 cd tests
 phpunit
+```
+
+### 静态检查
+```sh
+phpstan analyze src
 ```
 
 ### TODO

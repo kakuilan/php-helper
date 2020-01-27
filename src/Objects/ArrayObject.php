@@ -440,7 +440,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @return ArrayObject
      */
     public function slice($offset, $length = null): ArrayObject {
-        return new static(array_slice($this->__datas, $offset, $length));
+        return new self(array_slice($this->__datas, $offset, $length));
     }
 
 
@@ -474,7 +474,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @return ArrayObject
      */
     public function map(callable $fn): ArrayObject {
-        return new static(array_map($fn, $this->__datas));
+        return new self(array_map($fn, $this->__datas));
     }
 
 
@@ -483,7 +483,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @return ArrayObject
      */
     public function values(): ArrayObject {
-        return new static(array_values($this->__datas));
+        return new self(array_values($this->__datas));
     }
 
 
@@ -500,7 +500,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
             $keys = array_keys($this->__datas, $search_value, $strict);
         }
 
-        return new static($keys);
+        return new self($keys);
     }
 
 
@@ -511,7 +511,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @return ArrayObject
      */
     public function column($column_key, $index = null): ArrayObject {
-        return new static(array_column($this->__datas, $column_key, $index));
+        return new self(array_column($this->__datas, $column_key, $index));
     }
 
 
@@ -521,7 +521,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @return ArrayObject
      */
     public function unique($sort_flags = SORT_STRING): ArrayObject {
-        return new static(array_unique($this->__datas, $sort_flags));
+        return new self(array_unique($this->__datas, $sort_flags));
     }
 
 
@@ -532,7 +532,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      */
     public function multiple($sort_flags = SORT_STRING): ArrayObject {
         $arr = array_unique($this->__datas, $sort_flags);
-        return new static(array_merge(array_diff_assoc($this->__datas, $arr)));
+        return new self(array_merge(array_diff_assoc($this->__datas, $arr)));
     }
 
 
@@ -580,7 +580,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @return ArrayObject
      */
     public function chunk($size, $preserve_keys = false): ArrayObject {
-        return new static(array_chunk($this->__datas, $size, $preserve_keys));
+        return new self(array_chunk($this->__datas, $size, $preserve_keys));
     }
 
 
@@ -589,7 +589,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @return ArrayObject
      */
     public function flip(): ArrayObject {
-        return new static(array_flip($this->__datas));
+        return new self(array_flip($this->__datas));
     }
 
 
@@ -600,7 +600,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @return ArrayObject
      */
     public function filter(callable $fn, $flag = 0): ArrayObject {
-        return new static(array_filter($this->__datas, $fn, $flag));
+        return new self(array_filter($this->__datas, $fn, $flag));
     }
 
 
