@@ -27,6 +27,9 @@
     "psr-4": {
       "Kph\\": "src",
       "Kph\\Tests\\": "tests"
-    }
+    },
+    "files": [
+      "src/Concurrent/functions.php"
+    ]
   }
 }
