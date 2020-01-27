@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * Copyright (c) 2020 kakuilan@163.com All rights reserved
  * User: kakuilan@163.com
  * Date: 2019/5/10
  * Time: 16:18
@@ -19,6 +19,11 @@ use Kph\Interfaces\Jsonable;
 use RuntimeException;
 use Serializable;
 
+
+/**
+ * Class ArrayObject
+ * @package Kph\Objects
+ */
 class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, Serializable, Countable, Iterator, Arrayable, Jsonable {
 
 
@@ -82,7 +87,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param $key
      * @param $value
      */
-    public function set($key, $value) {
+    public function set($key, $value): void {
         $this->__datas[$key] = $value;
     }
 
@@ -92,7 +97,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param mixed $offset
      * @return bool
      */
-    public function offsetExists($offset) {
+    public function offsetExists($offset): bool {
         return isset($this->__datas[$offset]);
     }
 
@@ -112,7 +117,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param mixed $offset
      * @param mixed $value
      */
-    public function offsetSet($offset, $value) {
+    public function offsetSet($offset, $value): void {
         $this->__datas[$offset] = $value;
     }
 
@@ -121,16 +126,16 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * 删除键
      * @param mixed $offset
      */
-    public function offsetUnset($offset) {
+    public function offsetUnset($offset): void {
         unset($this->__datas[$offset]);
     }
 
 
     /**
      * json序列化
-     * @return array|mixed
+     * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return $this->__datas;
     }
 
@@ -139,7 +144,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * 序列化
      * @return string
      */
-    public function serialize() {
+    public function serialize(): string {
         return serialize($this->__datas);
     }
 
@@ -148,7 +153,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * 反序列化
      * @param string $serialized
      */
-    public function unserialize($serialized) {
+    public function unserialize($serialized): void {
         $this->__datas = unserialize($serialized);
     }
 
@@ -157,7 +162,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * 计算数量
      * @return int
      */
-    public function count() {
+    public function count(): int {
         return count($this->__datas);
     }
 
@@ -194,7 +199,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * 验证当前位置
      * @return bool
      */
-    public function valid() {
+    public function valid(): bool {
         return count($this->__datas) >= $this->__index;
     }
 
@@ -272,7 +277,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param $key
      * @return bool
      */
-    public function delete($key) {
+    public function delete($key): bool {
         $res = false;
         if (isset($this->__datas[$key])) {
             unset($this->__datas[$key]);
@@ -286,9 +291,9 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
     /**
      * 移除元素(根据值)
      * @param $value
-     * @return $this
+     * @return ArrayObject
      */
-    public function remove($value) {
+    public function remove($value): ArrayObject {
         $key = $this->search($value);
         if ($key !== false) {
             unset($this->__datas[$key]);
@@ -301,7 +306,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
     /**
      * 清空
      */
-    public function clear() {
+    public function clear(): void {
         $this->__datas = [];
     }
 
@@ -311,7 +316,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param $val
      * @return bool
      */
-    public function contains($val) {
+    public function contains($val): bool {
         return in_array($val, $this->__datas);
     }
 
@@ -321,7 +326,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param $key
      * @return bool
      */
-    public function exists($key) {
+    public function exists($key): bool {
         return array_key_exists($key, $this->__datas);
     }
 
@@ -331,7 +336,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param string $str
      * @return string
      */
-    public function join($str = '') {
+    public function join($str = ''): string {
         return implode($str, $this->__datas);
     }
 
@@ -342,7 +347,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param mixed $val 元素值
      * @return bool
      */
-    public function insert($offset, $val) {
+    public function insert($offset, $val): bool {
         if ($offset > $this->count()) {
             return false;
         }
@@ -357,7 +362,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * 是否为空
      * @return bool
      */
-    public function isEmpty() {
+    public function isEmpty(): bool {
         return empty($this->__datas);
     }
 
@@ -395,7 +400,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param $val
      * @return int
      */
-    public function append($val) {
+    public function append($val): int {
         return array_push($this->__datas, $val);
     }
 
@@ -405,7 +410,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param $val
      * @return int
      */
-    public function prepend($val) {
+    public function prepend($val): int {
         return array_unshift($this->__datas, $val);
     }
 
@@ -434,7 +439,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param null $length
      * @return ArrayObject
      */
-    public function slice($offset, $length = null) {
+    public function slice($offset, $length = null): ArrayObject {
         return new static(array_slice($this->__datas, $offset, $length));
     }
 
@@ -452,9 +457,9 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
     /**
      * 遍历数组
      * @param callable $fn 处理函数
-     * @return $this
+     * @return ArrayObject
      */
-    public function each(callable $fn) {
+    public function each(callable $fn): ArrayObject {
         if ($this->count() > 0) {
             array_walk($this->__datas, $fn);
         }
@@ -468,7 +473,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param callable $fn
      * @return ArrayObject
      */
-    public function map(callable $fn) {
+    public function map(callable $fn): ArrayObject {
         return new static(array_map($fn, $this->__datas));
     }
 
@@ -477,7 +482,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * 所有值
      * @return ArrayObject
      */
-    public function values() {
+    public function values(): ArrayObject {
         return new static(array_values($this->__datas));
     }
 
@@ -488,7 +493,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param bool $strict
      * @return ArrayObject
      */
-    public function keys($search_value = null, $strict = false) {
+    public function keys($search_value = null, $strict = false): ArrayObject {
         if (is_null($search_value)) {
             $keys = array_keys($this->__datas);
         } else {
@@ -505,7 +510,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param null $index
      * @return ArrayObject
      */
-    public function column($column_key, $index = null) {
+    public function column($column_key, $index = null): ArrayObject {
         return new static(array_column($this->__datas, $column_key, $index));
     }
 
@@ -515,7 +520,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param int $sort_flags
      * @return ArrayObject
      */
-    public function unique($sort_flags = SORT_STRING) {
+    public function unique($sort_flags = SORT_STRING): ArrayObject {
         return new static(array_unique($this->__datas, $sort_flags));
     }
 
@@ -525,7 +530,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param int $sort_flags
      * @return ArrayObject
      */
-    public function multiple($sort_flags = SORT_STRING) {
+    public function multiple($sort_flags = SORT_STRING): ArrayObject {
         $arr = array_unique($this->__datas, $sort_flags);
         return new static(array_merge(array_diff_assoc($this->__datas, $arr)));
     }
@@ -534,9 +539,9 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
     /**
      * 排序
      * @param int $sort_flags
-     * @return $this
+     * @return ArrayObject
      */
-    public function sort($sort_flags = SORT_REGULAR) {
+    public function sort($sort_flags = SORT_REGULAR): ArrayObject {
         sort($this->__datas, $sort_flags);
 
         return $this;
@@ -546,9 +551,9 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
     /**
      * 反序
      * @param bool $preserve_keys
-     * @return $this
+     * @return ArrayObject
      */
-    public function reverse($preserve_keys = false) {
+    public function reverse($preserve_keys = false): ArrayObject {
         $this->__datas = array_reverse($this->__datas, $preserve_keys);
 
         return $this;
@@ -557,9 +562,9 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
 
     /**
      * 乱序
-     * @return $this
+     * @return ArrayObject
      */
-    public function shuffle() {
+    public function shuffle(): ArrayObject {
         if ($this->count() > 0) {
             shuffle($this->__datas);
         }
@@ -574,7 +579,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param bool $preserve_keys 是否保留键名
      * @return ArrayObject
      */
-    public function chunk($size, $preserve_keys = false) {
+    public function chunk($size, $preserve_keys = false): ArrayObject {
         return new static(array_chunk($this->__datas, $size, $preserve_keys));
     }
 
@@ -583,7 +588,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * 交换数组中的键和值
      * @return ArrayObject
      */
-    public function flip() {
+    public function flip(): ArrayObject {
         return new static(array_flip($this->__datas));
     }
 
@@ -594,7 +599,7 @@ class ArrayObject extends BaseObject implements ArrayAccess, JsonSerializable, S
      * @param int $flag
      * @return ArrayObject
      */
-    public function filter(callable $fn, $flag = 0) {
+    public function filter(callable $fn, $flag = 0): ArrayObject {
         return new static(array_filter($this->__datas, $fn, $flag));
     }
 

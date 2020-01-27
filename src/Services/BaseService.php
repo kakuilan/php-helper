@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * Copyright (c) 2020 kakuilan@163.com All rights reserved
  * User: kakuilan@163.com
  * Date: 2019/6/8
  * Time: 21:32
@@ -11,6 +11,11 @@ namespace Kph\Services;
 
 use Kph\Objects\StrictObject;
 
+
+/**
+ * Class BaseService
+ * @package Kph\Services
+ */
 class BaseService extends StrictObject {
 
 

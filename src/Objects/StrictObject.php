@@ -10,7 +10,6 @@
 
 namespace Kph\Objects;
 
-use Closure;
 use Error;
 use Exception;
 use JsonSerializable;
@@ -44,8 +43,9 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
     /**
      * StrictObject constructor.
      * @param array $vars
+     * @throws Exception
      */
-    public function __construct($vars = []) {
+    public function __construct(array $vars = []) {
         foreach ($vars as $field => $value) {
             $this->set($field, $value);
         }
@@ -54,7 +54,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
 
     /**
      * 获取该类的反射对象
-     * @return object|ReflectionClass
+     * @return ReflectionClass
      * @throws ReflectionException
      */
     public function getReflectionObject() {
@@ -101,6 +101,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
     /**
      * 获取属性值或调用获取方法,如 get(name) => getName()
      * @param string $name
+     * @return mixed|void
      * @throws Exception
      */
     final public function get(string $name) {
@@ -130,7 +131,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
     /**
      * 设置属性值或调用设置方法,如 set(name,val) => setName(val)
      * @param string $name
-     * @param null $value
+     * @param mixed $value
      * @return bool|void
      * @throws Exception
      */
@@ -165,7 +166,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
      * @param $name
      * @return bool
      */
-    public function isset($name) {
+    public function isset($name): bool {
         $res = isset($this->$name);
         if (!$res) {
             try {
@@ -183,7 +184,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
      * 销毁属性
      * @param $name
      */
-    public function unset($name) {
+    public function unset($name): void {
         unset($this->$name, $this->jsonFields[$name]);
     }
 
@@ -193,7 +194,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
      * @return array
      * @throws ReflectionException
      */
-    protected function getJsonFields() {
+    protected function getJsonFields(): array {
         if (is_null($this->jsonFields)) {
             $this->jsonFields = [];
             $ref              = $this->getReflectionObject();
@@ -213,7 +214,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
      * @return array
      * @throws ReflectionException
      */
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         $arr    = [];
         $fields = $this->getJsonFields();
         if (!empty($fields)) {
@@ -235,7 +236,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
      * @return array
      * @throws ReflectionException
      */
-    public function toArray() {
+    public function toArray(): array {
         return $this->jsonSerialize();
     }
 
@@ -244,10 +245,10 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
      * 转为json串
      * @param int $options
      * @param int $depth
-     * @return mixed|string
+     * @return string
      * @throws ReflectionException
      */
-    public function toJson(int $options = 0, int $depth = 512) {
+    public function toJson(int $options = 0, int $depth = 512): string {
         return json_encode($this->jsonSerialize(), $options, $depth);
     }
 
