@@ -22,6 +22,11 @@ use ReflectionMethod;
 use Throwable;
 use TypeError;
 
+
+/**
+ * Class Future
+ * @package Kph\Concurrent
+ */
 class Future extends BaseObject {
 
     /**
@@ -44,7 +49,7 @@ class Future extends BaseObject {
 
     /**
      * 状态
-     * @var int
+     * @var string
      */
     protected $state = self::PENDING;
 
@@ -145,8 +150,9 @@ class Future extends BaseObject {
 
 
     /**
-     * 解决.状态由等待变为成功(pending->fulfilled)
-     * @param $value
+     * 解决
+     * 该方法可以将状态为待定（pending）的 promise 对象变为成功（fulfilled）状态
+     * @param mixed $value
      * @throws Exception
      */
     public function resolve($value) {
@@ -204,7 +210,8 @@ class Future extends BaseObject {
 
 
     /**
-     * 拒绝.状态由等待变为失败(pending->rejected)
+     * 拒绝
+     * 该方法可以将状态为待定（pending）的 promise 对象变为失败（rejected）状态
      * @param $reason
      * @throws Exception
      */
@@ -222,6 +229,7 @@ class Future extends BaseObject {
 
     /**
      * 将要
+     * 支持链式调用.
      * @param mixed $onfulfill 当成功时的执行体
      * @param mixed $onreject 当失败时的执行体
      * @return Future
@@ -250,69 +258,27 @@ class Future extends BaseObject {
 
 
     /**
-     * 完成.类似then,但无返回值,不支持链式调用;用于单元测试.
+     * 完成
+     * 类似then,但无返回值,不支持链式调用;用于单元测试.
      * @param $onfulfill
      * @param null $onreject
      * @throws Exception
      */
-    public function done($onfulfill, $onreject = NULL): void {
-        $this->then($onfulfill, $onreject)->then(NULL, function (Throwable $error) {
+    public function done($onfulfill, $onreject = null): void {
+        $this->then($onfulfill, $onreject)->then(null, function (Throwable $error) {
             throw new UncatchableException("", 0, $error);
         });
     }
 
 
     /**
-     * 检查当前 promise 对象的状态
-     * @return array
-     */
-    public function inspect(): array {
-        $res = ['state' => $this->state,];
-
-        switch ($this->state) {
-            case self::PENDING:
-                break;
-            case self::FULFILLED:
-                $res['value'] = $this->value;
-                break;
-            case self::REJECTED:
-                $res['reason'] = $this->reason;
-                break;
-        }
-
-        return $res;
-    }
-
-
-    /**
-     * 捕获错误
-     * @param $onreject
-     * @param mixed $fn
-     * @return Future
-     * @throws Exception
-     */
-    public function catchError($onreject, $fn = NULL) {
-        if (is_callable($fn)) {
-            $self = $this;
-            return $this->then(NULL, function ($e) use ($self, $onreject, $fn) {
-                if (call_user_func($fn, $e)) {
-                    return $self->then(NULL, $onreject);
-                } else {
-                    throw $e;
-                }
-            });
-        }
-        return $this->then(NULL, $onreject);
-    }
-
-
-    /**
-     * 失败.用于单元测试.
+     * 失败
+     * 该方法是 done(null, $onreject) 的简化.用于单元测试.
      * @param $onreject
      * @throws Exception
      */
     public function fail($onreject): void {
-        $this->done(NULL, $onreject);
+        $this->done(null, $onreject);
     }
 
 
@@ -334,7 +300,9 @@ class Future extends BaseObject {
 
 
     /**
-     * 完成.无论成功或失败,支持链式调用.
+     * 完成
+     * 无论成功或失败,支持链式调用.
+     * 是then(oncomplete, oncomplete)的简化
      * @param callable $oncomplete
      * @return Future
      * @throws Exception
@@ -348,7 +316,9 @@ class Future extends BaseObject {
 
 
     /**
-     * 总是.无论成功或失败,不支持链式.
+     * 总是
+     * 无论成功或失败,不支持链式.
+     * 是done(oncomplete, oncomplete) 的简化
      * @param callable $oncomplete
      * @throws Exception
      */
@@ -392,6 +362,90 @@ class Future extends BaseObject {
             return call_user_func_array($onfulfilledCallback, $array);
         });
     }
+
+
+    /**
+     * 返回当前 promise 对象的状态
+     * 如果当前状态为待定（pending），返回值为：['state' => 'pending']
+     * 如果当前状态为成功（fulfilled），返回值为：['state' => 'fulfilled', 'value' => $promise->value]
+     * 如果当前状态为失败（rejected），返回值为：['state' => 'rejected', 'reason' => $promise->reason]
+     * @return array
+     */
+    public function inspect(): array {
+        $res = ['state' => $this->state,];
+
+        switch ($this->state) {
+            case self::PENDING:
+                break;
+            case self::FULFILLED:
+                $res['value'] = $this->value;
+                break;
+            case self::REJECTED:
+                $res['reason'] = $this->reason;
+                break;
+        }
+
+        return $res;
+    }
+
+
+    /**
+     * 捕获错误
+     * 该方法是 then(null, $onreject) 的简化.
+     * @param $onreject
+     * @param callable $fn
+     * @return Future
+     * @throws Exception
+     */
+    public function catchError($onreject, callable $fn = null): Future {
+        if (is_callable($fn)) {
+            $self = $this;
+            return $this->then(null, function ($e) use ($self, $onreject, $fn) {
+                if (call_user_func($fn, $e)) {
+                    return $self->then(null, $onreject);
+                } else {
+                    throw $e;
+                }
+            });
+        }
+        return $this->then(null, $onreject);
+    }
+
+
+    /**
+     * 获取状态或结果key的值
+     * @param string $key
+     * @return string|Future
+     * @throws Exception
+     */
+    public function __get(string $key) {
+        if ($key == 'state') {
+            return $this->state;
+        }
+        return $this->then(function ($result) use ($key) {
+            return $result->$key ?? null;
+        });
+    }
+
+
+    /**
+     * 自动调用方法
+     * @param string $method 方法名
+     * @param array $args 参数
+     * @return Future
+     * @throws Exception
+     */
+    public function __call(string $method, array $args):Future {
+        if ($args === null) {
+            $args = [];
+        }
+        return $this->then(function ($result) use ($method, $args) {
+            return all($args)->then(function ($args) use ($result, $method) {
+                return call_user_func_array([$result, $method], $args);
+            });
+        });
+    }
+
 
 
 }
