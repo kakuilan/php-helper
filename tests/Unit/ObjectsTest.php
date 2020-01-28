@@ -27,8 +27,8 @@ class ObjectsTest extends TestCase {
      * @throws ReflectionException
      */
     public function testBase() {
-        $baseObj = new BaseCls();
-        $baseObj->name = 'hello';
+        $baseObj         = new BaseCls();
+        $baseObj->name   = 'hello';
         $baseObj->gender = 0;
 
         $this->assertEquals(strval($baseObj), get_class($baseObj));
@@ -41,15 +41,15 @@ class ObjectsTest extends TestCase {
      * @throws ReflectionException
      */
     public function testStrict() {
-        $striObj = new StrictCls(['name'=>'zhang3']);
-        $ref = $striObj->getReflectionObject();
+        $striObj = new StrictCls(['name' => 'zhang3']);
+        $ref     = $striObj->getReflectionObject();
         $this->assertTrue($ref instanceof ReflectionClass);
 
         // 空属性
         try {
             $striObj->get('');
-        }catch (Exception $e) {
-            $this->assertTrue(stripos($e->getMessage(), 'empty property')!==false);
+        } catch (Exception $e) {
+            $this->assertTrue(stripos($e->getMessage(), 'empty property') !== false);
         }
 
         // 访问protected属性
@@ -66,15 +66,15 @@ class ObjectsTest extends TestCase {
         // 访问不存在的属性
         try {
             $none = $striObj->get('none');
-        }catch (Exception $e) {
-            $this->assertTrue(stripos($e->getMessage(), 'Undefined readable property')!==false);
+        } catch (Exception $e) {
+            $this->assertTrue(stripos($e->getMessage(), 'Undefined readable property') !== false);
         }
 
         // 访问属性存在,但getXXX方法私有
         try {
             $no = $striObj->get('no');
-        }catch (Exception $e) {
-            $this->assertTrue(stripos($e->getMessage(), 'Undefined readable property')!==false);
+        } catch (Exception $e) {
+            $this->assertTrue(stripos($e->getMessage(), 'Undefined readable property') !== false);
         }
 
         // 设置protected属性
@@ -94,15 +94,15 @@ class ObjectsTest extends TestCase {
         // 设置不存在的属性
         try {
             $striObj->set('none', true);
-        }catch (Exception $e) {
-            $this->assertTrue(stripos($e->getMessage(), 'Undefined writable property')!==false);
+        } catch (Exception $e) {
+            $this->assertTrue(stripos($e->getMessage(), 'Undefined writable property') !== false);
         }
 
         // 设置属性存在,但getXXX方法私有
         try {
             $striObj->set('no', 2);
-        }catch (Exception $e) {
-            $this->assertTrue(stripos($e->getMessage(), 'Undefined writable property')!==false);
+        } catch (Exception $e) {
+            $this->assertTrue(stripos($e->getMessage(), 'Undefined writable property') !== false);
         }
 
         // 销毁属性
@@ -114,9 +114,9 @@ class ObjectsTest extends TestCase {
 
         // json化
         $json1 = json_encode($striObj);
-        $arr1 = json_decode($json1, true);
+        $arr1  = json_decode($json1, true);
         $json2 = $striObj->toJson();
-        $arr2 = $striObj->toArray();
+        $arr2  = $striObj->toArray();
 
         $this->assertEquals($json1, $json2);
         $this->assertEqualsCanonicalizing($arr1, $arr2);
@@ -128,7 +128,7 @@ class ObjectsTest extends TestCase {
      * 数组对象测试
      */
     public function testArray() {
-        $arrObj = new ArrayObject(['a'=>1, 'b'=>2, 'c'=>3]);
+        $arrObj = new ArrayObject(['a' => 1, 'b' => 2, 'c' => 3]);
 
         $this->assertEquals($arrObj->a, 1);
 
@@ -147,7 +147,7 @@ class ObjectsTest extends TestCase {
         $this->assertEquals($json1, $json2);
 
         $count1 = $arrObj->count();
-        $seri = $arrObj->serialize();
+        $seri   = $arrObj->serialize();
         $arrObj->unserialize($seri);
         $count2 = $arrObj->count();
         $this->assertEquals($count1, $count2);
@@ -164,7 +164,7 @@ class ObjectsTest extends TestCase {
         $arr = $arrObj->toArray();
         $this->assertEquals($arrObj->count(), count($arr));
 
-        $idx = $arrObj->search(3);
+        $idx  = $arrObj->search(3);
         $idx2 = $arrObj->indexOf(3);
         $this->assertEquals($idx, $idx2);
 
@@ -193,8 +193,8 @@ class ObjectsTest extends TestCase {
         $arrObj->append(3);
         $arrObj->prepend(1);
 
-        $sum = $arrObj->sum();
-        $pro = $arrObj->product();
+        $sum  = $arrObj->sum();
+        $pro  = $arrObj->product();
         $sum2 = $arrObj->reduce(function ($carry, $item) {
             $carry += $item;
             return $carry;
@@ -223,7 +223,7 @@ class ObjectsTest extends TestCase {
         $this->assertEquals($obj3->sum(), 24);
 
         $values = $arrObj->values();
-        $keys = $arrObj->keys();
+        $keys   = $arrObj->keys();
         $this->assertEquals($values->count(), $keys->count());
 
         $arrObj->prepend(2);
@@ -250,33 +250,19 @@ class ObjectsTest extends TestCase {
         $this->assertEquals($obj7->current(), 0);
 
         $obj8 = $arrObj->filter(function ($val) {
-            return $val>4;
+            return $val > 4;
         });
         $this->assertEquals($obj8->count(), 2);
 
         $arrObj->clear();
-        $arrObj->append([
-            'name' => 'zhang3',
-            'age' => '20',
-        ]);
-        $arrObj->append([
-            'name' => 'li4',
-            'age' => '22',
-        ]);
-        $arrObj->append([
-            'name' => 'zhao5',
-            'age' => '33',
-        ]);
-        $arrObj->append([
-            'name' => 'wang6',
-            'age' => '45',
-        ]);
+        $arrObj->append(['name' => 'zhang3', 'age' => '20',]);
+        $arrObj->append(['name' => 'li4', 'age' => '22',]);
+        $arrObj->append(['name' => 'zhao5', 'age' => '33',]);
+        $arrObj->append(['name' => 'wang6', 'age' => '45',]);
         $names = $arrObj->column('name');
         $this->assertEquals($names->count(), 4);
 
     }
-
-
 
 
 }

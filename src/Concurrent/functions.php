@@ -170,7 +170,6 @@ function co($generator, ...$args): Future {
     } elseif (!($generator instanceof Generator)) {
         return toFuture($generator);
     }
-
     $future      = new Future();
     $onfulfilled = function ($value) use (&$onfulfilled, &$onrejected, $generator, $future) {
         try {
@@ -200,6 +199,7 @@ function co($generator, ...$args): Future {
             $future->reject($e);
         }
     };
+
     toPromise($generator->current())->then($onfulfilled, $onrejected);
     return $future;
 }

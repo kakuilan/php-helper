@@ -25,7 +25,7 @@ class ServicesTest extends TestCase {
         $serv = new BaseServ([]);
 
         // 获取最终父类的实例化
-        $serv2 = BaseServ::getFinalInstance();
+        $serv2     = BaseServ::getFinalInstance();
         $servName2 = $serv2->getClassShortName();
         $this->assertEquals($servName2, 'BaseObject');
         $this->assertTrue(BaseServ::hasFinalInstance());
@@ -33,7 +33,7 @@ class ServicesTest extends TestCase {
         $this->assertFalse(BaseServ::hasFinalInstance());
 
         // 获取当前类的实例化
-        $serv3 = BaseServ::getSelfInstance();
+        $serv3     = BaseServ::getSelfInstance();
         $servName3 = $serv3->getClassShortName();
         $this->assertEquals($servName3, 'BaseServ');
         $this->assertTrue(BaseServ::hasSelfInstance());
@@ -42,8 +42,8 @@ class ServicesTest extends TestCase {
 
         $serv->setErrorInfo(123, '找不到资源');
         $errArr = $serv->getErrorInfo();
-        $errno = $serv->getErrno();
-        $error = $serv->getError();
+        $errno  = $serv->getErrno();
+        $error  = $serv->getError();
         $this->assertEquals($errArr['errno'], $errno);
         $this->assertEquals($errArr['error'], $error);
 

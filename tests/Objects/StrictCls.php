@@ -50,6 +50,6 @@ class StrictCls extends StrictObject {
     private function getNo() {
         return $this->no;
     }
-    
+
 
 }

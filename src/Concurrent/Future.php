@@ -77,7 +77,7 @@ class Future extends BaseObject {
 
     /**
      * Future constructor.
-     * @param null $computation
+     * @param mixed|null $computation
      * @throws Exception
      */
     public function __construct($computation = null) {
@@ -390,6 +390,62 @@ class Future extends BaseObject {
 
 
     /**
+     * 获取结果
+     * @return mixed|null
+     */
+    public function getResult() {
+        $status = $this->inspect();
+        return $status['value'] ?? null;
+    }
+
+
+    /**
+     * 获取原因
+     * @return mixed|null
+     */
+    public function getReason() {
+        $status = $this->inspect();
+        return $status['reason'] ?? null;
+    }
+
+
+    /**
+     * 是否正待定
+     * @return bool
+     */
+    public function isPending(): bool {
+        return $this->state === self::PENDING;
+    }
+
+
+    /**
+     * 是否已成功
+     * @return bool
+     */
+    public function isFulfilled(): bool {
+        return $this->state === self::FULFILLED;
+    }
+
+
+    /**
+     * 是否已失败
+     * @return bool
+     */
+    public function isRejected(): bool {
+        return $this->state === self::REJECTED;
+    }
+
+
+    /**
+     * 是否已完成
+     * @return bool
+     */
+    public function isCompleted(): bool {
+        return in_array($this->state, [self::FULFILLED, self::REJECTED]);
+    }
+
+
+    /**
      * 捕获错误
      * 该方法是 then(null, $onreject) 的简化.
      * @param $onreject
@@ -435,7 +491,7 @@ class Future extends BaseObject {
      * @return Future
      * @throws Exception
      */
-    public function __call(string $method, array $args):Future {
+    public function __call(string $method, array $args): Future {
         if ($args === null) {
             $args = [];
         }
@@ -445,7 +501,6 @@ class Future extends BaseObject {
             });
         });
     }
-
 
 
 }
