@@ -397,11 +397,11 @@ function any(array $array): Future {
  * 返回Promise
  * 当数组中所有子元素的promise全部完成(成功或失败)时,该Promise才为成功fulfilled状态.
  * 其值为数组参数中所有 promise 对象的 inspect 方法返回值，其数组元素与原数组元素一一对应
- * @param $array
+ * @param array $array
  * @return Future
  * @throws Exception
  */
-function settle($array): Future {
+function settle(array $array): Future {
     return toFuture($array)->then(function ($array) {
         $keys   = array_keys($array);
         $n      = count($array);

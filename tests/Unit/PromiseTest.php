@@ -319,5 +319,22 @@ class PromiseTest extends TestCase {
     }
 
 
+    /**
+     * @throws Exception
+     */
+    public function testFunSettle() {
+        $p1 = Concurrent\resolve(3);
+        $p2 = Concurrent\reject(new Exception('error'));
+        $p3 = new Future(); //pending状态
+
+        $promise = Concurrent\settle([true, $p1, $p2]);
+        $this->assertTrue($promise->isFulfilled());
+
+        $promise = Concurrent\settle([true, $p1, $p2, $p3]);
+        $this->assertTrue($promise->isPending());
+
+    }
+
+
 
 }
