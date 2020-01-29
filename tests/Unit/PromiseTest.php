@@ -141,14 +141,14 @@ class PromiseTest extends TestCase {
      */
     public function testFunCo() {
         $promise = Concurrent\co(function () {
-            yield MyGenerator::num();
-        });
-        $promise->then(function ($res) {
-            //注意,结果为生成器迭代完成的最后一个结果
-            //需要显式地返回结果
-            return $res;
+            yield MyGenerator::randNum();
         });
         $res = $promise->getResult();
+        $this->assertNotEmpty($res);
+
+        $promise = Concurrent\co(MyGenerator::num());
+        $res = $promise->getResult();
+        //注意,结果为生成器迭代完成的最后一个结果
         $this->assertEquals($res, 99);
     }
 
@@ -225,7 +225,7 @@ class PromiseTest extends TestCase {
     public function testAll() {
         $promise1 = Concurrent\toPromise(MyGenerator::randName());
         $promise2 = Concurrent\toPromise(MyGenerator::randAddr());
-        $promise3 = Concurrent\toPromise(MyGenerator::num());
+        $promise3 = Concurrent\toPromise(MyGenerator::randNum());
 
         $promise4 = Concurrent\all([$promise1, $promise2, $promise3])->then(function ($ret) {
             return $ret;

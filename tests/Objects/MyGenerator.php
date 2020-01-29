@@ -35,6 +35,16 @@ class MyGenerator {
 
 
     /**
+     * 随机数字的生成器
+     * @return Generator
+     */
+    public static function randNum() {
+        $num = mt_rand(1, 9999);
+        yield $num;
+    }
+
+
+    /**
      * 数字的生成器
      * @return Generator
      */
@@ -43,14 +53,6 @@ class MyGenerator {
             //注意变量$i的值在不同的yield之间是保持传递的。
             yield $i;
         }
-    }
-
-
-    /**
-     * @return int
-     */
-    public static function randNum() {
-        return mt_rand(1, 99);
     }
 
 
