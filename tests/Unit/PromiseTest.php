@@ -9,6 +9,7 @@
 
 namespace Kph\Tests\Unit;
 
+use function foo\func;
 use PHPUnit\Framework\TestCase;
 use Kph\Tests\Objects\MyGenerator;
 use Kph\Concurrent\Exception\UncatchableException;
@@ -112,7 +113,7 @@ class PromiseTest extends TestCase {
         $test = $this;
         $future = Concurrent\toFuture(1);
         $promise = Concurrent\toPromise($future);
-        $promise->then(function ($res) use($test){
+        $promise->then(function ($res) {
             //不能在回调里面进行断言
         });
         $res = $promise->getResult();
@@ -143,6 +144,7 @@ class PromiseTest extends TestCase {
         });
         $promise->then(function ($res){
             //注意,结果为生成器迭代完成的最后一个结果
+            return $res;
         });
         $res = $promise->getResult();
         $this->assertEquals($res, 99);
@@ -175,6 +177,42 @@ class PromiseTest extends TestCase {
         $fail = $promise->isRejected();
         $this->assertTrue($fail);
 
+    }
+
+
+    /**
+     * @throws Exception
+     */
+    public function testPromise() {
+        $fn = function () {
+            return time();
+        };
+
+        $promise = Concurrent\promise($fn);
+        $chk = Concurrent\isPromise($promise);
+        $this->assertTrue($chk);
+    }
+
+
+    /**
+     * @throws Exception
+     */
+    public function testPromisify() {
+        $sum = Concurrent\promisify([MyGenerator::class, 'asyncSum']);
+        $a = $sum(1, 2);
+        $b = $a->then(function ($a) use($sum) {
+            return $sum($a, 3);
+        });
+        $c = $b->then(function ($b) use($sum) {
+            return $sum($b, 4);
+        });
+
+        $promise = Concurrent\all([$a, $b, $c])->then(function ($result) {
+            return $result;
+        });
+        $res = $promise->getResult(); //[3,6,10]
+        $num = count($res);
+        $this->assertEquals($num, 3);
     }
 
 

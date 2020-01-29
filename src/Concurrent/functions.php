@@ -264,16 +264,16 @@ function promisify(callable $fn): callable {
     return function (...$args) use ($fn) {
         $future = new Future();
         //新建$fn最后一个参数,是可执行的回调函数
-        $args[] = function () use ($future, $args) {
-            switch (count($args)) {
+        $args[] = function (...$params) use ($future, $args) {
+            switch (count($params)) {
                 case 0:
                     $future->resolve(null);
                     break;
                 case 1:
-                    $future->resolve($args[0]);
+                    $future->resolve($params[0]);
                     break;
                 default:
-                    $future->resolve($args);
+                    $future->resolve($params);
                     break;
             }
         };

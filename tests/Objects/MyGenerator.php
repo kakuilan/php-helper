@@ -54,4 +54,17 @@ class MyGenerator {
     }
 
 
+    /**
+     * @param int $a
+     * @param int $b
+     * @param callable $callback
+     */
+    public static function asyncSum(int $a, int $b, callable $callback) {
+        $total = $a + $b;
+        return $callback($total);
+    }
+
+
+
+
 }
