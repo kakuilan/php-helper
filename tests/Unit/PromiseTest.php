@@ -332,8 +332,24 @@ class PromiseTest extends TestCase {
 
         $promise = Concurrent\settle([true, $p1, $p2, $p3]);
         $this->assertTrue($promise->isPending());
-
     }
+
+
+    /**
+     * @throws Exception
+     */
+    public function testFunRun() {
+        $add = function ($a, $b) {
+            return $a + $b;
+        };
+
+        $p1 = Concurrent\resolve(3);
+
+        $promise = Concurrent\run($add, 2, $p1);
+        $this->assertTrue($promise->isFulfilled());
+        $this->assertEquals($promise->getResult(), 5);
+    }
+
 
 
 
