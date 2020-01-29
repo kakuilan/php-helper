@@ -9,19 +9,18 @@
 
 namespace Kph\Tests\Unit;
 
-use function foo\func;
 use PHPUnit\Framework\TestCase;
-use Kph\Tests\Objects\MyGenerator;
-use Kph\Concurrent\Exception\UncatchableException;
+use Error;
+use Exception;
+use Faker\Factory;
+use Generator;
 use Kph\Concurrent;
+use Kph\Concurrent\Exception\UncatchableException;
 use Kph\Concurrent\Future;
 use Kph\Concurrent\Promise;
-use Faker\Factory;
-use Exception;
-use Throwable;
-use Generator;
+use Kph\Tests\Objects\MyGenerator;
 use RuntimeException;
-use Error;
+use Throwable;
 
 class PromiseTest extends TestCase {
 
@@ -110,8 +109,8 @@ class PromiseTest extends TestCase {
      * @throws Exception
      */
     public function testFunToFutureToPromise() {
-        $test = $this;
-        $future = Concurrent\toFuture(1);
+        $test    = $this;
+        $future  = Concurrent\toFuture(1);
         $promise = Concurrent\toPromise($future);
         $promise->then(function ($res) {
             //不能在回调里面进行断言
@@ -120,16 +119,18 @@ class PromiseTest extends TestCase {
         $this->assertEquals($res, 1);
 
         //闭包中引用生成器
-        $promise = Concurrent\toPromise(function (){
+        $promise = Concurrent\toPromise(function () {
             yield MyGenerator::randName();
         });
-        $promise->then(function ($res){});
+        $promise->then(function ($res) {
+        });
         $res = $promise->getResult();
         $this->assertNotEmpty($res);
 
         //直接调用生成器
         $promise = Concurrent\toPromise(MyGenerator::randAddr());
-        $promise->then(function ($res){});
+        $promise->then(function ($res) {
+        });
         $res = $promise->getResult();
         $this->assertNotEmpty($res);
     }
@@ -139,11 +140,12 @@ class PromiseTest extends TestCase {
      * @throws Exception
      */
     public function testFunCo() {
-        $promise = Concurrent\co(function (){
+        $promise = Concurrent\co(function () {
             yield MyGenerator::num();
         });
-        $promise->then(function ($res){
+        $promise->then(function ($res) {
             //注意,结果为生成器迭代完成的最后一个结果
+            //需要显式地返回结果
             return $res;
         });
         $res = $promise->getResult();
@@ -156,25 +158,25 @@ class PromiseTest extends TestCase {
      */
     public function testSync() {
         $promise = Concurrent\sync('hello');
-        $fail = $promise->isRejected();
+        $fail    = $promise->isRejected();
         $this->assertTrue($fail);
 
         try {
-            $fn = function () {
+            $fn      = function () {
                 throw new UncatchableException('none');
             };
             $promise = Concurrent\sync($fn);
-            $fail = $promise->isRejected();
+            $fail    = $promise->isRejected();
             $this->assertTrue($fail);
-        }catch (Error $e) {
+        } catch (Error $e) {
             $this->assertNotEmpty($e->getMessage());
         }
 
-        $fn = function () {
+        $fn      = function () {
             throw new Error('none');
         };
         $promise = Concurrent\sync($fn);
-        $fail = $promise->isRejected();
+        $fail    = $promise->isRejected();
         $this->assertTrue($fail);
 
     }
@@ -189,7 +191,7 @@ class PromiseTest extends TestCase {
         };
 
         $promise = Concurrent\promise($fn);
-        $chk = Concurrent\isPromise($promise);
+        $chk     = Concurrent\isPromise($promise);
         $this->assertTrue($chk);
     }
 
@@ -199,23 +201,39 @@ class PromiseTest extends TestCase {
      */
     public function testPromisify() {
         $sum = Concurrent\promisify([MyGenerator::class, 'asyncSum']);
-        $a = $sum(1, 2);
-        $b = $a->then(function ($a) use($sum) {
+        $a   = $sum(1, 2);
+        $b   = $a->then(function ($a) use ($sum) {
             return $sum($a, 3);
         });
-        $c = $b->then(function ($b) use($sum) {
+        $c   = $b->then(function ($b) use ($sum) {
             return $sum($b, 4);
         });
 
         $promise = Concurrent\all([$a, $b, $c])->then(function ($result) {
+            //需要显式地返回结果
             return $result;
         });
-        $res = $promise->getResult(); //[3,6,10]
-        $num = count($res);
+        $res     = $promise->getResult(); //[3,6,10]
+        $num     = count($res);
         $this->assertEquals($num, 3);
     }
 
 
+    /**
+     * @throws Exception
+     */
+    public function testAll() {
+        $promise1 = Concurrent\toPromise(MyGenerator::randName());
+        $promise2 = Concurrent\toPromise(MyGenerator::randAddr());
+        $promise3 = Concurrent\toPromise(MyGenerator::num());
+
+        $promise4 = Concurrent\all([$promise1, $promise2, $promise3])->then(function ($ret) {
+            return $ret;
+        });
+        $res      = $promise4->getResult();
+        $num      = count($res);
+        $this->assertEquals($num, 3);
+    }
 
 
 }
