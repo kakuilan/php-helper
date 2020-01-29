@@ -18,6 +18,7 @@ use Kph\Concurrent;
 use Kph\Concurrent\Exception\UncatchableException;
 use Kph\Concurrent\Future;
 use Kph\Concurrent\Promise;
+use Kph\Tests\Objects\BaseCls;
 use Kph\Tests\Objects\MyGenerator;
 use RuntimeException;
 use Throwable;
@@ -146,6 +147,10 @@ class PromiseTest extends TestCase {
         $res = $promise->getResult();
         $this->assertNotEmpty($res);
 
+        $obj = new BaseCls();
+        $promise = Concurrent\co($obj);
+        $this->assertTrue(Concurrent\isPromise($promise));
+
         //注意,结果为生成器迭代完成的最后一个结果
         //此段代码本地通过,但travis失败
 //        $promise = Concurrent\co(MyGenerator::num());
@@ -157,7 +162,7 @@ class PromiseTest extends TestCase {
     /**
      * @throws Exception
      */
-    public function testSync() {
+    public function testFunSync() {
         $promise = Concurrent\sync('hello');
         $fail    = $promise->isRejected();
         $this->assertTrue($fail);
@@ -186,7 +191,7 @@ class PromiseTest extends TestCase {
     /**
      * @throws Exception
      */
-    public function testPromise() {
+    public function testFunPromise() {
         $fn = function () {
             return time();
         };
@@ -200,7 +205,7 @@ class PromiseTest extends TestCase {
     /**
      * @throws Exception
      */
-    public function testPromisify() {
+    public function testFunPromisify() {
         $sum = Concurrent\promisify([MyGenerator::class, 'asyncSum']);
         $a   = $sum(1, 2);
         $b   = $a->then(function ($a) use ($sum) {
@@ -217,13 +222,35 @@ class PromiseTest extends TestCase {
         $res     = $promise->getResult(); //[3,6,10]
         $num     = count($res);
         $this->assertEquals($num, 3);
+
+        $sum1 = Concurrent\promisify([MyGenerator::class, 'asyncSumNone']);
+        $sum2 = Concurrent\promisify([MyGenerator::class, 'asyncSumDoubly']);
+
+        $d = $sum1(1, 2);
+        $e = $sum2(1, 2);
+        $res1 = $d->getResult();
+        $res2 = $e->getResult();
+
+        $this->assertEmpty($res1);
+        $this->assertNotEmpty($res2);
+
+        $sum3 = Concurrent\promisify([MyGenerator::class, 'asyncSumError']);
+        $f = $sum3();
+        $this->assertTrue($f->isRejected());
+
+        $fn = function () {
+            throw new Exception('has an error');
+        };
+        $sum4 = Concurrent\promisify($fn);
+        $g = $sum4();
+        $this->assertTrue($g->isRejected());
     }
 
 
     /**
      * @throws Exception
      */
-    public function testAll() {
+    public function testFunAll() {
         $promise1 = Concurrent\toPromise(MyGenerator::randName());
         $promise2 = Concurrent\toPromise(MyGenerator::randAddr());
         $promise3 = Concurrent\toPromise(MyGenerator::randNum());
@@ -240,7 +267,7 @@ class PromiseTest extends TestCase {
     /**
      * @throws Exception
      */
-    public function testJoin() {
+    public function testFunJoin() {
         $promise1 = Concurrent\toPromise(MyGenerator::randName());
         $promise2 = Concurrent\toPromise(MyGenerator::randAddr());
         $promise3 = Concurrent\toPromise(MyGenerator::randNum());
@@ -257,7 +284,7 @@ class PromiseTest extends TestCase {
     /**
      * @throws Exception
      */
-    public function testRace() {
+    public function testFunRace() {
         $promise1 = Concurrent\toPromise(MyGenerator::randName());
         $promise2 = Concurrent\toPromise(MyGenerator::randAddr());
         $promise3 = Concurrent\toPromise(MyGenerator::randNum());

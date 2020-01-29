@@ -265,6 +265,7 @@ function promisify(callable $fn): callable {
         $future = new Future();
         //新建$fn最后一个参数,是可执行的回调函数
         $args[] = function (...$params) use ($future, $args) {
+            //$params是回调函数参数
             switch (count($params)) {
                 case 0:
                     $future->resolve(null);

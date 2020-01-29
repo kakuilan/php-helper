@@ -67,6 +67,33 @@ class MyGenerator {
     }
 
 
+    /**
+     * @param int $a
+     * @param int $b
+     * @param callable $callback
+     * @return mixed
+     */
+    public static function asyncSumNone(int $a, int $b, callable $callback) {
+        return $callback();
+    }
+
+
+    /**
+     * @param int $a
+     * @param int $b
+     * @param callable $callback
+     * @return mixed
+     */
+    public static function asyncSumDoubly(int $a, int $b, callable $callback) {
+        $total = $a + $b;
+        return $callback($a, $b, $total);
+    }
+
+
+
+    public static function asyncSumError($a, $b, $c, $d):void {
+        return;
+    }
 
 
 }
