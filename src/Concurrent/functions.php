@@ -150,9 +150,21 @@ function toFuture($obj): Future {
 function toPromise($obj): Future {
     if (isFuture($obj)) {
         return $obj;
-    } elseif ($obj instanceof Generator) {
-        return co($obj);
     }
+
+    if (is_object($obj)) {
+        if ($obj instanceof Closure) {
+            $fn  = Closure::bind($obj, null);
+            $ref = new ReflectionFunction($fn);
+            //闭包中包含生成器
+            if ($ref->isGenerator()) {
+                return co($obj);
+            }
+        } elseif ($obj instanceof Generator) {
+            return co($obj);
+        }
+    }
+
     return value($obj);
 }
 
@@ -167,9 +179,11 @@ function toPromise($obj): Future {
 function co($generator, ...$args): Future {
     if (is_callable($generator)) {
         $generator = call_user_func_array($generator, $args);
-    } elseif (!($generator instanceof Generator)) {
+    }
+    if (!($generator instanceof Generator)) {
         return toFuture($generator);
     }
+
     $future      = new Future();
     $onfulfilled = function ($value) use (&$onfulfilled, &$onrejected, $generator, $future) {
         try {

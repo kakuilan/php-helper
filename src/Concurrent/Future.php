@@ -124,7 +124,7 @@ class Future extends BaseObject {
      * @param mixed $params
      * @throws Exception
      */
-    private function privateResolve(callable $onfulfill, Future $next, $params) {
+    private function privateResolve($onfulfill, Future $next, $params) {
         if (is_callable($onfulfill)) {
             $this->privateCall($onfulfill, $next, $params);
         } else {
@@ -140,7 +140,7 @@ class Future extends BaseObject {
      * @param mixed $params
      * @throws Exception
      */
-    private function privateReject(callable $onreject, Future $next, $params) {
+    private function privateReject($onreject, Future $next, $params) {
         if (is_callable($onreject)) {
             $this->privateCall($onreject, $next, $params);
         } else {

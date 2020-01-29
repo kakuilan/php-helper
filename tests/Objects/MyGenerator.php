@@ -39,7 +39,7 @@ class MyGenerator {
      * @return Generator
      */
     public static function num() {
-        for ($i = 1; $i <= 9999; $i++) {
+        for ($i = 1; $i <= 99; $i++) {
             //注意变量$i的值在不同的yield之间是保持传递的。
             yield $i;
         }
