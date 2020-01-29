@@ -254,5 +254,24 @@ class PromiseTest extends TestCase {
     }
 
 
+    /**
+     * @throws Exception
+     */
+    public function testRace() {
+        $promise1 = Concurrent\toPromise(MyGenerator::randName());
+        $promise2 = Concurrent\toPromise(MyGenerator::randAddr());
+        $promise3 = Concurrent\toPromise(MyGenerator::randNum());
+
+        $promise4 = Concurrent\race([$promise1, $promise2, $promise3])->then(function ($ret) {
+            return $ret;
+        });
+        $res      = $promise4->getResult();
+        $this->assertNotEmpty($res);
+    }
+
+
+
+
+
 
 }
