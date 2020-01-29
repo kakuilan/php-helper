@@ -19,6 +19,7 @@ use Kph\Concurrent\Exception\UncatchableException;
 use Kph\Concurrent\Future;
 use Kph\Concurrent\Promise;
 use Kph\Tests\Objects\BaseCls;
+use Kph\Tests\Objects\MathCls;
 use Kph\Tests\Objects\MyGenerator;
 use RuntimeException;
 use Throwable;
@@ -351,6 +352,20 @@ class PromiseTest extends TestCase {
     }
 
 
+    /**
+     * @throws Exception
+     */
+    public function testFunWrap() {
+        $var_dump = Concurrent\wrap('var_export');
+        $test = Concurrent\wrap(new MathCls());
+
+        $var_dump($test->add(1, Concurrent\value(2)));
+
+
+
+
+
+    }
 
 
 }
