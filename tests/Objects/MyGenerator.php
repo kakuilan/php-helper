@@ -45,4 +45,13 @@ class MyGenerator {
         }
     }
 
+
+    /**
+     * @return int
+     */
+    public static function randNum() {
+        return mt_rand(1, 99);
+    }
+
+
 }

@@ -11,6 +11,7 @@ namespace Kph\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Kph\Tests\Objects\MyGenerator;
+use Kph\Concurrent\Exception\UncatchableException;
 use Kph\Concurrent;
 use Kph\Concurrent\Future;
 use Kph\Concurrent\Promise;
@@ -18,6 +19,8 @@ use Faker\Factory;
 use Exception;
 use Throwable;
 use Generator;
+use RuntimeException;
+use Error;
 
 class PromiseTest extends TestCase {
 
@@ -117,24 +120,23 @@ class PromiseTest extends TestCase {
 
         //闭包中引用生成器
         $promise = Concurrent\toPromise(function (){
-            yield MyGenerator::num();
+            yield MyGenerator::randName();
         });
-        $promise->then(function ($res){
-            //注意,结果为生成器迭代完成的最后一个结果
-        });
+        $promise->then(function ($res){});
         $res = $promise->getResult();
-        $this->assertEquals($res, 99);
+        $this->assertNotEmpty($res);
 
         //直接调用生成器
-        $promise = Concurrent\toPromise(MyGenerator::num());
-        $promise->then(function ($res){
-            //注意,结果为生成器迭代完成的最后一个结果
-        });
+        $promise = Concurrent\toPromise(MyGenerator::randAddr());
+        $promise->then(function ($res){});
         $res = $promise->getResult();
-        $this->assertEquals($res, 99);
+        $this->assertNotEmpty($res);
     }
 
 
+    /**
+     * @throws Exception
+     */
     public function testFunCo() {
         $promise = Concurrent\co(function (){
             yield MyGenerator::num();
@@ -144,6 +146,35 @@ class PromiseTest extends TestCase {
         });
         $res = $promise->getResult();
         $this->assertEquals($res, 99);
+    }
+
+
+    /**
+     * @throws Exception
+     */
+    public function testSync() {
+        $promise = Concurrent\sync('hello');
+        $fail = $promise->isRejected();
+        $this->assertTrue($fail);
+
+        try {
+            $fn = function () {
+                throw new UncatchableException('none');
+            };
+            $promise = Concurrent\sync($fn);
+            $fail = $promise->isRejected();
+            $this->assertTrue($fail);
+        }catch (Error $e) {
+            $this->assertNotEmpty($e->getMessage());
+        }
+
+        $fn = function () {
+            throw new Error('none');
+        };
+        $promise = Concurrent\sync($fn);
+        $fail = $promise->isRejected();
+        $this->assertTrue($fail);
+
     }
 
 

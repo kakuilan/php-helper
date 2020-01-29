@@ -228,7 +228,7 @@ function co($generator, ...$args): Future {
  * @return Future
  * @throws Exception
  */
-function sync(callable $computation): Future {
+function sync($computation): Future {
     try {
         return toPromise(call_user_func($computation));
     } catch (UncatchableException $e) {
