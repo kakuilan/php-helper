@@ -237,4 +237,22 @@ class PromiseTest extends TestCase {
     }
 
 
+    /**
+     * @throws Exception
+     */
+    public function testJoin() {
+        $promise1 = Concurrent\toPromise(MyGenerator::randName());
+        $promise2 = Concurrent\toPromise(MyGenerator::randAddr());
+        $promise3 = Concurrent\toPromise(MyGenerator::randNum());
+
+        $promise4 = Concurrent\join($promise1, $promise2, $promise3)->then(function ($ret) {
+            return $ret;
+        });
+        $res      = $promise4->getResult();
+        $num      = count($res);
+        $this->assertEquals($num, 3);
+    }
+
+
+
 }
