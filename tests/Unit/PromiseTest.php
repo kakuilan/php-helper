@@ -261,6 +261,8 @@ class PromiseTest extends TestCase {
         $res      = $promise4->getResult();
         $num      = count($res);
         $this->assertEquals($num, 3);
+
+        Concurrent\all([]);
     }
 
 
@@ -297,7 +299,24 @@ class PromiseTest extends TestCase {
     }
 
 
+    /**
+     * @throws Exception
+     */
+    public function testFunAny() {
+        $promise = Concurrent\any([]);
+        $this->assertTrue($promise->isRejected());
 
+        $promise = Concurrent\any([1,2,3]);
+        $res = $promise->getResult();
+        $this->assertNotEmpty($res);
+
+        $fn = function () {
+            throw new Exception('error');
+        };
+
+        $promise = Concurrent\any([$fn, 1, 2]);
+        $this->assertTrue($promise->isFulfilled());
+    }
 
 
 

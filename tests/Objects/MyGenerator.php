@@ -59,11 +59,15 @@ class MyGenerator {
     /**
      * @param int $a
      * @param int $b
-     * @param callable $callback
+     * @param mixed $callback
      */
-    public static function asyncSum(int $a, int $b, callable $callback) {
+    public static function asyncSum(int $a, int $b, $callback=null) {
         $total = $a + $b;
-        return $callback($total);
+        if(!empty($callback) && is_callable($callback)) {
+            $total = $callback($total);
+        }
+
+        return $total;
     }
 
 
@@ -90,7 +94,12 @@ class MyGenerator {
     }
 
 
-
+    /**
+     * @param $a
+     * @param $b
+     * @param $c
+     * @param $d
+     */
     public static function asyncSumError($a, $b, $c, $d):void {
         return;
     }
