@@ -63,6 +63,37 @@ function makeClosureFun(callable $callback, ...$params): callable {
 
 
 /**
+ * 是否生成器
+ * @param $var
+ * @return bool
+ * @throws ReflectionException
+ */
+function isGenerator($var): bool {
+    if (is_callable($var) && !is_object($var)) {
+        try {
+            $var = call_user_func($var);
+        } catch (Exception $e) {
+        }
+    }
+
+    if (is_object($var)) {
+        if ($var instanceof Closure) {
+            $fn  = Closure::bind($var, null);
+            $ref = new ReflectionFunction($fn);
+            //闭包中包含生成器
+            if ($ref->isGenerator()) {
+                return true;
+            }
+        } elseif ($var instanceof Generator) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+/**
  * 根据错误构造future
  * @param mixed $e
  * @return Future
@@ -152,17 +183,8 @@ function toPromise($obj): Future {
         return $obj;
     }
 
-    if (is_object($obj)) {
-        if ($obj instanceof Closure) {
-            $fn  = Closure::bind($obj, null);
-            $ref = new ReflectionFunction($fn);
-            //闭包中包含生成器
-            if ($ref->isGenerator()) {
-                return co($obj);
-            }
-        } elseif ($obj instanceof Generator) {
-            return co($obj);
-        }
+    if (isGenerator($obj)) {
+        return co($obj);
     }
 
     return value($obj);
@@ -454,27 +476,22 @@ function run(callable $handler, ...$args): Future {
 function wrap($handler) {
     if (is_object($handler)) {
         if (is_callable($handler)) {
-            if (class_exists("\\Generator") && ($handler instanceof Generator)) {
+            if (isGenerator($handler)) {
                 return co($handler);
             }
+
             return new CallableWrapper($handler);
         }
         return new Wrapper($handler);
     }
     if (is_callable($handler)) {
-        if (class_exists("\\Generator")) {
-            return function () use ($handler) {
-                return all(func_get_args())->then(function ($args) use ($handler) {
-                    return co(call_user_func_array($handler, $args));
-                });
-            };
-        }
         return function () use ($handler) {
             return all(func_get_args())->then(function ($args) use ($handler) {
-                return call_user_func_array($handler, $args);
+                return co(call_user_func_array($handler, $args));
             });
         };
     }
+
     return $handler;
 }
 

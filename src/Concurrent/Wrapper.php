@@ -36,10 +36,7 @@ class Wrapper extends BaseObject {
     public function __call($name, array $arguments):Future {
         $method = [$this->obj, $name];
         return all($arguments)->then(function($args) use ($method, $name) {
-            if (class_exists("\\Generator", false)) {
-                return co(call_user_func_array($method, $args));
-            }
-            return call_user_func_array($method, $args);
+            return co(call_user_func_array($method, $args));
         });
     }
 

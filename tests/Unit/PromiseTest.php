@@ -372,6 +372,8 @@ class PromiseTest extends TestCase {
 
         $promise = $var_export($test->div(1, 2), true);
         $this->assertEquals('0.5', $promise->getResult());
+
+
     }
 
 
