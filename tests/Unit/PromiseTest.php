@@ -145,18 +145,18 @@ class PromiseTest extends TestCase {
         $promise = Concurrent\co(function () {
             yield MyGenerator::randNum();
         });
-        $res = $promise->getResult();
+        $res     = $promise->getResult();
         $this->assertNotEmpty($res);
 
-        $obj = new BaseCls();
+        $obj     = new BaseCls();
         $promise = Concurrent\co($obj);
         $this->assertTrue(Concurrent\isPromise($promise));
 
         //注意,结果为生成器迭代完成的最后一个结果
         //此段代码本地通过,但travis失败
-//        $promise = Concurrent\co(MyGenerator::num());
-//        $res = $promise->getResult();
-//        $this->assertEquals($res, 99);
+        //        $promise = Concurrent\co(MyGenerator::num());
+        //        $res = $promise->getResult();
+        //        $this->assertEquals($res, 99);
     }
 
 
@@ -227,8 +227,8 @@ class PromiseTest extends TestCase {
         $sum1 = Concurrent\promisify([MyGenerator::class, 'asyncSumNone']);
         $sum2 = Concurrent\promisify([MyGenerator::class, 'asyncSumDoubly']);
 
-        $d = $sum1(1, 2);
-        $e = $sum2(1, 2);
+        $d    = $sum1(1, 2);
+        $e    = $sum2(1, 2);
         $res1 = $d->getResult();
         $res2 = $e->getResult();
 
@@ -236,14 +236,14 @@ class PromiseTest extends TestCase {
         $this->assertNotEmpty($res2);
 
         $sum3 = Concurrent\promisify([MyGenerator::class, 'asyncSumError']);
-        $f = $sum3();
+        $f    = $sum3();
         $this->assertTrue($f->isRejected());
 
-        $fn = function () {
+        $fn   = function () {
             throw new Exception('has an error');
         };
         $sum4 = Concurrent\promisify($fn);
-        $g = $sum4();
+        $g    = $sum4();
         $this->assertTrue($g->isRejected());
     }
 
@@ -307,16 +307,16 @@ class PromiseTest extends TestCase {
         $promise = Concurrent\any([]);
         $this->assertTrue($promise->isRejected());
 
-        $promise = Concurrent\any([1,2,3]);
-        $res = $promise->getResult();
-        $this->assertNotEmpty($res);
-
-        $fn = function () {
+        $fn      = function () {
             throw new Exception('error');
         };
+        $promise = Concurrent\any([1, 2, 3, $fn]);
+        $res     = $promise->getResult();
+        $this->assertNotEmpty($res);
 
-        $promise = Concurrent\any([$fn, 1, 2]);
-        $this->assertTrue($promise->isFulfilled());
+        $p       = Concurrent\reject(new Exception('error'));
+        $promise = Concurrent\any([$p]);
+        $this->assertTrue($promise->isRejected());
     }
 
 
@@ -333,6 +333,8 @@ class PromiseTest extends TestCase {
 
         $promise = Concurrent\settle([true, $p1, $p2, $p3]);
         $this->assertTrue($promise->isPending());
+
+        Concurrent\settle([]);
     }
 
 
@@ -356,15 +358,20 @@ class PromiseTest extends TestCase {
      * @throws Exception
      */
     public function testFunWrap() {
-        $var_dump = Concurrent\wrap('var_export');
-        $test = Concurrent\wrap(new MathCls());
+        $var_export = Concurrent\wrap('var_export');
+        $test       = Concurrent\wrap(new MathCls());
 
-        $var_dump($test->add(1, Concurrent\value(2)));
+        $promise = $var_export($test->add(1, Concurrent\value(2)), true);
+        $this->assertEquals('3', $promise->getResult());
 
+        $promise = $var_export($test->sub(Concurrent\value(1), 2), true);
+        $this->assertEquals('-1', $promise->getResult());
 
+        $promise = $var_export($test->mul(Concurrent\value(1), Concurrent\value(2)), true);
+        $this->assertEquals('2', $promise->getResult());
 
-
-
+        $promise = $var_export($test->div(1, 2), true);
+        $this->assertEquals('0.5', $promise->getResult());
     }
 
 
