@@ -385,7 +385,20 @@ class PromiseTest extends TestCase {
         $promise = $var_export($test->div(1, 2), true);
         $this->assertEquals('0.5', $promise->getResult());
 
+        $promise = Concurrent\wrap(MyGenerator::randName());
+        $this->assertNotEmpty($promise->getResult());
 
+        $obj = new BaseCls();
+        $obj2 = Concurrent\wrap($obj);
+        $time = $obj2->time()->getResult();
+        $this->assertGreaterThan(1, $time);
+
+        $fn = function () {
+          return time();
+        };
+        $obj3 = Concurrent\wrap($fn);
+        $time = $obj3()->getResult();
+        $this->assertGreaterThan(1, $time);
     }
 
 

@@ -475,11 +475,9 @@ function run(callable $handler, ...$args): Future {
  */
 function wrap($handler) {
     if (is_object($handler)) {
-        if (is_callable($handler)) {
-            if (isGenerator($handler)) {
-                return co($handler);
-            }
-
+        if (isGenerator($handler)) {
+            return co($handler);
+        } elseif (is_callable($handler)) {
             return new CallableWrapper($handler);
         }
         return new Wrapper($handler);

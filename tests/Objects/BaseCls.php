@@ -21,4 +21,15 @@ class BaseCls extends BaseObject {
     private $id;
 
 
+    public function time() {
+        return time();
+    }
+
+
+    public function __call($name, $args) {
+        return call_user_func_array([$this, $name], $args);
+    }
+
+
+
 }
