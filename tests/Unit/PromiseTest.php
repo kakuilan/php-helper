@@ -28,6 +28,18 @@ class PromiseTest extends TestCase {
 
 
     /**
+     * @throws \ReflectionException
+     */
+    public function testIsGenerator() {
+        $chk = Concurrent\isGenerator('time');
+        $this->assertFalse($chk);
+
+        $chk = Concurrent\isGenerator([MyGenerator::class, 'randName']);
+        $this->assertTrue($chk);
+    }
+
+
+    /**
      * @throws Exception
      */
     public function testIsFuture() {
