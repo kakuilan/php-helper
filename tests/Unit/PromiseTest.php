@@ -402,6 +402,9 @@ class PromiseTest extends TestCase {
         $obj3 = Concurrent\wrap($fn);
         $time = $obj3()->getResult();
         $this->assertGreaterThan(1, $time);
+
+        $wrap = Concurrent\wrap(1);
+        $this->assertEquals(1, $wrap);
     }
 
 
