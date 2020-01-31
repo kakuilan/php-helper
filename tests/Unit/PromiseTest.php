@@ -36,6 +36,9 @@ class PromiseTest extends TestCase {
 
         $chk = Concurrent\isGenerator([MyGenerator::class, 'randName']);
         $this->assertTrue($chk);
+
+        $chk = Concurrent\isGenerator([MathCls::class, 'add']);
+        $this->assertFalse($chk);
     }
 
 
@@ -400,6 +403,15 @@ class PromiseTest extends TestCase {
         $time = $obj3()->getResult();
         $this->assertGreaterThan(1, $time);
     }
+
+
+    public function testFunEach() {
+
+
+
+
+    }
+
 
 
 }
