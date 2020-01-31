@@ -19,6 +19,7 @@ use Kph\Concurrent\Exception\UncatchableException;
 use Kph\Concurrent\Future;
 use Kph\Concurrent\Promise;
 use Kph\Tests\Objects\BaseCls;
+use Kph\Tests\Objects\BaseServ;
 use Kph\Tests\Objects\MathCls;
 use Kph\Tests\Objects\MyGenerator;
 use RuntimeException;
@@ -409,10 +410,24 @@ class PromiseTest extends TestCase {
 
 
     public function testFunEach() {
+        $arr1 = [1,2,3];
+        $arr2 = [
+            'name' => 'hello',
+            'age' => 20,
+            'lang' => 'php',
+        ];
 
+        $p1 = Concurrent\each($arr1, [BaseServ::class, 'value']);
+        $this->assertTrue($p1->isFulfilled());
 
+        $p2 = Concurrent\each($arr1, [BaseServ::class, 'concat']);
+        $this->assertTrue($p2->isFulfilled());
 
+        $p3 = Concurrent\each($arr2, [BaseServ::class, 'join']);
+        $this->assertTrue($p3->isFulfilled());
 
+        $p4 = Concurrent\each($arr2, [BaseServ::class, 'multiParams']);
+        $this->assertTrue($p4->isRejected());
     }
 
 
