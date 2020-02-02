@@ -44,18 +44,21 @@ function makeClosureFun(callable $callback, ...$params): callable {
 
     $fn = function () use ($callback, $params, $n) {
         $m = count($params);
+        $res = null;
         switch ($n) {
             case ($n == 1 && $m >= 1):
-                call_user_func($callback, $params[0]);
+                $res = call_user_func($callback, $params[0]);
                 break;
             case ($n > 1 && $m >= $n):
                 $newParams = array_slice($params, 0, $n);
-                call_user_func($callback, ...$newParams);
+                $res= call_user_func($callback, ...$newParams);
                 break;
             default:
-                call_user_func($callback);
+                $res= call_user_func($callback);
                 break;
         }
+
+        return $res;
     };
 
     return $fn;

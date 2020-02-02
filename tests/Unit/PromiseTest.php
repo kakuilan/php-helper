@@ -459,4 +459,29 @@ class PromiseTest extends TestCase {
     }
 
 
+    /**
+     * @throws Exception
+     */
+    public function testFunSome() {
+        $arr1 = [1,2,3];
+        $arr2 = [
+            'name' => 'hello',
+            'age' => 20,
+            'lang' => 'php',
+        ];
+
+        $p1 = Concurrent\some($arr1, [BaseServ::class, 'value']);
+        $this->assertTrue($p1->isFulfilled());
+
+        $p2 = Concurrent\some($arr1, [BaseServ::class, 'concat']);
+        $this->assertTrue($p2->isFulfilled());
+
+        $p3 = Concurrent\some($arr2, [BaseServ::class, 'join']);
+        $this->assertTrue($p3->isFulfilled());
+
+        $p4 = Concurrent\some($arr2, [BaseServ::class, 'multiParams']);
+        $this->assertTrue($p4->isRejected());
+    }
+
+
 }
