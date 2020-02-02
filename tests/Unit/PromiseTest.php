@@ -448,6 +448,12 @@ class PromiseTest extends TestCase {
 
         $p4 = Concurrent\every($arr2, [BaseServ::class, 'multiParams']);
         $this->assertTrue($p4->isRejected());
+
+        $fn = function ($v) {
+            return $v > 99;
+        };
+        $p5 = Concurrent\every($arr1, $fn);
+        $this->assertFalse($p5->getResult());
     }
 
 
@@ -469,6 +475,12 @@ class PromiseTest extends TestCase {
 
         $p4 = Concurrent\some($arr2, [BaseServ::class, 'multiParams']);
         $this->assertTrue($p4->isRejected());
+
+        $fn = function ($v) {
+            return $v > 99;
+        };
+        $p5 = Concurrent\some($arr1, $fn);
+        $this->assertFalse($p5->getResult());
     }
 
 
