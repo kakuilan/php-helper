@@ -504,4 +504,21 @@ class PromiseTest extends TestCase {
     }
 
 
+    /**
+     * @throws Exception
+     */
+    public function testFunMap() {
+        $arr = ['a' => -3, 'b' => -9, 'c' => 0, 'd' => 1, 'e' => 4, 'f' => 6,];
+
+        $fn = function ($v) {
+            return $v *2;
+        };
+
+        $p1 = Concurrent\map($arr, $fn);
+        $this->assertEquals(count($arr), count($p1->getResult()));
+
+    }
+
+
+
 }
