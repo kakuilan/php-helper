@@ -392,13 +392,13 @@ class PromiseTest extends TestCase {
         $promise = Concurrent\wrap(MyGenerator::randName());
         $this->assertNotEmpty($promise->getResult());
 
-        $obj = new BaseCls();
+        $obj  = new BaseCls();
         $obj2 = Concurrent\wrap($obj);
         $time = $obj2->time()->getResult();
         $this->assertGreaterThan(1, $time);
 
-        $fn = function () {
-          return time();
+        $fn   = function () {
+            return time();
         };
         $obj3 = Concurrent\wrap($fn);
         $time = $obj3()->getResult();
@@ -413,12 +413,8 @@ class PromiseTest extends TestCase {
      * @throws Exception
      */
     public function testFunEach() {
-        $arr1 = [1,2,3];
-        $arr2 = [
-            'name' => 'hello',
-            'age' => 20,
-            'lang' => 'php',
-        ];
+        $arr1 = [1, 2, 3];
+        $arr2 = ['name' => 'hello', 'age' => 20, 'lang' => 'php',];
 
         $p1 = Concurrent\each($arr1, [BaseServ::class, 'value']);
         $this->assertTrue($p1->isFulfilled());
@@ -438,12 +434,8 @@ class PromiseTest extends TestCase {
      * @throws Exception
      */
     public function testFunEvery() {
-        $arr1 = [1,2,3];
-        $arr2 = [
-            'name' => 'hello',
-            'age' => 20,
-            'lang' => 'php',
-        ];
+        $arr1 = [1, 2, 3];
+        $arr2 = ['name' => 'hello', 'age' => 20, 'lang' => 'php',];
 
         $p1 = Concurrent\every($arr1, [BaseServ::class, 'value']);
         $this->assertTrue($p1->isFulfilled());
@@ -463,12 +455,8 @@ class PromiseTest extends TestCase {
      * @throws Exception
      */
     public function testFunSome() {
-        $arr1 = [1,2,3];
-        $arr2 = [
-            'name' => 'hello',
-            'age' => 20,
-            'lang' => 'php',
-        ];
+        $arr1 = [1, 2, 3];
+        $arr2 = ['name' => 'hello', 'age' => 20, 'lang' => 'php',];
 
         $p1 = Concurrent\some($arr1, [BaseServ::class, 'value']);
         $this->assertTrue($p1->isFulfilled());
@@ -481,6 +469,26 @@ class PromiseTest extends TestCase {
 
         $p4 = Concurrent\some($arr2, [BaseServ::class, 'multiParams']);
         $this->assertTrue($p4->isRejected());
+    }
+
+
+    /**
+     * @throws Exception
+     */
+    public function testFunFilter() {
+        $arr = ['a' => -3, 'b' => -9, 'c' => 0, 'd' => 1, 'e' => 4, 'f' => 6,];
+
+        $fn = function ($v) {
+            return $v > 0;
+        };
+
+        $p1 = Concurrent\filter($arr, $fn);
+        $this->assertEquals(3, count($p1->getResult()));
+
+        $p2 = Concurrent\filter($arr, $fn, true);
+        $res = $p2->getResult();
+        $keys = array_keys($res);
+        $this->assertNotEmpty($keys);
     }
 
 
