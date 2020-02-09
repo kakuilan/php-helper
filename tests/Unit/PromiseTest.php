@@ -650,4 +650,16 @@ class PromiseTest extends TestCase {
         $this->assertEquals(2, count($res));
     }
 
+
+    public function testFunMakeClosureFun() {
+        try {
+            Concurrent\makeClosureFun('test', 1,2,3);
+        }catch (Exception $e) {
+            $chk = strripos($e->getMessage(), 'Un callable');
+            $this->assertNotEquals(-1, $chk);
+        }
+    }
+
+
+
 }

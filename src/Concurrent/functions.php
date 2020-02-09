@@ -32,7 +32,7 @@ use RangeException;
  * @throws ReflectionException
  * @throws Exception
  */
-function makeClosureFun(callable $callback, ...$params): callable {
+function makeClosureFun($callback, ...$params): callable {
     if (is_array($callback) && count($callback) == 2) {
         $f = new ReflectionMethod($callback[0], $callback[1]);
     } elseif (is_callable($callback)) {
@@ -55,7 +55,6 @@ function makeClosureFun(callable $callback, ...$params): callable {
                 break;
             default:
                 $res= call_user_func($callback);
-                break;
         }
 
         return $res;
