@@ -691,11 +691,11 @@ function diff(array ...$params): Future {
 
 /**
  * 用回调函数比较数据来计算数组的差集
- * @param array ...$params 不定参数.注意,最后一个参数为回调函数
+ * @param mixed ...$params 不定参数.注意,最后一个参数为回调函数
  * @return Future
  * @throws Exception
  */
-function udiff(array ...$params): Future {
+function udiff(...$params): Future {
     $callback = array_pop($params); //最后一个参数为回调函数
     $args     = [];
     foreach ($params as $i => $param) {

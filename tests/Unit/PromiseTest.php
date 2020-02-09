@@ -9,6 +9,7 @@
 
 namespace Kph\Tests\Unit;
 
+use function foo\func;
 use PHPUnit\Framework\TestCase;
 use Error;
 use Exception;
@@ -614,6 +615,39 @@ class PromiseTest extends TestCase {
     }
 
 
+    /**
+     * @throws Exception
+     */
+    public function testFunUdiff() {
+        $arr1 = [
+            1,
+            Concurrent\value(3),
+            4,
+            Concurrent\value(2),
+            Concurrent\value(5),
+            Concurrent\value(true),
+            7,
+        ];
+        $arr2 = [
+            true,
+            3,
+            5,
+            Concurrent\value(7),
+            9,
+        ];
 
+        $fn = function ($a, $b) {
+            if ($a < $b) {
+                return -1;
+            } elseif ($a > $b) {
+                return 1;
+            } else {
+                return 0;
+            }
+        };
+
+        $res = Concurrent\udiff($arr1, $arr2, $fn)->getResult();
+        $this->assertEquals(2, count($res));
+    }
 
 }
