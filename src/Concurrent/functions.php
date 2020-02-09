@@ -610,6 +610,7 @@ function map(array $array, callable $callback): Future {
  * 遍历数组中的每一个元素并执行回调 $callback,并累计为一个值
  * $callback 的第一个参数为 $initial 的值或者上一次调用的返回值
  * 最后一次 $callback 的返回结果作为 promise 对象所包含的值
+ * 回调方法的格式如 mixed callback(mixed $carry, mixed $item);
  * @param array $array
  * @param callable $callback
  * @param null $initial 结果的初始值

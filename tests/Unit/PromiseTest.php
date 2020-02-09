@@ -514,10 +514,26 @@ class PromiseTest extends TestCase {
             return $v *2;
         };
 
-        $p1 = Concurrent\map($arr, $fn);
-        $this->assertEquals(count($arr), count($p1->getResult()));
-
+        $pr = Concurrent\map($arr, $fn);
+        $this->assertEquals(count($arr), count($pr->getResult()));
     }
+
+
+    /**
+     * @throws Exception
+     */
+    public function testFunReduce() {
+        $arr = ['a' => -3, 'b' => -9, 'c' => 0, 'd' => 1, 'e' => 4, 'f' => 6,];
+
+        $fn = function ($carry, $item) {
+            return intval($carry) + intval($item);
+        };
+
+        $pr = Concurrent\reduce($arr, $fn, 0);
+        $res = $pr->getResult();
+        $this->assertEquals(-1, $res);
+    }
+
 
 
 
