@@ -564,5 +564,30 @@ class PromiseTest extends TestCase {
     }
 
 
+    /**
+     * @throws Exception
+     */
+    public function testFunIncludes() {
+        $numbers = [
+            Concurrent\value(0),
+            1,
+            Concurrent\value(2),
+            3,
+            Concurrent\value(4),
+            5,
+        ];
+
+        $res1 = Concurrent\includes($numbers, Concurrent\value(3))->getResult();
+        $res2 = Concurrent\includes($numbers, 9)->getResult();
+        $res3 = Concurrent\includes($numbers, true)->getResult();
+        $res4 = Concurrent\includes($numbers, true, true)->getResult();
+        $this->assertTrue($res1);
+        $this->assertFalse($res2);
+        $this->assertTrue($res3);
+        $this->assertFalse($res4);
+    }
+
+
+
 
 }
