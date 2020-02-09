@@ -672,6 +672,7 @@ function includes(array $array, $searchElement, $strict = false): Future {
 
 /**
  * 计算数组的差集
+ * 对比 array1 和其他一个或者多个数组，返回在 array1 中但是不在其他数组里的值
  * @param array ...$params
  * @return Future
  * @throws Exception

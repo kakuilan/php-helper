@@ -588,6 +588,32 @@ class PromiseTest extends TestCase {
     }
 
 
+    /**
+     * @throws Exception
+     */
+    public function testFunDiff() {
+        $arr1 = [
+            1,
+            Concurrent\value(3),
+            4,
+            Concurrent\value(2),
+            Concurrent\value(5),
+            Concurrent\value(true),
+            7,
+        ];
+        $arr2 = [
+            true,
+            3,
+            5,
+            Concurrent\value(7),
+            9,
+        ];
+
+        $res = Concurrent\diff($arr1, $arr2)->getResult();
+        $this->assertEquals(2, count($res));
+    }
+
+
 
 
 }
