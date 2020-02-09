@@ -32,7 +32,7 @@ class Promise extends Future {
             $self = $this;
             call_user_func($executor, function ($value = null) use ($self) {
                 $self->resolve($value);
-            }, function ($reason) use ($self) {
+            }, function ($reason=null) use ($self) {
                 $self->reject($reason);
             });
         }

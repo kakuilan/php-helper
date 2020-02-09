@@ -217,6 +217,16 @@ class PromiseTest extends TestCase {
         $promise = Concurrent\promise($fn);
         $chk     = Concurrent\isPromise($promise);
         $this->assertTrue($chk);
+
+        $promise2 = new Promise(function($reslove, $reject) {
+            $reslove();
+        });
+        $this->assertTrue($promise2->isFulfilled());
+
+        $promise3 = new Promise(function($reslove, $reject) {
+            $reject();
+        });
+        $this->assertTrue($promise3->isRejected());
     }
 
 
