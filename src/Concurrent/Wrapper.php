@@ -42,7 +42,7 @@ class Wrapper extends BaseObject {
 
 
     public function __get($name) {
-        return $this->obj->$name;
+        return $this->obj->$name ?? null;
     }
 
 

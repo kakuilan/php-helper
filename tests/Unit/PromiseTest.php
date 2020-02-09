@@ -398,6 +398,15 @@ class PromiseTest extends TestCase {
         $time = $obj2->time()->getResult();
         $this->assertGreaterThan(1, $time);
 
+        //测试 Wrapper 魔术方法
+        $pid = $obj2->pid;
+        $this->assertNull($pid);
+        $obj2->hehe = 'hello';
+        $chk = isset($obj2->hehe);
+        $this->assertTrue($chk);
+        unset($obj2->world);
+
+
         $fn   = function () {
             return time();
         };
