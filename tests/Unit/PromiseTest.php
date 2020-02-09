@@ -529,11 +529,39 @@ class PromiseTest extends TestCase {
             return intval($carry) + intval($item);
         };
 
-        $pr = Concurrent\reduce($arr, $fn, 0);
-        $res = $pr->getResult();
+        $pr1 = Concurrent\reduce($arr, $fn, 10);
+        $res = $pr1->getResult();
+        $this->assertEquals(9, $res);
+
+        $pr2 = Concurrent\reduce($arr, $fn);
+        $res = $pr2->getResult();
         $this->assertEquals(-1, $res);
     }
 
+
+    /**
+     * @throws Exception
+     */
+    public function testFunSearch() {
+        $numbers = [
+            Concurrent\value(0),
+            1,
+            Concurrent\value(2),
+            3,
+            Concurrent\value(4),
+            5,
+        ];
+
+        $res1 = Concurrent\search($numbers, 2)->getResult();
+        $res2 = Concurrent\search($numbers, Concurrent\value(3))->getResult();
+        $res3 = Concurrent\search($numbers, true)->getResult();
+        $res4 = Concurrent\search($numbers, true, true)->getResult();
+
+        $this->assertEquals(2, $res1);
+        $this->assertEquals(3, $res2);
+        $this->assertEquals(1, $res3);
+        $this->assertFalse($res4);
+    }
 
 
 
