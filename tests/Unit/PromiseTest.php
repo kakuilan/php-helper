@@ -9,7 +9,6 @@
 
 namespace Kph\Tests\Unit;
 
-use function foo\func;
 use PHPUnit\Framework\TestCase;
 use Error;
 use Exception;
@@ -218,12 +217,12 @@ class PromiseTest extends TestCase {
         $chk     = Concurrent\isPromise($promise);
         $this->assertTrue($chk);
 
-        $promise2 = new Promise(function($reslove, $reject) {
+        $promise2 = new Promise(function ($reslove, $reject) {
             $reslove();
         });
         $this->assertTrue($promise2->isFulfilled());
 
-        $promise3 = new Promise(function($reslove, $reject) {
+        $promise3 = new Promise(function ($reslove, $reject) {
             $reject();
         });
         $this->assertTrue($promise3->isRejected());
@@ -412,7 +411,7 @@ class PromiseTest extends TestCase {
         $pid = $obj2->pid;
         $this->assertNull($pid);
         $obj2->hehe = 'hello';
-        $chk = isset($obj2->hehe);
+        $chk        = isset($obj2->hehe);
         $this->assertTrue($chk);
         unset($obj2->world);
 
@@ -517,8 +516,8 @@ class PromiseTest extends TestCase {
         $p1 = Concurrent\filter($arr, $fn);
         $this->assertEquals(3, count($p1->getResult()));
 
-        $p2 = Concurrent\filter($arr, $fn, true);
-        $res = $p2->getResult();
+        $p2   = Concurrent\filter($arr, $fn, true);
+        $res  = $p2->getResult();
         $keys = array_keys($res);
         $this->assertNotEmpty($keys);
     }
@@ -531,7 +530,7 @@ class PromiseTest extends TestCase {
         $arr = ['a' => -3, 'b' => -9, 'c' => 0, 'd' => 1, 'e' => 4, 'f' => 6,];
 
         $fn = function ($v) {
-            return $v *2;
+            return $v * 2;
         };
 
         $pr = Concurrent\map($arr, $fn);
@@ -563,14 +562,7 @@ class PromiseTest extends TestCase {
      * @throws Exception
      */
     public function testFunSearch() {
-        $numbers = [
-            Concurrent\value(0),
-            1,
-            Concurrent\value(2),
-            3,
-            Concurrent\value(4),
-            5,
-        ];
+        $numbers = [Concurrent\value(0), 1, Concurrent\value(2), 3, Concurrent\value(4), 5,];
 
         $res1 = Concurrent\search($numbers, 2)->getResult();
         $res2 = Concurrent\search($numbers, Concurrent\value(3))->getResult();
@@ -588,14 +580,7 @@ class PromiseTest extends TestCase {
      * @throws Exception
      */
     public function testFunIncludes() {
-        $numbers = [
-            Concurrent\value(0),
-            1,
-            Concurrent\value(2),
-            3,
-            Concurrent\value(4),
-            5,
-        ];
+        $numbers = [Concurrent\value(0), 1, Concurrent\value(2), 3, Concurrent\value(4), 5,];
 
         $res1 = Concurrent\includes($numbers, Concurrent\value(3))->getResult();
         $res2 = Concurrent\includes($numbers, 9)->getResult();
@@ -612,22 +597,8 @@ class PromiseTest extends TestCase {
      * @throws Exception
      */
     public function testFunDiff() {
-        $arr1 = [
-            1,
-            Concurrent\value(3),
-            4,
-            Concurrent\value(2),
-            Concurrent\value(5),
-            Concurrent\value(true),
-            7,
-        ];
-        $arr2 = [
-            true,
-            3,
-            5,
-            Concurrent\value(7),
-            9,
-        ];
+        $arr1 = [1, Concurrent\value(3), 4, Concurrent\value(2), Concurrent\value(5), Concurrent\value(true), 7,];
+        $arr2 = [true, 3, 5, Concurrent\value(7), 9,];
 
         $res = Concurrent\diff($arr1, $arr2)->getResult();
         $this->assertEquals(2, count($res));
@@ -638,22 +609,8 @@ class PromiseTest extends TestCase {
      * @throws Exception
      */
     public function testFunUdiff() {
-        $arr1 = [
-            1,
-            Concurrent\value(3),
-            4,
-            Concurrent\value(2),
-            Concurrent\value(5),
-            Concurrent\value(true),
-            7,
-        ];
-        $arr2 = [
-            true,
-            3,
-            5,
-            Concurrent\value(7),
-            9,
-        ];
+        $arr1 = [1, Concurrent\value(3), 4, Concurrent\value(2), Concurrent\value(5), Concurrent\value(true), 7,];
+        $arr2 = [true, 3, 5, Concurrent\value(7), 9,];
 
         $fn = function ($a, $b) {
             if ($a < $b) {
@@ -672,13 +629,12 @@ class PromiseTest extends TestCase {
 
     public function testFunMakeClosureFun() {
         try {
-            Concurrent\makeClosureFun('test', 1,2,3);
-        }catch (Exception $e) {
+            Concurrent\makeClosureFun('test', 1, 2, 3);
+        } catch (Exception $e) {
             $chk = strripos($e->getMessage(), 'Un callable');
             $this->assertNotEquals(-1, $chk);
         }
     }
-
 
 
 }

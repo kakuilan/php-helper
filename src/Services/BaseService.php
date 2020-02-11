@@ -10,7 +10,7 @@
 namespace Kph\Services;
 
 use Kph\Objects\StrictObject;
-
+use Exception;
 
 /**
  * Class BaseService
@@ -34,9 +34,9 @@ class BaseService extends StrictObject {
 
 
     /**
-     * 构造函数
      * BaseService constructor.
      * @param array $vars
+     * @throws Exception
      */
     public function __construct($vars = []) {
         parent::__construct($vars);
