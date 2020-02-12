@@ -10,6 +10,11 @@
 
 namespace Kph;
 
+
+/**
+ * Class Consts
+ * @package Kph
+ */
 class Consts {
 
 
