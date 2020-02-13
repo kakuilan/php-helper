@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2019 LKK/lanq.net All rights reserved
+ * Copyright (c) 2020 LKK/lanq.net All rights reserved
  * User: kakuilan@163.com
  * Date: 2020/2/12
  * Time: 10:22
@@ -9,9 +9,6 @@
 
 
 namespace Kph\Helpers;
-
-
-use phpDocumentor\Reflection\Types\Mixed_;
 
 
 /**
@@ -29,8 +26,8 @@ class ArrayHelper {
      * @param bool $case 是否检查大小写
      * @return bool|mixed
      */
-    public static function dstrpos(string $str, array $arr, bool $returnValue = false, bool $case = false): Mixed_ {
-        if (empty($str)) {
+    public static function dstrpos(string $str, array $arr, bool $returnValue = false, bool $case = false) {
+        if (empty($str) || empty($arr)) {
             return false;
         }
 
@@ -54,16 +51,16 @@ class ArrayHelper {
      * @return array
      */
     public static function multiArraySort(array $arr, string $sortKey, int $sort = SORT_DESC): array {
-        $res = [];
+        $keyArr = [];
         foreach ($arr as $subArr) {
             if (!is_array($subArr) || !isset($subArr[$sortKey])) {
                 return [];
             }
-            array_push($res, $subArr[$sortKey]);
+            array_push($keyArr, $subArr[$sortKey]);
         }
-        array_multisort($res, $sort, $arr);
+        array_multisort($keyArr, $sort, $arr);
 
-        return $res;
+        return $arr;
     }
 
 
@@ -73,15 +70,15 @@ class ArrayHelper {
      * @param bool $keepKey 是否保留键值
      * @return array
      */
-    public static function multiArrayUnique(array $arr = [], bool $keepKey = false):array {
+    public static function multiArrayUnique(array $arr = [], bool $keepKey = false): array {
         $hasArr = $newArr = [];
-        foreach ($arr as $k=>$v) {
+        foreach ($arr as $k => $v) {
             $hash = md5(serialize($v));
-            if(!in_array($hash, $hasArr)) {
+            if (!in_array($hash, $hasArr)) {
                 array_push($hasArr, $hash);
-                if($keepKey){
+                if ($keepKey) {
                     $newArr[$k] = $v;
-                }else{
+                } else {
                     $newArr[] = $v;
                 }
             }
