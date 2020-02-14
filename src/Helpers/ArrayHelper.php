@@ -323,6 +323,8 @@ class ArrayHelper {
     public static function sortByMultiFields(array $arr, array ...$sorts): array {
         if (empty($arr)) {
             return [];
+        }elseif (empty($sorts)) {
+            return $arr;
         }
 
         $sortConditions = [];
