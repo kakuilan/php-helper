@@ -95,11 +95,11 @@ class ArrayHelper {
      * @param array $vals 结果
      * @return array
      */
-    public static function multiArrayValues(array $arr, &$vals=[]):array {
+    public static function multiArrayValues(array $arr, &$vals = []): array {
         foreach ($arr as $v) {
-            if(is_array($v)) {
+            if (is_array($v)) {
                 self::multiArrayValues($v, $vals);
-            }else{
+            } else {
                 array_push($vals, $v);
             }
         }
@@ -151,10 +151,10 @@ class ArrayHelper {
      * @param callable $fn 回调函数
      * @return array
      */
-    public static function arrayMapRecursive(array $arr, callable $fn):array {
+    public static function arrayMapRecursive(array $arr, callable $fn): array {
         $res = [];
-        foreach ($arr as $k=>$v) {
-            $res[$k] = is_array($v) ?(self::arrayMapRecursive($v, $fn)) : call_user_func($fn, $v);
+        foreach ($arr as $k => $v) {
+            $res[$k] = is_array($v) ? (self::arrayMapRecursive($v, $fn)) : call_user_func($fn, $v);
         }
         return $res;
     }
@@ -165,9 +165,9 @@ class ArrayHelper {
      * @param $val
      * @return array
      */
-    public static function object2Array($val):array {
+    public static function object2Array($val): array {
         $arr = is_object($val) ? get_object_vars($val) : $val;
-        if(is_array($arr)) {
+        if (is_array($arr)) {
             return array_map(__METHOD__, $arr);
         }
 
@@ -180,10 +180,65 @@ class ArrayHelper {
      * @param array $arr
      * @return object
      */
-    public static function arrayToObject(array $arr):object {
+    public static function arrayToObject(array $arr): object {
         return (object)array_map(__METHOD__, $arr);
     }
 
+
+    /**
+     * 数组元素组合
+     * @param array $arr 数组
+     * @param int $len 组合长度
+     * @param string $separator 分隔符
+     * @return array
+     */
+    private static function _combination(array $arr, int $len, string $separator = ''): array {
+        $res = [];
+        if ($len <= 0) {
+            return $res;
+        } elseif ($len == 1) {
+            return $arr;
+        } elseif ($len == count($arr)) {
+            array_push($res, implode($separator, $arr));
+            return $res;
+        }
+
+        $firstItem = array_shift($arr);
+        $newArr    = array_values($arr);
+
+        $list1 = self::_combination($newArr, $len - 1, $separator);
+        foreach ($list1 as $item) {
+            $str = strval($firstItem) . $separator . strval($item);
+            array_push($res, $str);
+        }
+
+        $list2 = self::_combination($newArr, $len, $separator);
+        foreach ($list2 as $item) {
+            array_push($res, strval($item));
+        }
+
+        return $res;
+    }
+
+
+    /**
+     * 以字符串形式,排列组合数组的元素
+     * @param array $arr 要排列组合的数组
+     * @param string $separator 分隔符
+     * @return array
+     */
+    public static function combination2String(array $arr, $separator = ''): array {
+        $res = [];
+        $len = count($arr);
+        for ($i = 1; $i <= $len; $i++) {
+            $news = self::_combination($arr, $i, $separator);
+            if (!empty($news)) {
+                $res = array_merge($res, $news);
+            }
+        }
+
+        return $res;
+    }
 
 
 }
