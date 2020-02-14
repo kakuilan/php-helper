@@ -241,4 +241,77 @@ class ArrayHelper {
     }
 
 
+    /**
+     * 从数组中搜索对应元素(单个).若匹配,返回该元素;否则返回false.
+     * @param array $arr 要搜索的数据数组
+     * @param array $conditions 条件数组
+     * @param bool $delSource 若匹配,是否删除原数组的该元素
+     * @return bool|mixed
+     */
+    public static function arraySearchItem(array $arr, array $conditions, bool $delSource = false) {
+        if (empty($arr) || empty($conditions)) {
+            return false;
+        }
+
+        $condLen = count($conditions);
+        foreach ($arr as $i => $item) {
+            $chk = 0;
+            foreach ($conditions as $k => $v) {
+                if (is_bool($v) && $v) {
+                    $chk++;
+                } elseif (isset($item[$k]) && $item[$k] == $v) {
+                    $chk++;
+                }
+            }
+
+            //条件完全匹配
+            if ($chk == $condLen) {
+                if ($delSource) {
+                    unset($arr[$i]);
+                }
+                return $item;
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * 从数组中搜索对应元素(多个).若匹配,返回新数组,包含一个以上元素;否则返回空数组.
+     * @param array $arr 要搜索的数据数组
+     * @param array $conditions 条件数组
+     * @param bool $delSource 若匹配,是否删除原数组的该元素
+     * @return array
+     */
+    public static function arraySearchMutil(array $arr, array $conditions, bool $delSource = false): array {
+        $res = [];
+        if (empty($arr) || empty($conditions)) {
+            return $res;
+        }
+
+        $condLen = count($conditions);
+        foreach ($arr as $i => $item) {
+            $chk = 0;
+            foreach ($conditions as $k => $v) {
+                if (is_bool($v) && $v) {
+                    $chk++;
+                } elseif (isset($item[$k]) && $item[$k] == $v) {
+                    $chk++;
+                }
+            }
+
+            //条件完全匹配
+            if ($chk == $condLen) {
+                if ($delSource) {
+                    unset($arr[$i]);
+                }
+                array_push($res, $item);
+            }
+        }
+
+        return $res;
+    }
+
+
 }
