@@ -314,4 +314,39 @@ class ArrayHelper {
     }
 
 
+    /**
+     * 数组按照多字段排序
+     * @param array $arr 多维数组
+     * @param array ...$sorts 多个排序信息.其中的元素必须是数组,形如['field', SORT_ASC],或者['field'];若没有排序类型,则默认SORT_DESC.
+     * @return array
+     */
+    public static function sortByMultiFields(array $arr, array ...$sorts): array {
+        if (empty($arr)) {
+            return [];
+        }
+
+        $sortConditions = [];
+        foreach ($sorts as $sortInfo) {
+            //$sortInfo必须形如['field', SORT_ASC],或者['field']
+            $file = strval(current($sortInfo));
+            $sort = intval($sortInfo[1] ?? SORT_DESC);
+
+            $tmpArr = [];
+            foreach ($arr as $k => $item) {
+                //排序字段不存在
+                if (!isset($item[$file])) {
+                    return [];
+                }
+
+                $tmpArr[$k] = $item[$file];
+            }
+
+            array_push($sortConditions, $tmpArr, $sort);
+        }
+
+        array_multisort(... $sortConditions, $arr);
+        return $arr;
+    }
+
+
 }
