@@ -70,23 +70,120 @@ class ArrayHelper {
      * @param bool $keepKey 是否保留键值
      * @return array
      */
-    public static function multiArrayUnique(array $arr = [], bool $keepKey = false): array {
-        $hasArr = $newArr = [];
+    public static function multiArrayUnique(array $arr, bool $keepKey = false): array {
+        $hasArr = $res = [];
         foreach ($arr as $k => $v) {
             $hash = md5(serialize($v));
             if (!in_array($hash, $hasArr)) {
                 array_push($hasArr, $hash);
                 if ($keepKey) {
-                    $newArr[$k] = $v;
+                    $res[$k] = $v;
                 } else {
-                    $newArr[] = $v;
+                    $res[] = $v;
                 }
             }
         }
         unset($hasArr);
 
-        return $newArr;
+        return $res;
     }
+
+
+    /**
+     * 取多维数组的最底层值
+     * @param array $arr
+     * @param array $vals 结果
+     * @return array
+     */
+    public static function multiArrayValues(array $arr, &$vals=[]):array {
+        foreach ($arr as $v) {
+            if(is_array($v)) {
+                self::multiArrayValues($v, $vals);
+            }else{
+                array_push($vals, $v);
+            }
+        }
+
+        return $vals;
+    }
+
+
+    /**
+     * 二维数组按指定的键值排序
+     * @param array $arr
+     * @param string $key 排序的键
+     * @param string $sort 排序方式:desc/asc
+     * @param bool $keepKey 是否保留键值
+     * @return array
+     */
+    public static function arraySort(array $arr, string $key, string $sort = 'desc', bool $keepKey = false): array {
+        $res    = [];
+        $values = [];
+        $sort   = strtolower(trim($sort));
+        foreach ($arr as $k => $v) {
+            if (!isset($v[$key])) {
+                return [];
+            }
+            $values[$k] = $v[$key];
+        }
+
+        if ($sort === 'asc') {
+            asort($values);
+        } else {
+            arsort($values);
+        }
+        reset($values);
+        foreach ($values as $k => $v) {
+            if ($keepKey) {
+                $res[$k] = $arr[$k];
+            } else {
+                $res[] = $arr[$k];
+            }
+        }
+
+        return $res;
+    }
+
+
+    /**
+     * 对数组元素递归求值
+     * @param array $arr
+     * @param callable $fn 回调函数
+     * @return array
+     */
+    public static function arrayMapRecursive(array $arr, callable $fn):array {
+        $res = [];
+        foreach ($arr as $k=>$v) {
+            $res[$k] = is_array($v) ?(self::arrayMapRecursive($v, $fn)) : call_user_func($fn, $v);
+        }
+        return $res;
+    }
+
+
+    /**
+     * 对象转数组
+     * @param $val
+     * @return array
+     */
+    public static function object2Array($val):array {
+        $arr = is_object($val) ? get_object_vars($val) : $val;
+        if(is_array($arr)) {
+            return array_map(__METHOD__, $arr);
+        }
+
+        return (array)$arr;
+    }
+
+
+    /**
+     * 数组转对象
+     * @param array $arr
+     * @return object
+     */
+    public static function arrayToObject(array $arr):object {
+        return (object)array_map(__METHOD__, $arr);
+    }
+
 
 
 }
