@@ -236,6 +236,9 @@ class ArrayHelperTest extends TestCase {
 
         $res3 = ArrayHelper::object2Array($par);
         $this->assertEquals(4, count($res3['childs']));
+
+        $res4 = ArrayHelper::object2Array(1);
+        $this->assertEquals(1, count($res4));
     }
 
 
@@ -307,6 +310,8 @@ class ArrayHelperTest extends TestCase {
         $res4 = ArrayHelper::combination2String(['a'], '-');
         $this->assertEquals(1, count($res4));
 
+        $res5 = ArrayHelper::combinationAll([], '-');
+        $this->assertEmpty($res5);
     }
 
 

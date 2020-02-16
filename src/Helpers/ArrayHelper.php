@@ -162,7 +162,7 @@ class ArrayHelper {
 
     /**
      * 对象转数组
-     * @param $val
+     * @param mixed $val
      * @return array
      */
     public static function object2Array($val): array {
@@ -227,9 +227,7 @@ class ArrayHelper {
      */
     private static function _combinationValue(array $arr, int $len, string $separator = ''): array {
         $res = [];
-        if ($len <= 0) {
-            return $res;
-        } elseif ($len == 1) {
+        if ($len <= 1) {
             return $arr;
         } elseif ($len >= count($arr)) {
             array_push($res, implode($separator, $arr));
@@ -262,10 +260,6 @@ class ArrayHelper {
      */
     private static function _combinationPosition(array $arr, string $separator = ''): array {
         $len = count($arr);
-        if($len==0) {
-            return [];
-        }
-
         $res = self::combinationAll($arr, $separator);
         if($len>=2) {
             foreach ($arr as $k=>$item) {
@@ -283,13 +277,12 @@ class ArrayHelper {
 
 
     /**
-     * 数组全排列
+     * 数组全排列,f(n)=n!.
      * @param array $arr 要排列组合的数组
      * @param string $separator 分隔符
      * @return array
      */
     public static function combinationAll(array $arr, string $separator = '') {
-        //全排列,f(n)=n!.
         $len = count($arr);
         if ($len == 0) {
             return [];
