@@ -326,14 +326,13 @@ class ArrayHelper {
 
 
     /**
-     * 以字符串形式,排列组合数组的元素.
-     * 全排列数f(n)=n!.
+     * 以字符串形式,排列组合数组的元素,全部可能的组合.
      * @param array $arr 要排列组合的数组
      * @param string $separator 分隔符
      * @param bool $unique 组合中的元素是否唯一.设为true时,只考虑元素值而忽略元素位置,则[a,b]与[b,a]是相同的组合;设为false时,同时考虑元素值和元素位置,则[a,b]与[b,a]是不同的组合.
      * @return array
      */
-    public static function combination2String(array $arr, string $separator = '', bool $unique = true): array {
+    public static function combinationFull(array $arr, string $separator = '', bool $unique = true): array {
         $res = [];
         $len = count($arr);
 
