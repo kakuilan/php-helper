@@ -272,11 +272,30 @@ class ArrayHelperTest extends TestCase {
     }
 
 
+    public function testCutItems() {
+        $arr = [
+            0 => 'aa',
+            3 => 'ww',
+            'a' => 4,
+            'd' => 56.78,
+            'e' => true,
+            '8' => 'hello',
+            9 => false,
+        ];
+
+        [$res1, $res2, $res3, $res4] = ArrayHelper::cutItems($arr, 3, 'a', 'd', 'p');
+        $this->assertEquals('ww', $res1);
+        $this->assertEquals(4, $res2);
+        $this->assertEquals(56.78, $res3);
+        $this->assertNull($res4);
+        $this->assertEquals(4, count($arr));
+    }
+
 
     public function testCombination2String() {
         $arr = ['a', 'b', 'c', 'd'];
         $res = ArrayHelper::combination2String($arr, '-');
-        var_dump($res);
+        //var_dump($res);
 
 
     }

@@ -198,14 +198,35 @@ class ArrayHelper {
 
 
     /**
-     * 数组元素组合
-     * @param array $arr 数组
-     * @param int $len 组合长度
-     * @param string $separator 分隔符
-     * @param bool $unique 组合中的元素是否唯一.设为true时,只考虑元素值而忽略元素位置,则[a,b]与[b,a]是相同的组合;设为false时,同时考虑元素值和元素位置,则[a,b]与[b,a]是不同的组合.
+     * 从数组中剪切元素,将改变原数组,并返回剪切的元素数组.
+     * @param array $arr 原数组
+     * @param mixed ...$keys 要剪切的元素键,一个或多个
      * @return array
      */
-    private static function _combination(array $arr, int $len, string $separator = '', bool $unique=true): array {
+    public static function cutItems(array &$arr, ...$keys):array {
+        $res = [];
+        foreach ($keys as $key) {
+            if(isset($arr[$key])) {
+                array_push($res, $arr[$key]);
+                unset($arr[$key]);
+            }else{
+                array_push($res, null);
+            }
+        }
+
+        return $res;
+    }
+
+
+
+    /**
+     * 数组元素组合(按元素值组合)
+     * @param array $arr 数组
+     * @param int $len 组合长度(从数组中取几个元素来组合)
+     * @param string $separator 分隔符
+     * @return array
+     */
+    private static function _combinationValue(array $arr, int $len, string $separator = ''): array {
         $res = [];
         if ($len <= 0) {
             return $res;
@@ -219,18 +240,26 @@ class ArrayHelper {
         $firstItem = array_shift($arr);
         $newArr    = array_values($arr);
 
-        $list1 = self::_combination($newArr, $len - 1, $separator);
+        $list1 = self::_combinationValue($newArr, $len - 1, $separator);
         foreach ($list1 as $item) {
             $str = strval($firstItem) . $separator . strval($item);
             array_push($res, $str);
         }
 
-        $list2 = self::_combination($newArr, $len, $separator);
+        $list2 = self::_combinationValue($newArr, $len, $separator);
         foreach ($list2 as $item) {
             array_push($res, strval($item));
         }
 
         return $res;
+    }
+
+
+
+    private static function _combinationPosition(array $arr, int $len, string $separator = ''):array {
+        //按元素值和位置
+
+
     }
 
 
@@ -245,14 +274,22 @@ class ArrayHelper {
     public static function combination2String(array $arr, string $separator = '', bool $unique=true): array {
         $res = [];
         $len = count($arr);
-        for ($i = 1; $i <= $len; $i++) {
-            $news = self::_combination($arr, $i, $separator, $unique);
+
+        if($unique) {
+            for ($i = 1; $i <= $len; $i++) {
+                $news = self::_combinationValue($arr, $i, $separator);
+                if (!empty($news)) {
+                    $res = array_merge($res, $news);
+                }
+            }
+        }else{
+            $news = self::_combinationPosition($arr, $len, $separator);
             if (!empty($news)) {
                 $res = array_merge($res, $news);
             }
         }
 
-        return $res;
+        return array_unique($res);
     }
 
 
