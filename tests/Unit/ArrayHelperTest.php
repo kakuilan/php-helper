@@ -362,7 +362,7 @@ class ArrayHelperTest extends TestCase {
         $res = ArrayHelper::searchMutil($tmp, ['id'=>99]);
         $this->assertEmpty($res);
 
-        $res1 = ArrayHelper::searchItem($arr, ['id'=>87]);
+        $res1 = ArrayHelper::searchItem($arr, ['id'=>87, 'name'=>true]);
         $this->assertTrue(in_array($res1, $arr));
 
         $res2 = ArrayHelper::searchMutil($arr, ['gender'=>1, 'age'=>19, 'name'=>true]);

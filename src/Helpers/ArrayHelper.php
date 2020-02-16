@@ -451,7 +451,7 @@ class ArrayHelper {
             $tmpArr = [];
             foreach ($arr as $k => $item) {
                 //排序字段不存在
-                if (!isset($item[$file])) {
+                if (empty($file) || !isset($item[$file])) {
                     return [];
                 }
 
