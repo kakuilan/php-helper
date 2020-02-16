@@ -345,8 +345,9 @@ class ArrayHelper {
 
             array_push($sortConditions, $tmpArr, $sort);
         }
+        array_push($sortConditions, $arr);
 
-        array_multisort(... $sortConditions, $arr);
+        array_multisort(... $sortConditions);
         return $arr;
     }
 
