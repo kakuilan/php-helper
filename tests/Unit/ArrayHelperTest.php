@@ -315,6 +315,64 @@ class ArrayHelperTest extends TestCase {
     }
 
 
+    public function testSearchItemSearchMutil() {
+        $arr = [
+            [
+                'id' => 9,
+                'gender' => 1,
+                'age' => 19,
+                'name' => 'hehe',
+                'nick' => '阿斯蒂芬',
+            ],
+            [
+                'id' => 2,
+                'gender' => 0,
+                'age' => 31,
+                'name' => 'lizz',
+                'nick' => '去玩儿',
+            ],
+            [
+                'id' => 87,
+                'gender' => 1,
+                'age' => 19,
+                'name' => 'zhang3',
+                'nick' => '谱曲说',
+            ],
+            [
+                'id' => 25,
+                'gender' => 0,
+                'age' => 43,
+                'name' => 'wang5',
+                'nick' => '阿斯蒂芬',
+            ],
+            [
+                'id' => 24,
+                'gender' => 1,
+                'age' => 63,
+                'name' => 'zhao4',
+                'nick' => '权威认证',
+            ],
+        ];
+
+        $res1 = ArrayHelper::searchItem($arr, ['id'=>87]);
+        $this->assertTrue(in_array($res1, $arr));
+
+        $res2 = ArrayHelper::searchMutil($arr, ['gender'=>1, 'age'=>19]);
+        $this->assertGreaterThanOrEqual(2, count($res2));
+
+        $newArr = $arr;
+        $res3 = ArrayHelper::searchItem($newArr, ['id'=>87], true);
+        $this->assertNotEmpty($res3);
+        $this->assertFalse(in_array($res3, $newArr));
+
+        $newArr = $arr;
+        $len = count($newArr);
+        $res4 = ArrayHelper::searchMutil($newArr, ['gender'=>1, 'age'=>19], true);
+        $this->assertEquals($len, count($res4) + count($newArr));
+    }
+
+
+
 
 
 
