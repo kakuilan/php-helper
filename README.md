@@ -81,4 +81,5 @@ https://github.com/php-promise/promise
 https://docs.aws.amazon.com/zh_cn/sdk-for-php/v3/developer-guide/guide_promises.html
 
 
-
+### TODO
+- 排列组合-全排列

@@ -202,9 +202,10 @@ class ArrayHelper {
      * @param array $arr 数组
      * @param int $len 组合长度
      * @param string $separator 分隔符
+     * @param bool $unique 组合中的元素是否唯一.设为true时,只考虑元素值而忽略元素位置,则[a,b]与[b,a]是相同的组合;设为false时,同时考虑元素值和元素位置,则[a,b]与[b,a]是不同的组合.
      * @return array
      */
-    private static function _combination(array $arr, int $len, string $separator = ''): array {
+    private static function _combination(array $arr, int $len, string $separator = '', bool $unique=true): array {
         $res = [];
         if ($len <= 0) {
             return $res;
@@ -234,16 +235,18 @@ class ArrayHelper {
 
 
     /**
-     * 以字符串形式,排列组合数组的元素
+     * 以字符串形式,排列组合数组的元素.
+     * 全排列数f(n)=n!.
      * @param array $arr 要排列组合的数组
      * @param string $separator 分隔符
+     * @param bool $unique 组合中的元素是否唯一.设为true时,只考虑元素值而忽略元素位置,则[a,b]与[b,a]是相同的组合;设为false时,同时考虑元素值和元素位置,则[a,b]与[b,a]是不同的组合.
      * @return array
      */
-    public static function combination2String(array $arr, $separator = ''): array {
+    public static function combination2String(array $arr, string $separator = '', bool $unique=true): array {
         $res = [];
         $len = count($arr);
         for ($i = 1; $i <= $len; $i++) {
-            $news = self::_combination($arr, $i, $separator);
+            $news = self::_combination($arr, $i, $separator, $unique);
             if (!empty($news)) {
                 $res = array_merge($res, $news);
             }
