@@ -199,13 +199,13 @@ class ArrayHelperTest extends TestCase {
     }
 
 
-    public function testArrayMapRecursive() {
+    public function testmapRecursive() {
         $arr = [-3, 0, 4, 7, 87];
         $fn = function (int $val):int {
             return 2 * $val;
         };
 
-        $res = ArrayHelper::arrayMapRecursive($arr, $fn);
+        $res = ArrayHelper::mapRecursive($arr, $fn);
         $this->assertEquals(count($arr), count($res));
     }
 

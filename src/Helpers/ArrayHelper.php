@@ -151,10 +151,10 @@ class ArrayHelper {
      * @param callable $fn 回调函数
      * @return array
      */
-    public static function arrayMapRecursive(array $arr, callable $fn): array {
+    public static function mapRecursive(array $arr, callable $fn): array {
         $res = [];
         foreach ($arr as $k => $v) {
-            $res[$k] = is_array($v) ? (self::arrayMapRecursive($v, $fn)) : call_user_func($fn, $v);
+            $res[$k] = is_array($v) ? (self::mapRecursive($v, $fn)) : call_user_func($fn, $v);
         }
         return $res;
     }
