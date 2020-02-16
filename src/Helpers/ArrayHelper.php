@@ -203,20 +203,19 @@ class ArrayHelper {
      * @param mixed ...$keys 要剪切的元素键,一个或多个
      * @return array
      */
-    public static function cutItems(array &$arr, ...$keys):array {
+    public static function cutItems(array &$arr, ...$keys): array {
         $res = [];
         foreach ($keys as $key) {
-            if(isset($arr[$key])) {
+            if (isset($arr[$key])) {
                 array_push($res, $arr[$key]);
                 unset($arr[$key]);
-            }else{
+            } else {
                 array_push($res, null);
             }
         }
 
         return $res;
     }
-
 
 
     /**
@@ -232,7 +231,7 @@ class ArrayHelper {
             return $res;
         } elseif ($len == 1) {
             return $arr;
-        } elseif ($len == count($arr)) {
+        } elseif ($len >= count($arr)) {
             array_push($res, implode($separator, $arr));
             return $res;
         }
@@ -255,11 +254,81 @@ class ArrayHelper {
     }
 
 
+    /**
+     * 数组元素组合(按元素值和位置组合)
+     * @param array $arr 数组
+     * @param string $separator
+     * @return array
+     */
+    private static function _combinationPosition(array $arr, string $separator = ''): array {
+        $len = count($arr);
+        if($len==0) {
+            return [];
+        }
 
-    private static function _combinationPosition(array $arr, int $len, string $separator = ''):array {
-        //按元素值和位置
+        $res = self::combinationAll($arr, $separator);
+        if($len>=2) {
+            foreach ($arr as $k=>$item) {
+                $newArr = $arr;
+                self::cutItems($newArr, $k);
+                $newRes = self::_combinationPosition($newArr, $separator);
+                if(!empty($newRes)) {
+                    $res = array_merge($res, $newRes);
+                }
+            }
+        }
+
+        return $res;
+    }
 
 
+    /**
+     * 数组全排列
+     * @param array $arr 要排列组合的数组
+     * @param string $separator 分隔符
+     * @return array
+     */
+    public static function combinationAll(array $arr, string $separator = '') {
+        //全排列,f(n)=n!.
+        $len = count($arr);
+        if ($len == 0) {
+            return [];
+        } elseif ($len == 1) {
+            return $arr;
+        }
+
+        //保证初始数组是有序的
+        sort($arr);
+        $last = $len - 1; //尾部元素下标
+        $x    = $last;
+
+        $res = [];
+        array_push($res, implode($separator, $arr)); //第一种组合
+        while (true) {
+            $y = $x--; //相邻的两个元素
+            if ($arr[$x] < $arr[$y]) { //如果前一个元素的值小于后一个元素的值
+                $z = $last;
+                while ($arr[$x] > $arr[$z]) { //从尾部开始，找到第一个大于 $x 元素的值
+                    $z--;
+                }
+
+                /* 交换 $x 和 $z 元素的值 */
+                list($arr[$x], $arr[$z]) = [$arr[$z], $arr[$x]];
+
+                /* 将 $y 之后的元素全部逆向排列 */
+                for ($i = $last; $i > $y; $i--, $y++) {
+                    list($arr[$i], $arr[$y]) = [$arr[$y], $arr[$i]];
+                }
+
+                array_push($res, implode($separator, $arr));
+                $x = $last;
+            }
+            if ($x == 0) { //全部组合完毕
+                break;
+            }
+        }
+
+        return $res;
     }
 
 
@@ -271,25 +340,27 @@ class ArrayHelper {
      * @param bool $unique 组合中的元素是否唯一.设为true时,只考虑元素值而忽略元素位置,则[a,b]与[b,a]是相同的组合;设为false时,同时考虑元素值和元素位置,则[a,b]与[b,a]是不同的组合.
      * @return array
      */
-    public static function combination2String(array $arr, string $separator = '', bool $unique=true): array {
+    public static function combination2String(array $arr, string $separator = '', bool $unique = true): array {
         $res = [];
         $len = count($arr);
 
-        if($unique) {
+        if ($unique) {
             for ($i = 1; $i <= $len; $i++) {
                 $news = self::_combinationValue($arr, $i, $separator);
                 if (!empty($news)) {
                     $res = array_merge($res, $news);
                 }
             }
-        }else{
-            $news = self::_combinationPosition($arr, $len, $separator);
+        } else {
+            $news = self::_combinationPosition($arr, $separator);
             if (!empty($news)) {
                 $res = array_merge($res, $news);
             }
+            $res = array_unique($res);
+            sort($res);
         }
 
-        return array_unique($res);
+        return $res;
     }
 
 

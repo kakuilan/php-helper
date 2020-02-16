@@ -294,9 +294,18 @@ class ArrayHelperTest extends TestCase {
 
     public function testCombination2String() {
         $arr = ['a', 'b', 'c', 'd'];
-        $res = ArrayHelper::combination2String($arr, '-');
-        //var_dump($res);
 
+        $res1 = ArrayHelper::combination2String($arr, '-', true);
+        $this->assertEquals(15, count($res1));
+
+        $res2 = ArrayHelper::combination2String($arr, '-', false);
+        $this->assertEquals(64, count($res2));
+
+        $res3 = ArrayHelper::combination2String([], '-');
+        $this->assertEmpty($res3);
+
+        $res4 = ArrayHelper::combination2String(['a'], '-');
+        $this->assertEquals(1, count($res4));
 
     }
 
