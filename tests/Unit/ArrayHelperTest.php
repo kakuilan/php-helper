@@ -199,5 +199,49 @@ class ArrayHelperTest extends TestCase {
     }
 
 
+    public function testArrayMapRecursive() {
+        $arr = [-3, 0, 4, 7, 87];
+        $fn = function (int $val):int {
+            return 2 * $val;
+        };
+
+        $res = ArrayHelper::arrayMapRecursive($arr, $fn);
+        $this->assertEquals(count($arr), count($res));
+    }
+
+
+    public function testObject2Array() {
+        $childs = [];
+        for ($i=1;$i<5;$i++) {
+            $chi = new \stdClass();
+            $chi->id = $i;
+            $chi->type = 'child';
+            $chi->name = 'boy-' . strval($i);
+            $chi->childs = [];
+
+            array_push($childs, $chi);
+        }
+
+        $par = new \stdClass();
+        $par->id = 0;
+        $par->type = 'parent';
+        $par->name = 'hello';
+        $par->childs = $childs;
+
+        $res1 = ArrayHelper::object2Array(new \stdClass());
+        $this->assertEmpty($res1);
+
+        $res2 = ArrayHelper::object2Array($chi);
+        $this->assertEquals(4, count($res2));
+
+        $res3 = ArrayHelper::object2Array($par);
+        $this->assertEquals(4, count($res3['childs']));
+    }
+
+
+
+
+
+
 
 }

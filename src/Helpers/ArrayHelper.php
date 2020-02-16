@@ -168,10 +168,16 @@ class ArrayHelper {
     public static function object2Array($val): array {
         $arr = is_object($val) ? get_object_vars($val) : $val;
         if (is_array($arr)) {
-            return array_map(__METHOD__, $arr);
+            foreach ($arr as $k=>$item) {
+                if(is_array($item) && !empty($item)) {
+                    $arr[$k] = array_map(__METHOD__, $item);
+                }
+            }
+        }else{
+            $arr = (array)$arr;
         }
 
-        return (array)$arr;
+        return $arr;
     }
 
 
