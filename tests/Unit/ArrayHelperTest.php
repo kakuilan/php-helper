@@ -372,6 +372,60 @@ class ArrayHelperTest extends TestCase {
     }
 
 
+    public function testSortByMultiFields() {
+        $arr = [
+            [
+                'id' => 9,
+                'gender' => 1,
+                'age' => 19,
+                'name' => 'hehe',
+                'nick' => '阿斯蒂芬',
+            ],
+            [
+                'id' => 2,
+                'gender' => 0,
+                'age' => 31,
+                'name' => 'lizz',
+                'nick' => '去玩儿',
+            ],
+            [
+                'id' => 87,
+                'gender' => 1,
+                'age' => 19,
+                'name' => 'zhang3',
+                'nick' => '谱曲说',
+            ],
+            [
+                'id' => 25,
+                'gender' => 0,
+                'age' => 43,
+                'name' => 'wang5',
+                'nick' => '阿斯蒂芬',
+            ],
+            [
+                'id' => 24,
+                'gender' => 1,
+                'age' => 63,
+                'name' => 'zhao4',
+                'nick' => '权威认证',
+            ],
+        ];
+
+        $res1 = ArrayHelper::sortByMultiFields([], ['id', SORT_ASC]);
+        $this->assertEmpty($res1);
+
+        $res2 = ArrayHelper::sortByMultiFields($arr);
+        $this->assertEquals(json_encode($arr), json_encode($res2));
+
+        $res3 = ArrayHelper::sortByMultiFields($arr, ['gender'], ['age', SORT_ASC], ['id', SORT_DESC]);
+        $first = current($res3);
+        $second = $res3[1];
+        $this->assertEquals(87, $first['id']);
+        $this->assertEquals(9, $second['id']);
+    }
+
+
+
 
 
 
