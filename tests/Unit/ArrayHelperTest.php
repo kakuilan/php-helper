@@ -181,17 +181,17 @@ class ArrayHelperTest extends TestCase {
             ],
         ];
 
-        $res1 = ArrayHelper::arraySort([], 'id');
+        $res1 = ArrayHelper::sortByField([], 'id');
         $this->assertEmpty($res1);
 
-        $res2 = ArrayHelper::arraySort($arr, 'comp');
+        $res2 = ArrayHelper::sortByField($arr, 'comp');
         $this->assertEmpty($res2);
 
-        $res3 = ArrayHelper::arraySort($arr, 'id', 'desc', false);
+        $res3 = ArrayHelper::sortByField($arr, 'id', 'desc', false);
         $first = current($res3);
         $this->assertEquals(87, $first['id']);
 
-        $res4 = ArrayHelper::arraySort($arr, 'id', 'asc', true);
+        $res4 = ArrayHelper::sortByField($arr, 'id', 'asc', true);
         $keys = array_keys($res4);
         $first = current($res4);
         $this->assertEquals(2, $first['id']);

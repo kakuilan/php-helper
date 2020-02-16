@@ -116,7 +116,7 @@ class ArrayHelper {
      * @param bool $keepKey 是否保留外层键值
      * @return array
      */
-    public static function arraySort(array $arr, string $key, string $sort = 'desc', bool $keepKey = false): array {
+    public static function sortByField(array $arr, string $key, string $sort = 'desc', bool $keepKey = false): array {
         $res    = [];
         $values = [];
         $sort   = strtolower(trim($sort));
