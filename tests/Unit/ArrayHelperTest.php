@@ -354,10 +354,18 @@ class ArrayHelperTest extends TestCase {
             ],
         ];
 
+        $tmp = [];
+        $res = ArrayHelper::searchItem($tmp, ['id'=>99]);
+        $this->assertFalse($res);
+        $res = ArrayHelper::searchItem($arr, ['id'=>99]);
+        $this->assertFalse($res);
+        $res = ArrayHelper::searchMutil($tmp, ['id'=>99]);
+        $this->assertEmpty($res);
+
         $res1 = ArrayHelper::searchItem($arr, ['id'=>87]);
         $this->assertTrue(in_array($res1, $arr));
 
-        $res2 = ArrayHelper::searchMutil($arr, ['gender'=>1, 'age'=>19]);
+        $res2 = ArrayHelper::searchMutil($arr, ['gender'=>1, 'age'=>19, 'name'=>true]);
         $this->assertGreaterThanOrEqual(2, count($res2));
 
         $newArr = $arr;
@@ -367,7 +375,7 @@ class ArrayHelperTest extends TestCase {
 
         $newArr = $arr;
         $len = count($newArr);
-        $res4 = ArrayHelper::searchMutil($newArr, ['gender'=>1, 'age'=>19], true);
+        $res4 = ArrayHelper::searchMutil($newArr, ['gender'=>1, 'age'=>19, 'name'=>true], true);
         $this->assertEquals($len, count($res4) + count($newArr));
     }
 
@@ -422,6 +430,9 @@ class ArrayHelperTest extends TestCase {
         $second = $res3[1];
         $this->assertEquals(87, $first['id']);
         $this->assertEquals(9, $second['id']);
+
+        $res4 = ArrayHelper::sortByMultiFields($arr, ['gender'], ['age', SORT_ASC], ['type', SORT_DESC]);
+        $this->assertEmpty($res4);
     }
 
 
