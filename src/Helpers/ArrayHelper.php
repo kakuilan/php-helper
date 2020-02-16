@@ -363,7 +363,7 @@ class ArrayHelper {
      * @param bool $delSource 若匹配,是否删除原数组的该元素
      * @return bool|mixed
      */
-    public static function arraySearchItem(array $arr, array $conditions, bool $delSource = false) {
+    public static function searchItem(array $arr, array $conditions, bool $delSource = false) {
         if (empty($arr) || empty($conditions)) {
             return false;
         }
