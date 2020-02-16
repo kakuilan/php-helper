@@ -109,11 +109,11 @@ class ArrayHelper {
 
 
     /**
-     * 二维数组按指定的键值排序
+     * 二维数组按指定的键值排序.若元素的键值不存在,则返回空数组.
      * @param array $arr
      * @param string $key 排序的键
      * @param string $sort 排序方式:desc/asc
-     * @param bool $keepKey 是否保留键值
+     * @param bool $keepKey 是否保留外层键值
      * @return array
      */
     public static function arraySort(array $arr, string $key, string $sort = 'desc', bool $keepKey = false): array {

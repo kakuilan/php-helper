@@ -128,6 +128,75 @@ class ArrayHelperTest extends TestCase {
     }
 
 
+    public function testMultiArrayValues() {
+        $arr = [
+            'aa' => [
+                'id' => 9,
+                'age' => 19,
+                'name' => 'hello',
+            ],
+            'bb' => [
+                'id' => 2,
+                'age' => 31,
+                'name' => 'lizz',
+            ],
+            'cc' => [
+                'id' => 9,
+                'age' => 19,
+                'name' => 'hello',
+            ],
+            'dd' => [
+                'id' => 87,
+                'age' => 50,
+                'name' => 'zhang3',
+            ],
+        ];
+
+        $res = ArrayHelper::multiArrayValues($arr);
+        $this->assertEquals(12, count($res));
+    }
+
+
+    public function testArraySort() {
+        $arr = [
+            'aa' => [
+                'id' => 9,
+                'age' => 19,
+                'name' => 'hello',
+            ],
+            'bb' => [
+                'id' => 2,
+                'age' => 31,
+                'name' => 'lizz',
+            ],
+            'cc' => [
+                'id' => 9,
+                'age' => 19,
+                'name' => 'hello',
+            ],
+            'dd' => [
+                'id' => 87,
+                'age' => 50,
+                'name' => 'zhang3',
+            ],
+        ];
+
+        $res1 = ArrayHelper::arraySort([], 'id');
+        $this->assertEmpty($res1);
+
+        $res2 = ArrayHelper::arraySort($arr, 'comp');
+        $this->assertEmpty($res2);
+
+        $res3 = ArrayHelper::arraySort($arr, 'id', 'desc', false);
+        $first = current($res3);
+        $this->assertEquals(87, $first['id']);
+
+        $res4 = ArrayHelper::arraySort($arr, 'id', 'asc', true);
+        $keys = array_keys($res4);
+        $first = current($res4);
+        $this->assertEquals(2, $first['id']);
+        $this->assertTrue(in_array('aa', $keys));
+    }
 
 
 
