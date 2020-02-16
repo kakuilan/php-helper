@@ -168,12 +168,12 @@ class ArrayHelper {
     public static function object2Array($val): array {
         $arr = is_object($val) ? get_object_vars($val) : $val;
         if (is_array($arr)) {
-            foreach ($arr as $k=>$item) {
-                if(is_array($item) && !empty($item)) {
+            foreach ($arr as $k => $item) {
+                if (is_array($item) && !empty($item)) {
                     $arr[$k] = array_map(__METHOD__, $item);
                 }
             }
-        }else{
+        } else {
             $arr = (array)$arr;
         }
 
@@ -186,8 +186,14 @@ class ArrayHelper {
      * @param array $arr
      * @return object
      */
-    public static function arrayToObject(array $arr): object {
-        return (object)array_map(__METHOD__, $arr);
+    public static function array2Object(array $arr): object {
+        foreach ($arr as $k => $item) {
+            if (is_array($item)) {
+                $arr[$k] = empty($item) ? new \stdClass() : call_user_func(__METHOD__, $item);
+            }
+        }
+
+        return (object)$arr;
     }
 
 
@@ -329,7 +335,7 @@ class ArrayHelper {
     public static function sortByMultiFields(array $arr, array ...$sorts): array {
         if (empty($arr)) {
             return [];
-        }elseif (empty($sorts)) {
+        } elseif (empty($sorts)) {
             return $arr;
         }
 

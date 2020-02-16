@@ -239,6 +239,37 @@ class ArrayHelperTest extends TestCase {
     }
 
 
+    public function testArrayToObject() {
+        $arr = [
+            'aa' => [
+                'id' => 9,
+                'age' => 19,
+                'name' => 'hello',
+                'child' => [],
+            ],
+            'bb' => [
+                'id' => 2,
+                'age' => 31,
+                'name' => 'lizz',
+            ],
+            'cc' => [
+                'id' => 9,
+                'age' => 19,
+                'name' => 'hello',
+            ],
+            'dd' => [
+                'id' => 87,
+                'age' => 50,
+                'name' => 'zhang3',
+            ],
+        ];
+
+        $res1 = ArrayHelper::array2Object([]);
+        $this->assertTrue(is_object($res1));
+
+        $res2 = ArrayHelper::array2Object($arr);
+        $this->assertTrue(is_object($res2->aa->child));
+    }
 
 
 
