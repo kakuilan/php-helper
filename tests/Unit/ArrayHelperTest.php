@@ -92,6 +92,42 @@ class ArrayHelperTest extends TestCase {
     }
 
 
+    public function testMultiArrayUnique() {
+        $arr = [
+            'aa' => [
+                'id' => 9,
+                'age' => 19,
+                'name' => 'hello',
+            ],
+            'bb' => [
+                'id' => 2,
+                'age' => 31,
+                'name' => 'lizz',
+            ],
+            'cc' => [
+                'id' => 9,
+                'age' => 19,
+                'name' => 'hello',
+            ],
+            'dd' => [
+                'id' => 87,
+                'age' => 50,
+                'name' => 'zhang3',
+            ],
+        ];
+
+        $res1 = ArrayHelper::multiArrayUnique([]);
+        $this->assertEmpty($res1);
+
+        $res2 = ArrayHelper::multiArrayUnique($arr, false);
+        $this->assertEquals(3, count($res2));
+
+        $res3 = ArrayHelper::multiArrayUnique($arr, true);
+        $keys = array_keys($res3);
+        $this->assertTrue(in_array('aa', $keys));
+    }
+
+
 
 
 
