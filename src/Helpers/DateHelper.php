@@ -111,7 +111,7 @@ class DateHelper {
      * 获取时间戳的微秒部分,单位/微秒.
      * @return float
      */
-    public static function getMicrosecond():float {
+    public static function getMicrosecond(): float {
         list($usec,) = explode(" ", microtime());
         return ((float)$usec * pow(10, 6));
     }
@@ -121,13 +121,10 @@ class DateHelper {
      * 获取时间戳,单位/毫秒.
      * @return float
      */
-    public static function getMillitime():float {
+    public static function getMillitime(): float {
         list($t1, $t2) = explode(' ', microtime());
         return (float)sprintf('%.0f', (floatval($t1) + floatval($t2)) * 1000);
     }
-
-
-
 
 
 }
