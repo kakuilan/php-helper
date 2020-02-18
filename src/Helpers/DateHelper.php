@@ -18,7 +18,7 @@ class DateHelper {
      * @param string $format 格式化
      * @return string
      */
-    public static function smartDatetime($datetime, string $format = 'Y-n-j H:i'): string {
+    public static function smartDatetime($datetime, string $format = 'Y-n-j G:i'): string {
         $time = is_numeric($datetime) ? $datetime : strtotime($datetime);
         $sec  = time() - intval($time);
         $hour = floor($sec / 3600);
