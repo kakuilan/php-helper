@@ -19,7 +19,7 @@ class DateHelperTest extends TestCase {
 
 
     public function testSmartDatetime() {
-        $now = time();
+        $now  = time();
         $res1 = DateHelper::smartDatetime($now - 5);
         $res2 = DateHelper::smartDatetime($now - 65);
         $res3 = DateHelper::smartDatetime($now - (3600 * 2));
@@ -53,6 +53,39 @@ class DateHelperTest extends TestCase {
         $this->assertEquals(29, $res6);
         $this->assertEquals(28, $res7);
     }
+
+
+    public function testSecond2time() {
+        $res1 = DateHelper::second2time(0);
+        $res2 = DateHelper::second2time(10);
+        $res3 = DateHelper::second2time(120);
+        $res4 = DateHelper::second2time(3611);
+        $res5 = DateHelper::second2time(370211);
+
+        $this->assertEmpty($res1);
+        $this->assertEquals('00:10', $res2);
+        $this->assertEquals('02:00', $res3);
+        $this->assertEquals('01:00:11', $res4);
+        $this->assertEquals('102:50:11', $res5);
+    }
+
+
+    public function testGetMicrosecond() {
+        $res = DateHelper::getMicrosecond();
+        $len = strlen($res);
+        $this->assertGreaterThan(0, $res);
+        $this->assertEquals(6, $len);
+    }
+
+
+    public function testGetMillitime() {
+        $res = DateHelper::getMillitime();
+        $len = strlen($res);
+        $this->assertGreaterThan(0, $res);
+        $this->assertEquals(13, $len);
+    }
+
+
 
 
 }
