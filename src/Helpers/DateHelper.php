@@ -129,7 +129,7 @@ class DateHelper {
 
     /**
      * 根据时间获取星座
-     * @param $datetime 时间戳或Y-m-d格式日期
+     * @param int|string $datetime 时间戳或Y-m-d格式日期
      * @return string
      */
     public static function getXingZuo($datetime): string {
@@ -239,7 +239,7 @@ class DateHelper {
 
     /**
      * 根据时间获取生肖
-     * @param $datetime 时间戳或Y-m-d格式日期
+     * @param int|string $datetime 时间戳或Y-m-d格式日期
      * @return string
      */
     public static function getShengXiao($datetime): string {
@@ -311,4 +311,32 @@ class DateHelper {
         return $res;
     }
 
+
+    /**
+     * 根据时间获取农历年份(天干地支)
+     * @param int|string $datetime 时间戳或Y-m-d格式日期
+     * @return string
+     */
+    public static function getLunarYear($datetime): string {
+        $res = '';
+        if (is_numeric($datetime) && strlen($datetime) > 4) {
+            $datetime = date('Y-m-d H:i:s', $datetime);
+        } else {
+            $datetime = strval($datetime);
+        }
+
+        if (!ValidateHelper::isDate2time($datetime)) {
+            return $res;
+        }
+
+        //天干
+        $sky = ['庚', '辛', '壬', '癸', '甲', '乙', '丙', '丁', '戊', '己'];
+        //地支
+        $earth = ['申', '酉', '戌', '亥', '子', '丑', '寅', '卯', '辰', '巳', '午', '未'];
+
+        $year = intval(substr($datetime, 0, 4));
+        $diff = $year - 1900 + 40;
+        $res  = $sky[$diff % 10] . $earth[$diff % 12];
+        return $res;
+    }
 }
