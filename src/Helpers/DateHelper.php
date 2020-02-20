@@ -127,12 +127,188 @@ class DateHelper {
     }
 
 
-    public static function getXingZuo($datetime):string {
+    /**
+     * 根据时间获取星座
+     * @param $datetime 时间戳或Y-m-d格式日期
+     * @return string
+     */
+    public static function getXingZuo($datetime): string {
         $res = '';
-        //TODO
+        if (is_numeric($datetime) && strlen($datetime) > 4) {
+            $datetime = date('Y-m-d H:i:s', $datetime);
+        } else {
+            $datetime = strval($datetime);
+        }
+
+        if (!ValidateHelper::isDate2time($datetime)) {
+            return $res;
+        }
+
+        $month = substr($datetime, 5, 2); //取出月份
+        $day   = intval(substr($datetime, 8, 2)); //取出日期
+        switch ($month) {
+            case "01":
+                if ($day < 21) {
+                    $res = '摩羯';
+                } else {
+                    $res = '水瓶';
+                }
+                break;
+            case "02":
+                if ($day < 20) {
+                    $res = '水瓶';
+                } else {
+                    $res = '双鱼';
+                }
+                break;
+            case "03":
+                if ($day < 21) {
+                    $res = '双鱼';
+                } else {
+                    $res = '白羊';
+                }
+                break;
+            case "04":
+                if ($day < 20) {
+                    $res = '白羊';
+                } else {
+                    $res = '金牛';
+                }
+                break;
+            case "05":
+                if ($day < 21) {
+                    $res = '金牛';
+                } else {
+                    $res = '双子';
+                }
+                break;
+            case "06":
+                if ($day < 22) {
+                    $res = '双子';
+                } else {
+                    $res = '巨蟹';
+                }
+                break;
+            case "07":
+                if ($day < 23) {
+                    $res = '巨蟹';
+                } else {
+                    $res = '狮子';
+                }
+                break;
+            case "08":
+                if ($day < 23) {
+                    $res = '狮子';
+                } else {
+                    $res = '处女';
+                }
+                break;
+            case "09":
+                if ($day < 23) {
+                    $res = '处女';
+                } else {
+                    $res = '天秤';
+                }
+                break;
+            case "10":
+                if ($day < 24) {
+                    $res = '天秤';
+                } else {
+                    $res = '天蝎';
+                }
+                break;
+            case "11":
+                if ($day < 22) {
+                    $res = '天蝎';
+                } else {
+                    $res = '射手';
+                }
+                break;
+            case "12":
+                if ($day < 22) {
+                    $res = '射手';
+                } else {
+                    $res = '摩羯';
+                }
+                break;
+        }
+
         return $res;
     }
 
 
+    /**
+     * 根据时间获取生肖
+     * @param $datetime 时间戳或Y-m-d格式日期
+     * @return string
+     */
+    public static function getShengXiao($datetime): string {
+        $res = '';
+        if (is_numeric($datetime) && strlen($datetime) > 4) {
+            $datetime = date('Y-m-d H:i:s', $datetime);
+        } else {
+            $datetime = strval($datetime);
+        }
+
+        if (!ValidateHelper::isDate2time($datetime)) {
+            return $res;
+        }
+
+        $startYear = 1901;
+        $endYear   = intval(substr($datetime, 0, 4));
+        $x         = ($startYear - $endYear) % 12;
+
+        switch ($x) {
+            case 1 :
+            case -11:
+                $res = "鼠";
+                break;
+            case 0:
+                $res = "牛";
+                break;
+            case 11 :
+            case -1:
+                $res = "虎";
+                break;
+            case 10 :
+            case -2:
+                $res = "兔";
+                break;
+            case 9 :
+            case -3:
+                $res = "龙";
+                break;
+            case 8 :
+            case -4:
+                $res = "蛇";
+                break;
+            case 7 :
+            case -5:
+                $res = "马";
+                break;
+            case 6 :
+            case -6:
+                $res = "羊";
+                break;
+            case 5 :
+            case -7:
+                $res = "猴";
+                break;
+            case 4:
+            case -8:
+                $res = "鸡";
+                break;
+            case 3 :
+            case -9:
+                $res = "狗";
+                break;
+            case 2 :
+            case -10:
+                $res = "猪";
+                break;
+        }
+
+        return $res;
+    }
 
 }
