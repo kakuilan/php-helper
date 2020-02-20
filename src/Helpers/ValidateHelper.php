@@ -100,7 +100,7 @@ class ValidateHelper {
      * @param int $maxLen 字符串最大长度
      * @return bool
      */
-    public static function isEmail(string $val, $minLen = 6, $maxLen = 40): bool {
+    public static function isEmail(string $val, int $minLen = 6, int $maxLen = 40): bool {
         $len = strlen($val);
         return $minLen <= $len && $len <= $maxLen && filter_var($val, FILTER_VALIDATE_EMAIL) && preg_match(RegularHelper::$patternEmail, $val);
     }
@@ -259,11 +259,28 @@ class ValidateHelper {
 
 
     /**
+     * 字符串是否ASCII编码
+     * @param string $val
+     * @return bool
+     */
+    public static function isAscii(string $val): bool {
+        if (!empty($val)) {
+            if (function_exists('mb_detect_encoding')) {
+                return 'ASCII' === mb_detect_encoding($val, 'ASCII', true);
+            }
+
+            return !preg_match('/[\\x80-\\xff]+/', $val);
+        }
+        return true;
+    }
+
+
+    /**
      * 是否全是中文字符
      * @param string $val
      * @return bool
      */
-    public static function isChinese(string $val):bool {
+    public static function isChinese(string $val): bool {
         return !empty($val) && preg_match(RegularHelper::$patternAllChinese, $val);
     }
 
@@ -273,10 +290,102 @@ class ValidateHelper {
      * @param string $val
      * @return bool
      */
-    public static function hasChinese(string $val):bool {
+    public static function hasChinese(string $val): bool {
         return !empty($val) && preg_match(RegularHelper::$patternHasChinese, $val);
     }
 
+
+    /**
+     * 是否英文字符串
+     * @param string $val
+     * @param int $case 是否检查大小写:0忽略大小写,1检查小写,2检查大写
+     * @return bool
+     */
+    public static function isEnglish(string $val, int $case = 0): bool {
+        if ($case == 1) { //小写
+            $pattern = RegularHelper::$patternAllEnglishLower;
+        } elseif ($case == 2) { //大写
+            $pattern = RegularHelper::$patternAllEnglishUpper;
+        } else { //忽略大小写
+            $pattern = RegularHelper::$patternAllEnglish;
+        }
+
+        return !empty($val) && preg_match($pattern, $val);
+    }
+
+
+    /**
+     * 是否包含英文字符
+     * @param string $val
+     * @return bool
+     */
+    public static function hasEnglish(string $val): bool {
+        return !empty($val) && preg_match(RegularHelper::$patternHasEnglish, $val);
+    }
+
+
+    public static function isUpper(string $val): bool {
+
+    }
+
+
+    /**
+     * 是否词语(不以下划线开头的中文、英文、数字、下划线)
+     * @param string $val
+     * @return bool
+     */
+    public static function isWord(string $val): bool {
+        return !empty($val) && preg_match(RegularHelper::$patternWord, $val);
+    }
+
+
+    /**
+     * 检查字符串是否日期格式,并转换为时间戳.
+     * @param string $val
+     * @return int
+     */
+    public static function isDate2time(string $val): int {
+        $val   = str_replace('/', '-', $val);
+        $check = preg_match(RegularHelper::$patternDatetime, $val);
+        if (!$check) {
+            return 0;
+        }
+
+        $val      .= substr('1970-00-00 00:00:00', strlen($val), 19);
+        $unixTime = strtotime($val);
+        if (!$unixTime) {
+            $unixTime = 0;
+        }
+
+        return $unixTime;
+    }
+
+
+    /**
+     * 字符串$val是否以$sub为开头
+     * @param string $val
+     * @param string $sub
+     * @return bool
+     */
+    public static function startsWith(string $val, string $sub): bool {
+        return substr($val, 0, strlen($sub)) === $sub;
+    }
+
+
+    /**
+     * 字符串$val是否以$sub为结尾
+     * @param string $val
+     * @param string $sub
+     * @return bool
+     */
+    public static function endsWith(string $val, string $sub): bool {
+        $len = strlen($sub);
+        if ($len == 0) {
+            return true;
+        }
+
+        return (substr($val, -$len) === $sub);
+    }
 
 
 }
