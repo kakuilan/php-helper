@@ -296,36 +296,55 @@ class ValidateHelper {
 
 
     /**
-     * 是否英文字符串
+     * 是否全是字母
      * @param string $val
      * @param int $case 是否检查大小写:0忽略大小写,1检查小写,2检查大写
      * @return bool
      */
-    public static function isEnglish(string $val, int $case = 0): bool {
-        if ($case == 1) { //小写
-            $pattern = RegularHelper::$patternAllEnglishLower;
-        } elseif ($case == 2) { //大写
-            $pattern = RegularHelper::$patternAllEnglishUpper;
-        } else { //忽略大小写
-            $pattern = RegularHelper::$patternAllEnglish;
+    public static function isLetter(string $val, int $case = 0): bool {
+        if (empty($val)) {
+            return false;
         }
 
-        return !empty($val) && preg_match($pattern, $val);
+        if ($case == 1) { //小写
+            $res = ctype_lower($val);
+        } elseif ($case == 2) { //大写
+            $res = ctype_upper($val);
+        } else {
+            $res = ctype_alpha($val);
+        }
+
+        return $res;
     }
 
 
     /**
-     * 是否包含英文字符
+     * 是否包含字母
      * @param string $val
      * @return bool
      */
-    public static function hasEnglish(string $val): bool {
-        return !empty($val) && preg_match(RegularHelper::$patternHasEnglish, $val);
+    public static function hasLetter(string $val): bool {
+        return !empty($val) && preg_match(RegularHelper::$patternHasLetter, $val);
     }
 
 
-    public static function isUpper(string $val): bool {
+    /**
+     * 是否全部大写字母
+     * @param string $val
+     * @return bool
+     */
+    public static function isUpperLetter(string $val): bool {
+        return !empty($val) && ctype_upper($val);
+    }
 
+
+    /**
+     * 是否全部小写字母
+     * @param string $val
+     * @return bool
+     */
+    public static function isLowerLetter(string $val): bool {
+        return !empty($val) && ctype_lower($val);
     }
 
 
@@ -385,6 +404,160 @@ class ValidateHelper {
         }
 
         return (substr($val, -$len) === $sub);
+    }
+
+
+    /**
+     * 是否iPhone客户端
+     * @param string $agent 客户端头信息
+     * @return bool
+     */
+    public static function isIPhoneClient(string $agent): bool {
+        return stripos($agent, 'iPhone') !== false;
+    }
+
+
+    /**
+     * 是否iPad客户端
+     * @param string $agent 客户端头信息
+     * @return bool
+     */
+    public static function isIPadClient(string $agent): bool {
+        return stripos($agent, 'iPad') !== false;
+    }
+
+
+    /**
+     * 是否iOS设备
+     * @param string $agent 客户端头信息
+     * @return bool
+     */
+    public static function isIOSClient(string $agent): bool {
+        return self::isIPhoneClient($agent) || self::isIPadClient($agent);
+    }
+
+
+    /**
+     * 是否Android设备
+     * @param string $agent 客户端头信息
+     * @return bool
+     */
+    public static function isAndroidClient(string $agent): bool {
+        return stripos($agent, 'Android') !== false;
+    }
+
+
+    /**
+     * 字符串是否base64编码的图片.若否,返回false;若是,返回非空的匹配数组.
+     * @param string $val
+     * @return bool|array
+     */
+    public static function isBase64Image(string $val) {
+        if (empty($val) || !stripos($val, 'base64')) {
+            return false;
+        }
+
+        if (!preg_match(RegularHelper::$patternBase64Image, $val, $match)) {
+            return false;
+        }
+
+        /*$match = [
+            0 => 'data:img/jpg;base64,',
+            1 => 'data:img/jpg;base64,',
+            2 => 'img',
+            3 => 'jpg',
+        ];*/
+
+        return $match;
+    }
+
+
+    /**
+     * 是否图片文件(根据扩展名)
+     * @param string $file 文件路径
+     * @return bool
+     */
+    public static function isImage(string $file): bool {
+        $ext = FileHelper::getFileExt($file);
+        return in_array($ext, ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'webp']);
+    }
+
+
+    /**
+     * 是否可执行文件(根据后缀)
+     * @param string $file 文件路径
+     * @return bool
+     */
+    public static function isExecuteFile(string $file): bool {
+        $ext = FileHelper::getFileExt($file);
+        return in_array($ext, ['php', 'php3', 'php4', 'php5', 'exe', 'sh', 'py']);
+    }
+
+
+    /**
+     * 字符串是否IPv4格式
+     * @param string $val
+     * @return bool
+     */
+    public static function isIPv4(string $val): bool {
+        return filter_var($val, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) == true;
+    }
+
+
+    /**
+     * 字符串是否IPv6格式
+     * @param string $val
+     * @return bool
+     */
+    public static function isIPv6(string $val): bool {
+        return filter_var($val, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) == true;
+    }
+
+
+    /**
+     * 是否window系统
+     * @return bool
+     */
+    public static function isWindows(): bool {
+        return strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+    }
+
+
+    /**
+     * 是否linux系统
+     * @return bool
+     */
+    public static function isLinux(): bool {
+        return strtolower(PHP_OS) != 'linux';
+    }
+
+
+    /**
+     * 检查主机端口是否开放
+     * @param string $host 主机/IP
+     * @param int $port 端口
+     * @param int $timeout
+     * @return bool 超时,秒
+     */
+    public static function isPortOpen(string $host = '127.0.0.1', int $port = 80, int $timeout = 5): bool {
+        $res = false; //端口未绑定
+        $fp  = @fsockopen($host, $port, $errno, $errstr, $timeout);
+        if ($errno == 0 && $fp != false) {
+            @fclose($fp);
+            $res = true; //端口已绑定
+        }
+
+        return $res;
+    }
+
+
+    /**
+     * 是否空对象
+     * @param object $val
+     * @return bool
+     */
+    public static function isEmptyObject(object $val): bool {
+        return count(get_object_vars($val)) == 0;
     }
 
 

@@ -92,28 +92,28 @@ class RegularHelper {
      * 正则模式-全英文-小写
      * @var string
      */
-    public static $patternAllEnglishLower = "/^[a-z]+$/";
+    public static $patternAllLetterLower = "/^[a-z]+$/";
 
 
     /**
      * 正则模式-全英文-大写
      * @var string
      */
-    public static $patternAllEnglishUpper = "/^[A-Z]+$/";
+    public static $patternAllLetterUpper = "/^[A-Z]+$/";
 
 
     /**
      * 正则模式-全英文-忽略大小写
      * @var string
      */
-    public static $patternAllEnglish = "/^[a-z]+$/i";
+    public static $patternAllLetter = "/^[a-z]+$/i";
 
 
     /**
      * 正则模式-含英文
      * @var string
      */
-    public static $patternHasEnglish = "/[a-z]+/i";
+    public static $patternHasLetter = "/[a-z]+/i";
 
 
     /**
