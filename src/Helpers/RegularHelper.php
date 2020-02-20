@@ -144,4 +144,10 @@ class RegularHelper {
     public static $patternIPv4 = "/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/";
 
 
+    /**
+     * 正则模式-连续的"//"或"\\"或"\/"或"/\"
+     * @var string
+     */
+    public static $patternDoubleSlash = '/(\/){2,}|(\\\){1,}/';
+
 }
