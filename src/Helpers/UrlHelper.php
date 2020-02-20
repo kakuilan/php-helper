@@ -1,0 +1,98 @@
+<?php
+/**
+ * Copyright (c) 2020 LKK/lanq.net All rights reserved
+ * User: kakuilan@163.com
+ * Date: 2020/2/20
+ * Time: 17:03
+ * Desc: URL助手类
+ */
+
+namespace Kph\Helpers;
+
+class UrlHelper {
+
+
+    /**
+     * 中文urlencode(对URL中有中文的部分进行编码处理)
+     * 如: http://www.abc3210.com/s?wd=博客
+     * 编码结果: http://www.abc3210.com/s?wd=%E5%8D%9A%20%E5%AE%A2
+     * @param string $url
+     * @return string
+     */
+    public static function cnUrlencode(string $url): string {
+        if (preg_match_all(RegularHelper::$patternChineseChar, $url, $matchArray)) {//匹配中文，返回数组
+            foreach ($matchArray[0] as $key => $val) {
+                $url = str_replace($val, urlencode($val), $url); //将转译替换中文
+            }
+            if (strpos($url, ' ')) {//若存在空格
+                $url = str_replace(' ', '%20', $url);
+            }
+        }
+        return $url;
+    }
+
+
+    /**
+     * 中文urldecode
+     * @param string $url
+     * @return string
+     */
+    public static function cnUrldecode(string $url): string {
+        $res = "";
+        $pos = 0;
+        $len = strlen($url);
+        while ($pos < $len) {
+            $charAt = substr($url, $pos, 1);
+            if ($charAt == '%') {
+                $pos++;
+                $charAt = substr($url, $pos, 1);
+                if ($charAt == 'u') {
+                    // we got a unicode character
+                    $pos++;
+                    $unicodeHexVal = substr($url, $pos, 4);
+                    $unicode       = hexdec($unicodeHexVal);
+                    $entity        = "&#" . $unicode . ';';
+                    $res           .= utf8_encode($entity);
+                    $pos           += 4;
+                } else {
+                    // we have an escaped ascii character
+                    $hexVal = substr($url, $pos, 2);
+                    $res    .= chr(hexdec($hexVal));
+                    $pos    += 2;
+                }
+            } else {
+                $res .= $charAt;
+                $pos++;
+            }
+        }
+        return $res;
+    }
+
+
+    public static function buildUriParams(array $params, array $replaceKeys = [], array $replaceVals = []) {
+        foreach ($replaceKeys as $key) {
+            unset($params[$key]);
+        }
+
+        $res = '';
+        foreach ($params as $k => $v) {
+            if (is_array($v)) {
+                foreach ($v as $v2) {
+                    $res .= empty($res) ? "{$k}[]={$v2}" : "&{$k}[]={$v2}";
+                }
+            } else {
+                $res .= empty($res) ? "{$k}={$v}" : "&{$k}={$v}";
+            }
+        }
+
+        if (!empty($replaceKeys)) {
+            foreach ($replaceKeys as $k => $key) {
+                $res .= empty($res) ? "{$key}={$replaceVals[$k]}" : "&{$key}={$replaceVals[$k]}";
+            }
+        }
+
+        return $res;
+    }
+
+
+}

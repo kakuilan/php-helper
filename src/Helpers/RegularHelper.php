@@ -75,10 +75,17 @@ class RegularHelper {
 
 
     /**
+     * 正则模式-中文字符
+     * @var string
+     */
+    public static $patternChineseChar = "/[\x{4e00}-\x{9fa5}]+/u";
+
+
+    /**
      * 正则模式-全中文
      * @var string
      */
-    public static $patternAllChinese = "/^[\\x{4e00}-\\x{9fa5}]+$/u/";
+    public static $patternAllChinese = "/^[\\x{4e00}-\\x{9fa5}]+$/u";
 
 
     /**
