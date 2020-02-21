@@ -113,4 +113,78 @@ class EncryptHelper {
     }
 
 
+    /**
+     * 简单加密
+     * @param string $data 数据
+     * @param string $key 密钥
+     * @return string
+     */
+    public static function easyEncrypt(string $data, string $key): string {
+        if ($data == '') {
+            return '';
+        }
+
+        $key     = md5($key);
+        $dataLen = strlen($data);
+        $keyLen  = strlen($key);
+        $x       = 0;
+        $str     = $char = '';
+        for ($i = 0; $i < $dataLen; $i++) {
+            if ($x == $keyLen) {
+                $x = 0;
+            }
+
+            $str .= chr(ord($data[$i]) + (ord($key[$x])) % 256);
+            $x++;
+        }
+
+        return substr($key, 0, Consts::DYNAMIC_KEY_LEN) . self::base64UrlEncode($str);
+    }
+
+
+    /**
+     * 简单解密
+     * @param string $data 数据
+     * @param string $key 密钥
+     * @return string
+     */
+    public static function easyDecrypt(string $data, string $key): string {
+        if (strlen($data) < Consts::DYNAMIC_KEY_LEN) {
+            return '';
+        }
+
+        $key = md5($key);
+        if (substr($key, 0, Consts::DYNAMIC_KEY_LEN) != substr($data, 0, Consts::DYNAMIC_KEY_LEN)) {
+            return '';
+        }
+
+        $data = self::base64UrlDecode(substr($data, Consts::DYNAMIC_KEY_LEN));
+        if (empty($data)) {
+            return '';
+        }
+
+        $dataLen = strlen($data);
+        $keyLen  = strlen($key);
+        $x       = 0;
+        $str     = $char = '';
+        for ($i = 0; $i < $dataLen; $i++) {
+            if ($x == $keyLen) {
+                $x = 0;
+            }
+
+            $c = ord($data[$i]);
+            $k = ord($key[$x]);
+            if ($c < $k) {
+                $str .= chr(($c + 256) - $k);
+            } else {
+                $str .= chr($c - $k);
+            }
+
+            $x++;
+        }
+
+        return $str;
+    }
+
+
 }

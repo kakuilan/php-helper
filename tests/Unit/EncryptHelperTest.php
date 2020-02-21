@@ -17,6 +17,7 @@ use Kph\Helpers\EncryptHelper;
 
 class EncryptHelperTest extends TestCase {
 
+
     public function testAuthcode() {
         $origin = 'hello world!';
         $key = '123456';
@@ -30,6 +31,28 @@ class EncryptHelperTest extends TestCase {
         $res2 = EncryptHelper::authcode('', '', false);
         $this->assertEquals('', $res1[0]);
         $this->assertEquals('', $res2[0]);
+    }
+
+
+    public function testEasyEncryptDecrypt() {
+        $origin = 'hello world!你好，世界！';
+        $key = '123456';
+
+        $enres = EncryptHelper::easyEncrypt($origin, $key);
+        $deres = EncryptHelper::easyDecrypt($enres, $key);
+        $this->assertEquals($origin, $deres);
+
+        $res1 = EncryptHelper::easyEncrypt('', $key);
+        $this->assertEquals('', $res1);
+
+        $res2 = EncryptHelper::easyDecrypt('', $key);
+        $this->assertEquals('', $res2);
+
+        $res3 = EncryptHelper::easyDecrypt('0adc39zZaczdODqqimpcaCGfYBRwciJPLxFO3NTce8VfS5', $key);
+        $this->assertEquals('', $res3);
+
+        $res4 = EncryptHelper::easyDecrypt('e10adc39   ', $key);
+        $this->assertEquals('', $res4);
     }
 
 
