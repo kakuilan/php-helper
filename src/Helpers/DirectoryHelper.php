@@ -9,6 +9,11 @@
 
 namespace Kph\Helpers;
 
+
+/**
+ * Class DirectoryHelper
+ * @package Kph\Helpers
+ */
 class DirectoryHelper {
 
 

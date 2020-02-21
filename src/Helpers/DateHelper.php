@@ -9,6 +9,11 @@
 
 namespace Kph\Helpers;
 
+
+/**
+ * Class DateHelper
+ * @package Kph\Helpers
+ */
 class DateHelper {
 
 

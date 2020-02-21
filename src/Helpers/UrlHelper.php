@@ -9,6 +9,11 @@
 
 namespace Kph\Helpers;
 
+
+/**
+ * Class UrlHelper
+ * @package Kph\Helpers
+ */
 class UrlHelper {
 
 

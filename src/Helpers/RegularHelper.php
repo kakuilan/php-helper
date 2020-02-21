@@ -9,6 +9,11 @@
 
 namespace Kph\Helpers;
 
+
+/**
+ * Class RegularHelper
+ * @package Kph\Helpers
+ */
 class RegularHelper {
 
     /**

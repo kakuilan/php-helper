@@ -9,6 +9,11 @@
 
 namespace Kph\Helpers;
 
+
+/**
+ * Class ValidateHelper
+ * @package Kph\Helpers
+ */
 class ValidateHelper {
 
 

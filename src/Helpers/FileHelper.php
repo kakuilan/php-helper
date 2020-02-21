@@ -9,6 +9,11 @@
 
 namespace Kph\Helpers;
 
+
+/**
+ * Class FileHelper
+ * @package Kph\Helpers
+ */
 class FileHelper {
 
 

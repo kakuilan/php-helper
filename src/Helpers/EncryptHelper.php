@@ -11,6 +11,11 @@ namespace Kph\Helpers;
 
 use Kph\Consts;
 
+
+/**
+ * Class EncryptHelper
+ * @package Kph\Helpers
+ */
 class EncryptHelper {
 
 

@@ -73,6 +73,7 @@ https://github.com/whm19940308/phpTools
 https://github.com/wycto/helper
 https://github.com/yunkaiyueming/php_lib_code_center
 https://github.com/zhosoft/tools
+https://github.com/voku/portable-utf8
 
 promise
 https://github.com/hprose/hprose-php
