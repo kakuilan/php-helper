@@ -261,12 +261,12 @@ class ArrayHelper {
     private static function _combinationPosition(array $arr, string $separator = ''): array {
         $len = count($arr);
         $res = self::combinationAll($arr, $separator);
-        if($len>=2) {
-            foreach ($arr as $k=>$item) {
+        if ($len >= 2) {
+            foreach ($arr as $k => $item) {
                 $newArr = $arr;
                 self::cutItems($newArr, $k);
                 $newRes = self::_combinationPosition($newArr, $separator);
-                if(!empty($newRes)) {
+                if (!empty($newRes)) {
                     $res = array_merge($res, $newRes);
                 }
             }
@@ -464,6 +464,24 @@ class ArrayHelper {
 
         array_multisort(... $sortConditions);
         return end($sortConditions);
+    }
+
+
+    /**
+     * 交换2个元素的值
+     * @param array $arr
+     * @param int|string $keya 键a
+     * @param int|string $keyb 键b
+     * @return bool
+     */
+    public static function swapItem(array &$arr, $keya, $keyb): bool {
+        $keya = strval($keya);
+        $keyb = strval($keyb);
+        if (isset($arr[$keya]) && isset($keyb)) {
+            list($arr[$keya], $arr[$keyb]) = [$arr[$keyb], $arr[$keya]];
+            return true;
+        }
+        return false;
     }
 
 
