@@ -56,4 +56,13 @@ class EncryptHelperTest extends TestCase {
     }
 
 
+    public function testMurmurhash3Int() {
+        $origin = 'hello';
+        $res1 = EncryptHelper::murmurhash3Int($origin);
+        $res2 = EncryptHelper::murmurhash3Int($origin, 3, false);
+        $this->assertEquals(11, strlen($res1));
+        $this->assertEquals(10, strlen($res2));
+    }
+
+
 }
