@@ -69,6 +69,14 @@ class UrlHelper {
     }
 
 
+    /**
+     * 根据键值对数组,组建uri(带?的url参数串).
+     * 若$replaceKeys非空,而$replaceVals为空时,则是删除$replaceKeys包含的键(参数名).
+     * @param array $params 参数数组,最多二维
+     * @param array $replaceKeys 要替换的键
+     * @param array $replaceVals 要替换的值
+     * @return string
+     */
     public static function buildUriParams(array $params, array $replaceKeys = [], array $replaceVals = []) {
         foreach ($replaceKeys as $key) {
             unset($params[$key]);
@@ -77,21 +85,62 @@ class UrlHelper {
         $res = '';
         foreach ($params as $k => $v) {
             if (is_array($v)) {
-                foreach ($v as $v2) {
-                    $res .= empty($res) ? "{$k}[]={$v2}" : "&{$k}[]={$v2}";
+                foreach ($v as $k2 => $v2) {
+                    $res .= "&{$k}[{$k2}]={$v2}";
                 }
             } else {
-                $res .= empty($res) ? "{$k}={$v}" : "&{$k}={$v}";
+                $res .= "&{$k}={$v}";
             }
         }
 
-        if (!empty($replaceKeys)) {
-            foreach ($replaceKeys as $k => $key) {
-                $res .= empty($res) ? "{$key}={$replaceVals[$k]}" : "&{$key}={$replaceVals[$k]}";
+        if (!empty($replaceVals)) {
+            foreach ($replaceVals as $k => $val) {
+                $key = $replaceKeys[$k] ?? '';
+                if (!empty($key)) {
+                    $res .= "&{$key}={$val}";
+                }
             }
         }
 
+        $res[0] = '?';
         return $res;
+    }
+
+
+    /**
+     * 格式化URL(替换重复的//)
+     * @param string $url
+     * @return string
+     */
+    public static function formatUrl(string $url): string {
+        if (!stripos($url, '://')) {
+            $url = 'http://' . $url;
+        }
+        $url = str_replace("\\", "/", $url);
+        return preg_replace('/([^:])[\/]{2,}/', '$1/', $url);
+    }
+
+
+    /**
+     * 检查URL是否正常存在
+     * @param string $url
+     * @return bool
+     */
+    public static function checkUrlExists(string $url): bool {
+        if (empty($url)) {
+            return false;
+        }
+
+        if (!stripos($url, '://')) {
+            $url = 'http://' . $url;
+        }
+        if (!ValidateHelper::isUrl($url)) {
+            return false;
+        }
+
+        $header = get_headers($url, true);
+
+        return isset($header[0]) && (strpos($header[0], '200') || strpos($header[0], '304'));
     }
 
 
