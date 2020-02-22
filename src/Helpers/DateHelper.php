@@ -324,7 +324,7 @@ class DateHelper {
      */
     public static function getLunarYear($datetime): string {
         $res = '';
-        if (is_numeric($datetime) && strlen($datetime) > 4) {
+        if (is_numeric($datetime) && strlen($datetime) == 10) {
             $datetime = date('Y-m-d H:i:s', $datetime);
         } else {
             $datetime = strval($datetime);

@@ -143,7 +143,7 @@ class DateHelperTest extends TestCase {
             ['1910', '狗'],
             ['1911', '猪'],
             ['1912', '鼠'],
-            ['2020', '鼠'],
+            ['2020-02-22', '鼠'],
         ];
 
         foreach ($tests as $test) {
@@ -151,5 +151,25 @@ class DateHelperTest extends TestCase {
             $this->assertEquals($test[1], $expected);
         }
     }
+
+
+    public function testGetLunarYear() {
+        $time = 1582368688;
+        $tests = [
+            ['hello', ''],
+            [$time, '庚子'],
+            ['2020', '庚子'],
+            ['2019-02-05', '己亥'],
+            ['2018', '戊戌'],
+            ['2017', '丁酉'],
+            ['2016', '丙申'],
+        ];
+
+        foreach ($tests as $test) {
+            $expected = DateHelper::getLunarYear($test[0]);
+            $this->assertEquals($test[1], $expected);
+        }
+    }
+
 
 }
