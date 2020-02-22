@@ -477,7 +477,7 @@ class ArrayHelper {
     public static function swapItem(array &$arr, $keya, $keyb): bool {
         $keya = strval($keya);
         $keyb = strval($keyb);
-        if (isset($arr[$keya]) && isset($keyb)) {
+        if (isset($arr[$keya]) && isset($arr[$keyb])) {
             list($arr[$keya], $arr[$keyb]) = [$arr[$keyb], $arr[$keya]];
             return true;
         }

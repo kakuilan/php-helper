@@ -38,32 +38,32 @@ class ArrayHelperTest extends TestCase {
     public function testMultiArraySort() {
         $arr1 = [
             [
-                'id' => 9,
-                'age' => 19,
+                'id'   => 9,
+                'age'  => 19,
                 'name' => 'hehe',
                 'nick' => '阿斯蒂芬',
             ],
             [
-                'id' => 2,
-                'age' => 31,
+                'id'   => 2,
+                'age'  => 31,
                 'name' => 'lizz',
                 'nick' => '去玩儿',
             ],
             [
-                'id' => 87,
-                'age' => 50,
+                'id'   => 87,
+                'age'  => 50,
                 'name' => 'zhang3',
                 'nick' => '谱曲说',
             ],
             [
-                'id' => 25,
-                'age' => 43,
+                'id'   => 25,
+                'age'  => 43,
                 'name' => 'wang5',
                 'nick' => '阿斯蒂芬',
             ],
             [
-                'id' => 24,
-                'age' => 63,
+                'id'   => 24,
+                'age'  => 63,
                 'name' => 'zhao4',
                 'nick' => '权威认证',
             ],
@@ -71,7 +71,7 @@ class ArrayHelperTest extends TestCase {
 
         $arr2 = array_merge($arr1, ['hello']);
         $arr3 = array_merge($arr1, [
-            'age' => 44,
+            'age'  => 44,
             'name' => 'asdf',
             'nick' => '主线程v',
         ]);
@@ -93,23 +93,23 @@ class ArrayHelperTest extends TestCase {
     public function testMultiArrayUnique() {
         $arr = [
             'aa' => [
-                'id' => 9,
-                'age' => 19,
+                'id'   => 9,
+                'age'  => 19,
                 'name' => 'hello',
             ],
             'bb' => [
-                'id' => 2,
-                'age' => 31,
+                'id'   => 2,
+                'age'  => 31,
                 'name' => 'lizz',
             ],
             'cc' => [
-                'id' => 9,
-                'age' => 19,
+                'id'   => 9,
+                'age'  => 19,
                 'name' => 'hello',
             ],
             'dd' => [
-                'id' => 87,
-                'age' => 50,
+                'id'   => 87,
+                'age'  => 50,
                 'name' => 'zhang3',
             ],
         ];
@@ -129,23 +129,23 @@ class ArrayHelperTest extends TestCase {
     public function testMultiArrayValues() {
         $arr = [
             'aa' => [
-                'id' => 9,
-                'age' => 19,
+                'id'   => 9,
+                'age'  => 19,
                 'name' => 'hello',
             ],
             'bb' => [
-                'id' => 2,
-                'age' => 31,
+                'id'   => 2,
+                'age'  => 31,
                 'name' => 'lizz',
             ],
             'cc' => [
-                'id' => 9,
-                'age' => 19,
+                'id'   => 9,
+                'age'  => 19,
                 'name' => 'hello',
             ],
             'dd' => [
-                'id' => 87,
-                'age' => 50,
+                'id'   => 87,
+                'age'  => 50,
                 'name' => 'zhang3',
             ],
         ];
@@ -158,23 +158,23 @@ class ArrayHelperTest extends TestCase {
     public function testArraySort() {
         $arr = [
             'aa' => [
-                'id' => 9,
-                'age' => 19,
+                'id'   => 9,
+                'age'  => 19,
                 'name' => 'hello',
             ],
             'bb' => [
-                'id' => 2,
-                'age' => 31,
+                'id'   => 2,
+                'age'  => 31,
                 'name' => 'lizz',
             ],
             'cc' => [
-                'id' => 9,
-                'age' => 19,
+                'id'   => 9,
+                'age'  => 19,
                 'name' => 'hello',
             ],
             'dd' => [
-                'id' => 87,
-                'age' => 50,
+                'id'   => 87,
+                'age'  => 50,
                 'name' => 'zhang3',
             ],
         ];
@@ -185,12 +185,12 @@ class ArrayHelperTest extends TestCase {
         $res2 = ArrayHelper::sortByField($arr, 'comp');
         $this->assertEmpty($res2);
 
-        $res3 = ArrayHelper::sortByField($arr, 'id', 'desc', false);
+        $res3  = ArrayHelper::sortByField($arr, 'id', 'desc', false);
         $first = current($res3);
         $this->assertEquals(87, $first['id']);
 
-        $res4 = ArrayHelper::sortByField($arr, 'id', 'asc', true);
-        $keys = array_keys($res4);
+        $res4  = ArrayHelper::sortByField($arr, 'id', 'asc', true);
+        $keys  = array_keys($res4);
         $first = current($res4);
         $this->assertEquals(2, $first['id']);
         $this->assertTrue(in_array('aa', $keys));
@@ -199,7 +199,7 @@ class ArrayHelperTest extends TestCase {
 
     public function testmapRecursive() {
         $arr = [-3, 0, 4, 7, 87];
-        $fn = function (int $val):int {
+        $fn  = function (int $val): int {
             return 2 * $val;
         };
 
@@ -210,20 +210,20 @@ class ArrayHelperTest extends TestCase {
 
     public function testObject2Array() {
         $childs = [];
-        for ($i=1;$i<5;$i++) {
-            $chi = new \stdClass();
-            $chi->id = $i;
-            $chi->type = 'child';
-            $chi->name = 'boy-' . strval($i);
+        for ($i = 1; $i < 5; $i++) {
+            $chi         = new \stdClass();
+            $chi->id     = $i;
+            $chi->type   = 'child';
+            $chi->name   = 'boy-' . strval($i);
             $chi->childs = [];
 
             array_push($childs, $chi);
         }
 
-        $par = new \stdClass();
-        $par->id = 0;
-        $par->type = 'parent';
-        $par->name = 'hello';
+        $par         = new \stdClass();
+        $par->id     = 0;
+        $par->type   = 'parent';
+        $par->name   = 'hello';
         $par->childs = $childs;
 
         $res1 = ArrayHelper::object2Array(new \stdClass());
@@ -243,24 +243,24 @@ class ArrayHelperTest extends TestCase {
     public function testArrayToObject() {
         $arr = [
             'aa' => [
-                'id' => 9,
-                'age' => 19,
-                'name' => 'hello',
+                'id'    => 9,
+                'age'   => 19,
+                'name'  => 'hello',
                 'child' => [],
             ],
             'bb' => [
-                'id' => 2,
-                'age' => 31,
+                'id'   => 2,
+                'age'  => 31,
                 'name' => 'lizz',
             ],
             'cc' => [
-                'id' => 9,
-                'age' => 19,
+                'id'   => 9,
+                'age'  => 19,
                 'name' => 'hello',
             ],
             'dd' => [
-                'id' => 87,
-                'age' => 50,
+                'id'   => 87,
+                'age'  => 50,
                 'name' => 'zhang3',
             ],
         ];
@@ -275,13 +275,13 @@ class ArrayHelperTest extends TestCase {
 
     public function testCutItems() {
         $arr = [
-            0 => 'aa',
-            3 => 'ww',
+            0   => 'aa',
+            3   => 'ww',
             'a' => 4,
             'd' => 56.78,
             'e' => true,
             '8' => 'hello',
-            9 => false,
+            9   => false,
         ];
 
         [$res1, $res2, $res3, $res4] = ArrayHelper::cutItems($arr, 3, 'a', 'd', 'p');
@@ -316,64 +316,64 @@ class ArrayHelperTest extends TestCase {
     public function testSearchItemSearchMutil() {
         $arr = [
             [
-                'id' => 9,
+                'id'     => 9,
                 'gender' => 1,
-                'age' => 19,
-                'name' => 'hehe',
-                'nick' => '阿斯蒂芬',
+                'age'    => 19,
+                'name'   => 'hehe',
+                'nick'   => '阿斯蒂芬',
             ],
             [
-                'id' => 2,
+                'id'     => 2,
                 'gender' => 0,
-                'age' => 31,
-                'name' => 'lizz',
-                'nick' => '去玩儿',
+                'age'    => 31,
+                'name'   => 'lizz',
+                'nick'   => '去玩儿',
             ],
             [
-                'id' => 87,
+                'id'     => 87,
                 'gender' => 1,
-                'age' => 19,
-                'name' => 'zhang3',
-                'nick' => '谱曲说',
+                'age'    => 19,
+                'name'   => 'zhang3',
+                'nick'   => '谱曲说',
             ],
             [
-                'id' => 25,
+                'id'     => 25,
                 'gender' => 0,
-                'age' => 43,
-                'name' => 'wang5',
-                'nick' => '阿斯蒂芬',
+                'age'    => 43,
+                'name'   => 'wang5',
+                'nick'   => '阿斯蒂芬',
             ],
             [
-                'id' => 24,
+                'id'     => 24,
                 'gender' => 1,
-                'age' => 63,
-                'name' => 'zhao4',
-                'nick' => '权威认证',
+                'age'    => 63,
+                'name'   => 'zhao4',
+                'nick'   => '权威认证',
             ],
         ];
 
         $tmp = [];
-        $res = ArrayHelper::searchItem($tmp, ['id'=>99]);
+        $res = ArrayHelper::searchItem($tmp, ['id' => 99]);
         $this->assertFalse($res);
-        $res = ArrayHelper::searchItem($arr, ['id'=>99]);
+        $res = ArrayHelper::searchItem($arr, ['id' => 99]);
         $this->assertFalse($res);
-        $res = ArrayHelper::searchMutil($tmp, ['id'=>99]);
+        $res = ArrayHelper::searchMutil($tmp, ['id' => 99]);
         $this->assertEmpty($res);
 
-        $res1 = ArrayHelper::searchItem($arr, ['id'=>87, 'name'=>true]);
+        $res1 = ArrayHelper::searchItem($arr, ['id' => 87, 'name' => true]);
         $this->assertTrue(in_array($res1, $arr));
 
-        $res2 = ArrayHelper::searchMutil($arr, ['gender'=>1, 'age'=>19, 'name'=>true]);
+        $res2 = ArrayHelper::searchMutil($arr, ['gender' => 1, 'age' => 19, 'name' => true]);
         $this->assertGreaterThanOrEqual(2, count($res2));
 
         $newArr = $arr;
-        $res3 = ArrayHelper::searchItem($newArr, ['id'=>87], true);
+        $res3   = ArrayHelper::searchItem($newArr, ['id' => 87], true);
         $this->assertNotEmpty($res3);
         $this->assertFalse(in_array($res3, $newArr));
 
         $newArr = $arr;
-        $len = count($newArr);
-        $res4 = ArrayHelper::searchMutil($newArr, ['gender'=>1, 'age'=>19, 'name'=>true], true);
+        $len    = count($newArr);
+        $res4   = ArrayHelper::searchMutil($newArr, ['gender' => 1, 'age' => 19, 'name' => true], true);
         $this->assertEquals($len, count($res4) + count($newArr));
     }
 
@@ -381,39 +381,39 @@ class ArrayHelperTest extends TestCase {
     public function testSortByMultiFields() {
         $arr = [
             [
-                'id' => 9,
+                'id'     => 9,
                 'gender' => 1,
-                'age' => 19,
-                'name' => 'hehe',
-                'nick' => '阿斯蒂芬',
+                'age'    => 19,
+                'name'   => 'hehe',
+                'nick'   => '阿斯蒂芬',
             ],
             [
-                'id' => 2,
+                'id'     => 2,
                 'gender' => 0,
-                'age' => 31,
-                'name' => 'lizz',
-                'nick' => '去玩儿',
+                'age'    => 31,
+                'name'   => 'lizz',
+                'nick'   => '去玩儿',
             ],
             [
-                'id' => 87,
+                'id'     => 87,
                 'gender' => 1,
-                'age' => 19,
-                'name' => 'zhang3',
-                'nick' => '谱曲说',
+                'age'    => 19,
+                'name'   => 'zhang3',
+                'nick'   => '谱曲说',
             ],
             [
-                'id' => 25,
+                'id'     => 25,
                 'gender' => 0,
-                'age' => 43,
-                'name' => 'wang5',
-                'nick' => '阿斯蒂芬',
+                'age'    => 43,
+                'name'   => 'wang5',
+                'nick'   => '阿斯蒂芬',
             ],
             [
-                'id' => 24,
+                'id'     => 24,
                 'gender' => 1,
-                'age' => 63,
-                'name' => 'zhao4',
-                'nick' => '权威认证',
+                'age'    => 63,
+                'name'   => 'zhao4',
+                'nick'   => '权威认证',
             ],
         ];
 
@@ -423,8 +423,8 @@ class ArrayHelperTest extends TestCase {
         $res2 = ArrayHelper::sortByMultiFields($arr);
         $this->assertEquals(json_encode($arr), json_encode($res2));
 
-        $res3 = ArrayHelper::sortByMultiFields($arr, ['gender'], ['age', SORT_ASC], ['id', SORT_DESC]);
-        $first = current($res3);
+        $res3   = ArrayHelper::sortByMultiFields($arr, ['gender'], ['age', SORT_ASC], ['id', SORT_DESC]);
+        $first  = current($res3);
         $second = $res3[1];
         $this->assertEquals(87, $first['id']);
         $this->assertEquals(9, $second['id']);
@@ -434,9 +434,29 @@ class ArrayHelperTest extends TestCase {
     }
 
 
+    public function testSwapItem() {
+        $arr = [
+            1   => 1,
+            'a' => 'aa',
+            'b' => 'bb',
+            'c' => 'cc',
+            'd' => 'dd',
+            3   => 3,
+        ];
 
+        $ret1 = ArrayHelper::swapItem($arr, 1, 3);
+        $this->assertTrue($ret1);
+        $this->assertEquals(3, $arr[1]);
+        $this->assertEquals(1, $arr[3]);
 
+        $ret2 = ArrayHelper::swapItem($arr, 'a', 'c');
+        $this->assertTrue($ret1);
+        $this->assertEquals('cc', $arr['a']);
+        $this->assertEquals('aa', $arr['c']);
 
+        $ret3 = ArrayHelper::swapItem($arr, 'a', 't');
+        $this->assertFalse($ret3);
+    }
 
 
 }
