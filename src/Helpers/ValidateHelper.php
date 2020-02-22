@@ -369,6 +369,19 @@ class ValidateHelper {
      * @return int
      */
     public static function isDate2time(string $val): int {
+        /* 匹配
+        0000
+        0000-00
+        0000/00
+        0000-00-00
+        0000/00/00
+        0000-00-00 00
+        0000/00/00 00
+        0000-00-00 00:00
+        0000/00/00 00:00
+        0000-00-00 00:00:00
+        0000/00/00 00:00:00 */
+
         $val   = str_replace('/', '-', $val);
         $check = preg_match(RegularHelper::$patternDatetime, $val);
         if (!$check) {

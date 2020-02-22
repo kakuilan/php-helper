@@ -117,7 +117,7 @@ class DateHelper {
      * @return float
      */
     public static function getMicrosecond(): float {
-        list($usec,) = explode(" ", microtime());
+        [$usec,] = explode(" ", microtime());
         return ((float)$usec * pow(10, 6));
     }
 
@@ -127,7 +127,7 @@ class DateHelper {
      * @return float
      */
     public static function getMillitime(): float {
-        list($t1, $t2) = explode(' ', microtime());
+        [$t1, $t2] = explode(' ', microtime());
         return (float)sprintf('%.0f', (floatval($t1) + floatval($t2)) * 1000);
     }
 
@@ -139,7 +139,7 @@ class DateHelper {
      */
     public static function getXingZuo($datetime): string {
         $res = '';
-        if (is_numeric($datetime) && strlen($datetime) > 4) {
+        if (is_numeric($datetime) && strlen($datetime) == 10) {
             $datetime = date('Y-m-d H:i:s', $datetime);
         } else {
             $datetime = strval($datetime);
