@@ -125,4 +125,31 @@ class DateHelperTest extends TestCase {
     }
 
 
+    public function testGetShengXiao() {
+        $time = 1582368688;
+        $tests = [
+            ['hello', ''],
+            [$time, '鼠'],
+            ['1900', '鼠'],
+            ['1901', '牛'],
+            ['1902', '虎'],
+            ['1903', '兔'],
+            ['1904', '龙'],
+            ['1905', '蛇'],
+            ['1906', '马'],
+            ['1907', '羊'],
+            ['1908', '猴'],
+            ['1909', '鸡'],
+            ['1910', '狗'],
+            ['1911', '猪'],
+            ['1912', '鼠'],
+            ['2020', '鼠'],
+        ];
+
+        foreach ($tests as $test) {
+            $expected = DateHelper::getShengXiao($test[0]);
+            $this->assertEquals($test[1], $expected);
+        }
+    }
+
 }
