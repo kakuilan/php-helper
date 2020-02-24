@@ -118,7 +118,7 @@ class DateHelper {
      */
     public static function getMicrosecond(): float {
         [$usec,] = explode(" ", microtime());
-        return ((float)$usec * pow(10, 6));
+        return (float)$usec * pow(10, 6);
     }
 
 
