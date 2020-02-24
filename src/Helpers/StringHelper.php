@@ -17,6 +17,20 @@ class StringHelper {
 
 
     /**
+     * 半角字符集
+     * @var array
+     */
+    public static $DBCChars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '-', ' ', ':', '.', ',', '/', '%', '#', '!', '@', '&', '(', ')', '<', '>', '"', '\'', '?', '[', ']', '{', '}', '\\', '|', '+', '=', '_', '^', '$', '~', '`'];
+
+
+    /**
+     * 全角字符集
+     * @var array
+     */
+    public static $SBCChars = ['０', '１', '２', '３', '４', '５', '６', '７', '８', '９', 'Ａ', 'Ｂ', 'Ｃ', 'Ｄ', 'Ｅ', 'Ｆ', 'Ｇ', 'Ｈ', 'Ｉ', 'Ｊ', 'Ｋ', 'Ｌ', 'Ｍ', 'Ｎ', 'Ｏ', 'Ｐ', 'Ｑ', 'Ｒ', 'Ｓ', 'Ｔ', 'Ｕ', 'Ｖ', 'Ｗ', 'Ｘ', 'Ｙ', 'Ｚ', 'ａ', 'ｂ', 'ｃ', 'ｄ', 'ｅ', 'ｆ', 'ｇ', 'ｈ', 'ｉ', 'ｊ', 'ｋ', 'ｌ', 'ｍ', 'ｎ', 'ｏ', 'ｐ', 'ｑ', 'ｒ', 'ｓ', 'ｔ', 'ｕ', 'ｖ', 'ｗ', 'ｘ', 'ｙ', 'ｚ', '－', '　', '：', '．', '，', '／', '％', '＃', '！', '＠', '＆', '（', '）', '＜', '＞', '＂', '＇', '？', '［', '］', '｛', '｝', '＼', '｜', '＋', '＝', '＿', '＾', '＄', '～', '｀'];
+
+
+    /**
      * 字符串剪切(宽字符)
      * @param string $str 字符串
      * @param int $length 截取长度
@@ -193,5 +207,87 @@ class StringHelper {
 
         return preg_replace("/\<br\s*\/\>\s*\<\/p\>/is", '</p>', $html);
     }
+
+
+    /**
+     * 全角转半角字符
+     * @param string $str
+     * @return string
+     */
+    public static function SBC2DBC(string $str): string {
+        return str_replace(self::$SBCChars, self::$DBCChars, $str);
+    }
+
+
+    /**
+     * 半角转全角字符
+     * @param string $str
+     * @return string
+     */
+    public static function DBC2SBC(string $str): string {
+        return str_replace(self::$DBCChars, self::$SBCChars, $str);
+    }
+
+
+    /**
+     * 获取相似度最高的字符串,结果是数组,包含相似字符和编辑距离.
+     * @param string $word 要比较的字符串
+     * @param array $searchs 要查找的字符串数组
+     * @return array
+     */
+    public static function getClosestWord(string $word, array $searchs): array {
+        $shortest = -1;
+        $closest  = null;
+
+        foreach ($searchs as $search) {
+            $lev = levenshtein($word, $search);
+            if ($lev == 0) { //完全相等
+                $closest  = $search;
+                $shortest = 0;
+                break;
+            }
+            if ($lev <= $shortest || $shortest < 0) {
+                $closest  = $search;
+                $shortest = $lev;
+            }
+        }
+
+        $res = [
+            $closest,
+            $shortest,
+        ];
+
+        return $res;
+    }
+
+
+    /**
+     * escape编码
+     * @param string $str 待编码字符串
+     * @param string $charset 字符集
+     * @return string
+     */
+    public static function escape(string $str, $charset = 'UTF-8'): string {
+        preg_match_all("/[\x80-\xff].|[\x01-\x7f]+/", $str, $matchs);
+        $arr = $matchs[0];
+        foreach ($arr as $k => $v) {
+            $ar[$k] = ord($v[0]) < 128 ? rawurlencode($v) : '%u' . bin2hex(iconv($charset, 'UCS-2', $v));
+        }
+        return join('', $arr);
+    }
+
+
+    /**
+     * unescape解码
+     * @param string $str 待解码字符串
+     * @param string $charset 字符集
+     * @return string
+     */
+    public static function unescape(string $str, $charset = 'UTF-8'): string {
+        $str = rawurldecode($str);
+        $str = preg_replace("/\%u([0-9A-Z]{4})/es", "iconv('UCS-2', '$charset', pack('H4', '$1'))", $str);
+        return $str;
+    }
+
 
 }
