@@ -563,4 +563,143 @@ class StringHelper {
     }
 
 
+    /**
+     * 隐藏证件号码
+     * @param string $str
+     * @return string
+     */
+    public static function hideCard(string $str): string {
+        $res = '******';
+        $len = strlen($str);
+        if ($len > 4 && $len <= 10) {
+            $res = substr($str, 0, 4) . '******';
+        } elseif ($len > 10) {
+            $res = substr($str, 0, 4) . '******' . substr($str, ($len - 4), $len);
+        }
+
+        return $res;
+    }
+
+
+    /**
+     * 隐藏手机号
+     * @param string $str
+     * @return string
+     */
+    public static function hideMobile(string $str): string {
+        $res = '***';
+        $len = strlen($str);
+        if ($len > 7) {
+            $res = substr($str, 0, 3) . '****' . substr($str, ($len - 3), $len);
+        }
+
+        return $res;
+    }
+
+
+    /**
+     * 隐藏真实名称(如姓名、账号、公司等)
+     * @param string $str
+     * @return string
+     */
+    public static function hideTrueName(string $str): string {
+        $res = '**';
+        if ($str != '') {
+            $len = mb_strlen($str, 'UTF-8');
+            if ($len <= 3) {
+                $res = mb_substr($str, 0, 1, 'UTF-8') . $res;
+            } elseif ($len < 5) {
+                $res = mb_substr($str, 0, 2, 'UTF-8') . $res;
+            } elseif ($len < 10) {
+                $res = mb_substr($str, 0, 2, 'UTF-8') . '***' . mb_substr($str, ($len - 2), $len, 'UTF-8');
+            } elseif ($len < 16) {
+                $res = mb_substr($str, 0, 3, 'UTF-8') . '***' . mb_substr($str, ($len - 3), $len, 'UTF-8');
+            } else {
+                $res = mb_substr($str, 0, 4, 'UTF-8') . '***' . mb_substr($str, ($len - 4), $len, 'UTF-8');
+            }
+        }
+
+        return $res;
+    }
+
+
+    /**
+     * 统计base64字符串大小(字节)
+     * @param string $str base64字符串
+     * @return int
+     */
+    public static function countBase64Byte(string $str): int {
+        if (empty($str)) {
+            return 0;
+        }
+
+        $str = preg_replace('/^(data:\s*(image|img)\/(\w+);base64,)/', '', $str);
+        $str = str_replace('=', '', $str);
+        $len = strlen($str);
+        $res = intval($len * (3 / 4));
+        return $res;
+    }
+
+
+    /**
+     * 将字符串转换成二进制
+     * @param string $str
+     * @return string
+     */
+    public static function str2Bin(string $str): string {
+        //列出每个字符
+        $arr = preg_split('/(?<!^)(?!$)/u', $str);
+        //unpack字符
+        foreach ($arr as &$v) {
+            $temp = unpack('H*', $v);
+            $v    = base_convert($temp[1], 16, 2);
+            unset($temp);
+        }
+
+        return join(' ', $arr);
+    }
+
+
+    /**
+     * 将二进制转换成字符串
+     * @param string $str
+     * @return string
+     */
+    public static function bin2Str(string $str): string {
+        $arr = explode(' ', $str);
+        foreach ($arr as &$v) {
+            $v = pack("H" . strlen(base_convert($v, 2, 16)), base_convert($v, 2, 16));
+        }
+
+        return join('', $arr);
+    }
+
+
+    /**
+     * 多分隔符切割字符串
+     * @param string $str 源字符串
+     * @param string ...$delimiters 分隔符数组
+     * @return array
+     */
+    public static function multiExplode(string $str, string ...$delimiters): array {
+        $res = [];
+        if($str=='') {
+            return $res;
+        }
+
+        $dLen = count($delimiters);
+        if($dLen==0) {
+            array_push($res, $str);
+        }else{
+            if($dLen>1) {
+                $str = str_replace($delimiters, $delimiters[0], $str);
+            }
+
+            $res = explode($delimiters[0], $str);
+        }
+
+        return $res;
+    }
+
+
 }
