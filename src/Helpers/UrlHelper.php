@@ -149,4 +149,33 @@ class UrlHelper {
     }
 
 
+    /**
+     * 将URL转换为链接标签
+     * @param string $url 含URL的字符串
+     * @param array $protocols 要转换的协议, http/https, ftp/ftps, mail
+     * @param string $target 是否新页面打开:_blank,_self,默认为空
+     * @return string
+     */
+    public static function url2Link(string $url, array $protocols = ['http', 'https'], string $target = ''): string {
+        if (!empty($url)) {
+            if (!empty(array_intersect($protocols, ['http', 'https']))) {
+                $pattern = '@(http(s)?)?(://)?(([a-zA-Z])([-\w]+\.)+([^\s\.]+[^\s]*)+[^,.\s])@i';
+                $url     = preg_replace($pattern, '<a href="http$2://$4" target="{$target}">$0</a>', $url);
+            }
+
+            if (!empty(array_intersect($protocols, ['ftp', 'ftps']))) {
+                $pattern = '/(ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/i';
+                $url     = preg_replace($pattern, '<a href="$0" target="{$target}">$0</a>', $url);
+            }
+
+            if (in_array('mail', $protocols)) {
+                $pattern = '/([^\s<]+?@[^\s<]+?\.[^\s<]+)(?<![\.,:])/';
+                $url     = preg_replace($pattern, '<a href="mailto:$0" target="{$target}">$0</a>', $url);
+            }
+        }
+
+        return $url;
+    }
+
+
 }
