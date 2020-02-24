@@ -367,4 +367,110 @@ class OsHelper {
     }
 
 
+    /**
+     * IP地址转成无符号整型(内置函数ip2long会返回负值)
+     * @param string $ip
+     * @return false|int|string
+     */
+    public static function ip2UnsignedInt(string $ip) {
+        if (empty($ip)) {
+            return 0;
+        }
+
+        $long = ip2long($ip);
+        if ($long == false) {
+            $long = 0;
+        } elseif ($long < 0) {
+            $long = sprintf('%u', $long);
+        }
+
+        return $long;
+    }
+
+
+    /**
+     * 获取远程图片宽高和大小
+     * @param string $url 图片地址
+     * @param string $type 获取方式:curl或fread
+     * @param bool $isGetFilesize 是否获取远程图片的体积大小, 默认false不获取, 设置为 true 时 $type 将强制为 fread
+     * @param int $length 读取长度
+     * @param int $times 尝试次数
+     * @param null $handle 文件句柄
+     * @return array
+     */
+    public static function getRemoteImageSize(string $url, string $type = 'curl', bool $isGetFilesize = false, int $length = 168, int $times = 1, $handle = null): array {
+        if (!in_array($type, ['curl', 'fread'])) {
+            $type = 'curl';
+        }
+
+        // 若需要获取图片体积大小则默认使用 fread 方式
+        if ($isGetFilesize) {
+            $type = 'fread';
+        }
+        $handle = ($type == 'fread' && empty($handle)) ? fopen($url, 'rb') : null;
+        $res    = [];
+
+        if (!is_null($handle)) {
+            // 或者使用 socket 二进制方式读取, 需要获取图片体积大小最好使用此方法
+            if (!$handle) {
+                return $res;
+            }
+            // 只取头部固定长度168字节数据
+            $dataBlock = fread($handle, $length);
+        } else {
+            // 据说 CURL 能缓存DNS 效率比 socket 高
+            $ch = curl_init($url);
+            // 超时设置
+            curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+            // 取前面 168 个字符 通过四张测试图读取宽高结果都没有问题,若获取不到数据可适当加大数值
+            curl_setopt($ch, CURLOPT_RANGE, "0-{$length}");
+            // 跟踪301跳转
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+            // 返回结果
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $dataBlock = curl_exec($ch);
+            curl_close($ch);
+        }
+        if (empty($dataBlock)) {
+            return $res;
+        }
+
+        // 将读取的图片信息转化为图片路径并获取图片信息,经测试,这里的转化设置 jpeg 对获取png,gif的信息没有影响,无须分别设置
+        // 有些图片虽然可以在浏览器查看但实际已被损坏可能无法解析信息
+        $str64 = base64_encode($dataBlock);
+        $size  = getimagesize('data:image/jpeg;base64,' . $str64);
+        if (empty($size)) {
+            if ($times < 3) {
+                $res = self::getRemoteImageSize($url, $type, $isGetFilesize, $length * 10, ($times + 1), $handle);
+                return $res;
+            }
+            return [];
+        }
+
+        $res['width']  = $size[0];
+        $res['height'] = $size[1];
+        $res['size']   = 0;
+
+        // 是否获取图片体积大小
+        if ($isGetFilesize) {
+            // 获取文件数据流信息
+            $meta = stream_get_meta_data($handle);
+            // nginx 的信息保存在 headers 里，apache 则直接在 wrapper_data
+            $dataInfo = isset($meta['wrapper_data']['headers']) ? $meta['wrapper_data']['headers'] : $meta['wrapper_data'];
+            foreach ($dataInfo as $va) {
+                if (preg_match('/length/iU', $va)) {
+                    $ts          = explode(':', $va);
+                    $res['size'] = trim(array_pop($ts));
+                    break;
+                }
+            }
+        }
+
+        if ($type == 'fread' && $handle) {
+            @fclose($handle);
+        }
+
+        return $res;
+    }
+
 }

@@ -542,4 +542,28 @@ class ValidateHelper {
     }
 
 
+    /**
+     * 是否内网IP
+     * @param string $ip
+     * @return bool
+     */
+    public static function isIntranetIp(string $ip): bool {
+        if (empty($ip)) {
+            return false;
+        }
+
+        $arr    = [
+            '127.',
+            '172.',
+            '192.',
+        ];
+        $prefix = substr($ip, 0, 4);
+
+        if (in_array($prefix, $arr) || stripos($ip, '10.') === 0) {
+            return true;
+        }
+
+        return false;
+    }
+
 }
