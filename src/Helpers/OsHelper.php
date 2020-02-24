@@ -60,7 +60,7 @@ class OsHelper {
      * @param string $path
      * @return bool
      */
-    public static function isReallyWritable(string $path): bool {
+    public static function isWritable(string $path): bool {
         // If we're on a Unix server with safe_mode off we call is_writable
         if (DIRECTORY_SEPARATOR == '/' and ini_get('safe_mode') == false) {
             return is_writable($path);
@@ -69,9 +69,9 @@ class OsHelper {
         // For windows servers and safe_mode "on" installations we'll actually
         // write a file then read it.  Bah...
         if (is_dir($path)) {
-            $path = rtrim($path, '/') . '/_isReallyWritable_' . md5(mt_rand(1, 10000));
+            $path = rtrim($path, '/') . '/_isWritable_' . md5(mt_rand(1, 10000));
 
-            if (!file_put_contents($path, 'php isReallyWritable() test file')) {
+            if (!file_put_contents($path, 'php isWritable() test file')) {
                 return false;
             } else {
                 unlink($path);

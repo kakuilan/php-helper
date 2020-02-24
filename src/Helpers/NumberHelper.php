@@ -9,6 +9,7 @@
 
 
 namespace Kph\Helpers;
+
 use Kph\Consts;
 
 /**
@@ -33,6 +34,61 @@ class NumberHelper {
         return round($size, $dec) . $delimiter . ($units[$i] ?? Consts::UNKNOWN);
     }
 
+
+    /**
+     * 值是否在某范围内
+     * @param int|float $val 值
+     * @param int|float $min 小值
+     * @param int|float $max 大值
+     * @return bool
+     */
+    public static function inRange($val, $min, $max): bool {
+        $val = floatval($val);
+        $min = floatval($min);
+        $max = floatval($max);
+        return $val >= $min && $val <= $max;
+    }
+
+
+    /**
+     * 对数列求和,忽略非数值.
+     * @param mixed ...$vals
+     * @return float
+     */
+    public static function sum(...$vals): float {
+        $res = 0;
+        foreach ($vals as $val) {
+            if (is_numeric($val)) {
+                $res += floatval($val);
+            }
+        }
+
+        return $res;
+    }
+
+
+    /**
+     * 对数列求平均值,忽略非数值.
+     * @param mixed ...$vals
+     * @return float
+     */
+    public static function average(...$vals): float {
+        $res   = 0;
+        $count = 0;
+        $total = 0;
+        foreach ($vals as $val) {
+            if(is_numeric($val)) {
+                $total += floatval($val);
+                $count++;
+            }
+        }
+
+        if($count>0) {
+            $res = $total / $count;
+        }
+
+        return $res;
+    }
 
 
 }
