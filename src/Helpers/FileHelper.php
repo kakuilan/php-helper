@@ -186,4 +186,18 @@ class FileHelper {
     }
 
 
+    /**
+     * 把整个文件读入一个数组中,每行作为一个元素.
+     * @param string $path
+     * @return array
+     */
+    public static function readInArray(string $path): array {
+        if(!is_file($path)) {
+            return [];
+        }
+
+        return file($path, FILE_IGNORE_NEW_LINES);
+    }
+
+
 }
