@@ -9,6 +9,7 @@
 
 namespace Kph\Helpers;
 
+
 /**
  * Class StringHelper
  * @package Kph\Helpers
@@ -553,23 +554,6 @@ class StringHelper {
         }
 
         return $len;
-    }
-
-
-    /**
-     * 格式化文件比特大小
-     * @param int $size 文件大小(比特)
-     * @param int $dec 小数位
-     * @param string $delimiter 数字和单位间的分隔符
-     * @return string
-     */
-    public static function formatBytes(int $size, int $dec = 2, string $delimiter = ''): string {
-        $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
-        for ($i = 0; $size >= 1024 && $i < 5; $i++) {
-            $size /= 1024;
-        }
-
-        return round($size, $dec) . $delimiter . $units[$i];
     }
 
 

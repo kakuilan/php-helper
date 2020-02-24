@@ -8,7 +8,12 @@
  */
 
 namespace Kph\Helpers;
+use Kph\Consts;
 
+/**
+ * Class OsHelper
+ * @package Kph\Helpers
+ */
 class OsHelper {
 
 
@@ -91,8 +96,8 @@ class OsHelper {
             $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
         }
 
-        $bname    = 'Unknown';
-        $platform = 'Unknown';
+        $bname    = Consts::UNKNOWN;
+        $platform = Consts::UNKNOWN;
         $version  = '';
 
         //First get the platform?
@@ -182,6 +187,37 @@ class OsHelper {
             'pattern'   => $pattern        //匹配正则
         ];
         return $res;
+    }
+
+
+    /**
+     * 获取客户端操作系统
+     * @param string $userAgent 客户端信息
+     * @return string
+     */
+    public static function getClientOS(string $userAgent = ''): string {
+        if (empty($userAgent)) {
+            $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+        }
+
+        $os = Consts::UNKNOWN;
+        if (preg_match('/win/i', $userAgent)) {
+            $os = 'Windows';
+        } elseif (preg_match('/mac/i', $userAgent)) {
+            $os = 'MAC';
+        } elseif (preg_match('/linux/i', $userAgent)) {
+            $os = 'Linux';
+        } elseif (preg_match('/unix/i', $userAgent)) {
+            $os = 'Unix';
+        } elseif (preg_match('/bsd/i', $userAgent)) {
+            $os = 'BSD';
+        } elseif (preg_match('/iPhone|iPad|iPod/i', $userAgent)) {
+            $os = 'iOS';
+        } elseif (preg_match('/android/i', $userAgent)) {
+            $os = 'Android';
+        }
+
+        return $os;
     }
 
 

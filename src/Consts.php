@@ -43,6 +43,7 @@ class Consts {
 
 
     const DYNAMIC_KEY_LEN = 8; //authcode动态密钥长度,须<32
+    const UNKNOWN         = 'Unknown'; //未知字符串
 
 
 }

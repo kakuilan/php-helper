@@ -9,6 +9,11 @@
 
 namespace Kph\Helpers;
 
+
+/**
+ * Class DebugHelper
+ * @package Kph\Helpers
+ */
 class DebugHelper {
 
 
