@@ -35,7 +35,7 @@ class StringHelper {
      * @param string $str 字符串
      * @param int $length 截取长度
      * @param int $start 开始位置
-     * @param string $dot 省略符
+     * @param string $dot 后接的省略符
      * @return string
      */
     public static function cutStr(string $str, int $length, int $start = 0, string $dot = ''): string {
@@ -269,7 +269,7 @@ class StringHelper {
      */
     public static function escape(string $str, $charset = 'UTF-8'): string {
         preg_match_all("/[\x80-\xff].|[\x01-\x7f]+/", $str, $matchs);
-        $arr = $matchs[0];
+        $arr = $matchs[0] ?? [];
         foreach ($arr as $k => $v) {
             $ar[$k] = ord($v[0]) < 128 ? rawurlencode($v) : '%u' . bin2hex(iconv($charset, 'UCS-2', $v));
         }
@@ -285,7 +285,7 @@ class StringHelper {
      */
     public static function unescape(string $str, $charset = 'UTF-8'): string {
         $str = rawurldecode($str);
-        $str = preg_replace("/\%u([0-9A-Z]{4})/es", "iconv('UCS-2', '$charset', pack('H4', '$1'))", $str);
+        $str = preg_replace("/\%u([0-9A-Z]{4})/es", iconv('UCS-2', $charset, pack('H4', '$1')), $str);
         return $str;
     }
 
@@ -377,6 +377,189 @@ class StringHelper {
         }
 
         return $images;
+    }
+
+
+    /**
+     * br标签转换为nl
+     * @param string $str
+     * @return string
+     */
+    public static function br2nl(string $str): string {
+        return preg_replace('/\<br(\s*)?\/?\>/i', "\n", $str);
+    }
+
+
+    /**
+     * 移除字符串中的空格
+     * @param string $str
+     * @return string
+     */
+    public static function removeSpace(string $str): string {
+        if ($str == '') {
+            return '';
+        }
+
+        $str = str_replace([chr(13), chr(10), "\n", "\r", "\t", '  '], '', $str);
+        $str = str_replace('&nbsp;', '', $str);
+        $str = preg_replace("/\s|　/i", "", $str);
+        return trim($str, " 　\t\n\r\0\x0B");
+    }
+
+
+    /**
+     * 获取纯文本(不保留行内空格)
+     * @param string $html
+     * @return string
+     */
+    public static function getText(string $html): string {
+        if ($html == '') {
+            return '';
+        }
+
+        $str = strip_tags($html);
+
+        //移除html,js,css标签
+        $search = [
+            "'<script[^>]*?>.*?<\/script>'si", // 去掉 javascript
+            "'<style[^>]*?>.*?<\/style>'si", // 去掉 css
+            "'<[/!]*?[^<>]*?>'si", // 去掉 HTML 标记
+            "'<!--[/!]*?[^<>]*?>'si", // 去掉 注释标记
+            "'([rn])[s]+'", // 去掉空白字符
+            "'&(quot|#34);'i", // 替换 HTML 实体
+            "'&(amp|#38);'i",
+            "'&(lt|#60);'i",
+            "'&(gt|#62);'i",
+            "'&(nbsp|#160);'i",
+            "'&(iexcl|#161);'i",
+            "'&(cent|#162);'i",
+            "'&(pound|#163);'i",
+            "'&(copy|#169);'i",
+            "'&#(d+);'" // 作为PHP代码运行
+        ];
+
+        $replace = [
+            "",
+            "",
+            "",
+            "",
+            "\1",
+            "\"",
+            "&",
+            "<",
+            ">",
+            " ",
+            chr(161),
+            chr(162),
+            chr(163),
+            chr(169),
+            "chr(\1)"
+        ];
+
+        $str = preg_replace($search, $replace, $str);
+        $str = self::removeSpace($str);
+        $str = mb_convert_encoding($str, 'UTF-8');
+
+        return trim($str);
+    }
+
+
+    /**
+     * 移除HTML标签(保留行内空格)
+     * @param string $html
+     * @return string
+     */
+    public static function removeHtml(string $html): string {
+        if ($html == '') {
+            return '';
+        }
+
+        $str = preg_replace("@<(.*?)>@is", "", $html); //过滤标签
+        $str = preg_replace("/<\s*img\s+[^>]*?src\s*=\s*(\'|\")(.*?)\\1[^>]*?\/?\s*>/i", "", $str); //过滤img标签
+        $str = preg_replace("@<style(.*?)<\/style>@is", "", $str); //过滤css
+        $str = preg_replace("/\s+/", " ", $str); //过滤多余回车
+        $str = preg_replace("/<[ ]+/si", "<", $str); //过滤<__("<"号后面带空格)
+        $str = preg_replace("/<\!--.*?-->/si", "", $str); //注释
+        $str = preg_replace("/<(\!.*?)>/si", "", $str); //过滤DOCTYPE
+        $str = preg_replace("/<(\/?html.*?)>/si", "", $str); //过滤html标签
+        $str = preg_replace("/<(\/?head.*?)>/si", "", $str); //过滤head标签
+        $str = preg_replace("/<(\/?meta.*?)>/si", "", $str); //过滤meta标签
+        $str = preg_replace("/<(\/?body.*?)>/si", "", $str); //过滤body标签
+        $str = preg_replace("/<(\/?link.*?)>/si", "", $str); //过滤link标签
+        $str = preg_replace("/<(\/?form.*?)>/si", "", $str); //过滤form标签
+        $str = preg_replace("/cookie/si", "COOKIE", $str); //过滤COOKIE标签
+        $str = preg_replace("/<(applet.*?)>(.*?)<(\/applet.*?)>/si", "", $str); //过滤applet标签
+        $str = preg_replace("/<(\/?applet.*?)>/si", "", $str); //过滤applet标签
+        $str = preg_replace("/<(style.*?)>(.*?)<(\/style.*?)>/si", "", $str); //过滤style标签
+        $str = preg_replace("/<(\/?style.*?)>/si", "", $str); //过滤style标签
+        $str = preg_replace("/<(title.*?)>(.*?)<(\/title.*?)>/si", "", $str); //过滤title标签
+        $str = preg_replace("/<(\/?title.*?)>/si", "", $str); //过滤title标签
+        $str = preg_replace("/<(object.*?)>(.*?)<(\/object.*?)>/si", "", $str); //过滤object标签
+        $str = preg_replace("/<(\/?objec.*?)>/si", "", $str); //过滤object标签
+        $str = preg_replace("/<(noframes.*?)>(.*?)<(\/noframes.*?)>/si", "", $str); //过滤noframes标签
+        $str = preg_replace("/<(\/?noframes.*?)>/si", "", $str); //过滤noframes标签
+        $str = preg_replace("/<(i?frame.*?)>(.*?)<(\/i?frame.*?)>/si", "", $str); //过滤frame标签
+        $str = preg_replace("/<(\/?i?frame.*?)>/si", "", $str); //过滤frame标签
+        $str = preg_replace("/<(script.*?)>(.*?)<(\/script.*?)>/si", "", $str); //过滤script标签
+        $str = preg_replace("/<(\/?script.*?)>/si", "", $str); //过滤script标签
+        $str = preg_replace("/javascript/si", "Javascript", $str); //过滤script标签
+        $str = preg_replace("/vbscript/si", "Vbscript", $str); //过滤script标签
+        $str = preg_replace("/on([a-z]+)\s*=/si", "On\\1=", $str); //过滤script标签
+        $str = preg_replace("/&#/si", "&＃", $str); //过滤script标签
+
+        return trim($str);
+    }
+
+
+    /**
+     * 字符串/单词统计
+     * @param string $str
+     * @param int $type 统计类型: 0:按字符统计; 1:只统计英文单词; 2:按英文单词和中文字数
+     * @return int
+     */
+    public static function stringWordCount(string $str, int $type = 0): int {
+        $str = trim($str);
+        switch ($type) {
+            case 0:
+            default:
+                $len = mb_strlen(self::removeHtml(self::removeSpace($str)), 'UTF-8');
+                break;
+            case 1:
+                $len = str_word_count(self::removeHtml(html_entity_decode($str, ENT_QUOTES, 'UTF-8')));
+                break;
+            case 2:
+                $str         = self::removeHtml(html_entity_decode($str, ENT_QUOTES, 'UTF-8'));
+                $utf8_cn     = "/[\x{4e00}-\x{9fff}\x{f900}-\x{faff}]/u";//中文
+                $utf8_symbol = "/[\x{ff00}-\x{ffef}\x{2000}-\x{206F}]/u";//中文标点符号
+
+                $str   = preg_replace($utf8_symbol, ' ', $str);
+                $cnLen = preg_match_all($utf8_cn, $str, $textrr);
+
+                $str   = preg_replace($utf8_cn, ' ', $str);
+                $enLen = str_word_count($str);
+
+                $len = intval($cnLen) + $enLen;
+                break;
+        }
+
+        return $len;
+    }
+
+
+    /**
+     * 格式化文件比特大小
+     * @param int $size 文件大小(比特)
+     * @param int $dec 小数位
+     * @param string $delimiter 数字和单位间的分隔符
+     * @return string
+     */
+    public static function formatBytes(int $size, int $dec = 2, string $delimiter = ''): string {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+        for ($i = 0; $size >= 1024 && $i < 5; $i++) {
+            $size /= 1024;
+        }
+
+        return round($size, $dec) . $delimiter . $units[$i];
     }
 
 
