@@ -533,43 +533,6 @@ class ValidateHelper {
 
 
     /**
-     * 是否window系统
-     * @return bool
-     */
-    public static function isWindows(): bool {
-        return strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
-    }
-
-
-    /**
-     * 是否linux系统
-     * @return bool
-     */
-    public static function isLinux(): bool {
-        return strtolower(PHP_OS) != 'linux';
-    }
-
-
-    /**
-     * 检查主机端口是否开放
-     * @param string $host 主机/IP
-     * @param int $port 端口
-     * @param int $timeout
-     * @return bool 超时,秒
-     */
-    public static function isPortOpen(string $host = '127.0.0.1', int $port = 80, int $timeout = 5): bool {
-        $res = false; //端口未绑定
-        $fp  = @fsockopen($host, $port, $errno, $errstr, $timeout);
-        if ($errno == 0 && $fp != false) {
-            @fclose($fp);
-            $res = true; //端口已绑定
-        }
-
-        return $res;
-    }
-
-
-    /**
      * 是否空对象
      * @param object $val
      * @return bool

@@ -31,6 +31,16 @@ class StringHelper {
 
 
     /**
+     * md5短串(返回16位md5值)
+     * @param string $str
+     * @return string
+     */
+    public static function md5Short(string $str): string {
+        return substr(md5(strval($str)), 8, 16);
+    }
+
+
+    /**
      * 字符串剪切(宽字符)
      * @param string $str 字符串
      * @param int $length 截取长度
@@ -683,15 +693,15 @@ class StringHelper {
      */
     public static function multiExplode(string $str, string ...$delimiters): array {
         $res = [];
-        if($str=='') {
+        if ($str == '') {
             return $res;
         }
 
         $dLen = count($delimiters);
-        if($dLen==0) {
+        if ($dLen == 0) {
             array_push($res, $str);
-        }else{
-            if($dLen>1) {
+        } else {
+            if ($dLen > 1) {
                 $str = str_replace($delimiters, $delimiters[0], $str);
             }
 
