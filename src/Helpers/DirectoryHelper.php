@@ -142,7 +142,7 @@ class DirectoryHelper {
         }
 
         if (is_dir($path)) {
-            if (!chmod($path, $dirmode)) {
+            if (!@chmod($path, $dirmode)) {
                 return;
             }
             $dh = opendir($path);
@@ -154,7 +154,7 @@ class DirectoryHelper {
             }
             closedir($dh);
         } elseif (!is_link($path)) {
-            chmod($path, $filemode);
+            @chmod($path, $filemode);
         }
     }
 
