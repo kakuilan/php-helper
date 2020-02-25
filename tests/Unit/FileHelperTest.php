@@ -46,4 +46,21 @@ class FileHelperTest extends TestCase {
     }
 
 
+    public function testCreateZip() {
+        $files = [
+            TESTDIR .'tmp/abc/test.log',
+            TESTDIR .'../src',
+            TESTDIR .'../vendor',
+        ];
+        $dest = TESTDIR .'tmp/test.zip';
+
+        $res1 = FileHelper::createZip($files, $dest, true);
+        $res2 = FileHelper::createZip($files, $dest, false);
+        $this->assertTrue($res1);
+        $this->assertFalse($res2);
+    }
+
+
+
+
 }
