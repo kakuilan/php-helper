@@ -149,6 +149,9 @@ class FileHelper {
                 case 3 :
                     $imgType = 'png';
                     break;
+                case 18 :
+                    $imgType = 'webp';
+                    break;
             }
             $res = 'data:image/' . $imgType . ';base64,' . $fileContent;//合成图片的base64编码
             @fclose($fp);

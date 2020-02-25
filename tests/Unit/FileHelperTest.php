@@ -35,7 +35,7 @@ class FileHelperTest extends TestCase {
 
 
     public function testRemoveBom() {
-        $file = TESTDIR .'tmp/bom.txt';
+        $file = TESTDIR .'data/bom.txt';
         $str = file_get_contents($file);
         $len1 = strlen($str);
 
@@ -60,6 +60,18 @@ class FileHelperTest extends TestCase {
         $this->assertFalse($res2);
     }
 
+
+    public function testImg2Base64() {
+        $img = TESTDIR .'data/php_elephant.png';
+        $str = FileHelper::img2Base64($img);
+
+        $this->assertNotEmpty($str);
+        $this->assertGreaterThan(1, strpos($str, 'png'));
+
+        $img = TESTDIR .'data/png.webp';
+        $str = FileHelper::img2Base64($img);
+        $this->assertGreaterThan(1, strpos($str, 'webp'));
+    }
 
 
 
