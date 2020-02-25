@@ -40,8 +40,12 @@ class FileHelper {
      */
     public static function writeFile(string $file, string $data, bool $append = false, int $mode = 0766): bool {
         $res = false;
-        $dir = dirname($file);
-        if (!empty($file) && !empty($data) && mkdir($dir, 0766, true)) {
+        if (!empty($file) && !empty($data)) {
+            $dir = dirname($file);
+            if (!is_dir($dir)) {
+                mkdir($dir, 0766, true);
+            }
+
             if ($fp = @fopen($file, $append ? 'ab' : 'wb')) {
                 $res = @fwrite($fp, $data);
                 @fclose($fp);
@@ -59,10 +63,11 @@ class FileHelper {
      * @return string
      */
     public static function removeBom(string $val): string {
-        if (substr($val, 0, 3) == pack('CCC', 239, 187, 191)) {
-            return substr($val, 3);
-        }
+//        if (substr($val, 0, 3) == pack('CCC', 239, 187, 191)) {
+//            return substr($val, 3);
+//        }
 
+        $val = str_replace("\xEF\xBB\xBF", '', $val);
         return $val;
     }
 
@@ -192,7 +197,7 @@ class FileHelper {
      * @return array
      */
     public static function readInArray(string $path): array {
-        if(!is_file($path)) {
+        if (!is_file($path)) {
             return [];
         }
 
