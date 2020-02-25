@@ -27,19 +27,19 @@ class FileHelperTest extends TestCase {
 
 
     public function testWriteFile() {
-        $file = TESTDIR .'tmp/abc/test.log';
-        $res = FileHelper::writeFile($file, 'hello world');
+        $file = TESTDIR . 'tmp/abc/test.log';
+        $res  = FileHelper::writeFile($file, 'hello world');
         $this->assertTrue($res);
         $this->assertTrue(file_exists($file));
     }
 
 
     public function testRemoveBom() {
-        $file = TESTDIR .'data/bom.txt';
-        $str = file_get_contents($file);
+        $file = TESTDIR . 'data/bom.txt';
+        $str  = file_get_contents($file);
         $len1 = strlen($str);
 
-        $res = FileHelper::removeBom($str);
+        $res  = FileHelper::removeBom($str);
         $len2 = strlen($res);
 
         $this->assertEquals(3, ($len1 - $len2));
@@ -48,11 +48,11 @@ class FileHelperTest extends TestCase {
 
     public function testCreateZip() {
         $files = [
-            TESTDIR .'tmp/abc/test.log',
-            TESTDIR .'../src',
-            TESTDIR .'../vendor',
+            TESTDIR . 'tmp/abc/test.log',
+            TESTDIR . '../src',
+            TESTDIR . '../vendor',
         ];
-        $dest = TESTDIR .'tmp/test.zip';
+        $dest  = TESTDIR . 'tmp/test.zip';
 
         $res1 = FileHelper::createZip($files, $dest, true);
         $res2 = FileHelper::createZip($files, $dest, false);
@@ -62,17 +62,40 @@ class FileHelperTest extends TestCase {
 
 
     public function testImg2Base64() {
-        $img = TESTDIR .'data/php_elephant.png';
+        $img = TESTDIR . 'data/php_elephant.png';
         $str = FileHelper::img2Base64($img);
 
         $this->assertNotEmpty($str);
         $this->assertGreaterThan(1, strpos($str, 'png'));
 
-        $img = TESTDIR .'data/png.webp';
+        $img = TESTDIR . 'data/png.webp';
         $str = FileHelper::img2Base64($img);
         $this->assertGreaterThan(1, strpos($str, 'webp'));
     }
 
+
+    public function testGetAllMimes() {
+        $res = FileHelper::getAllMimes();
+        $this->assertGreaterThan(1, count($res));
+    }
+
+
+    public function testGetFileMime() {
+        $img1 = TESTDIR . 'data/png.webp';
+        $img2 = TESTDIR . 'data/php-logo.svg';
+        $mim1 = FileHelper::getFileMime($img1);
+        $mim2 = FileHelper::getFileMime($img2);
+
+        $this->assertNotEmpty($mim1);
+        $this->assertNotEmpty($mim2);
+    }
+
+
+    public function testReadInArray() {
+        $file = TESTDIR . 'data/bom.txt';
+        $arr  = FileHelper::readInArray($file);
+        $this->assertGreaterThan(1, count($arr));
+    }
 
 
 }

@@ -388,21 +388,12 @@ class FileHelper {
     /**
      * 获取文件的mime类型
      * @param string $file 文件路径
-     * @param bool $real 是否获取真实的
      * @return string
      */
-    public static function getFileMime(string $file, bool $real = false): string {
-        $res = '';
-        if ($real) {
-            $magicFile = file_exists('/usr/share/file/magic') ? '/usr/share/file/magic' : null;
-            $handle    = finfo_open(FILEINFO_MIME, $magicFile);
-            $res       = finfo_file($handle, $file);
-            finfo_close($handle);
-        } else {
-            $allMimes = self::getAllMimes();
-            $ext      = self::getFileExt($file);
-            $res      = $allMimes[$ext] ?? '';
-        }
+    public static function getFileMime(string $file): string {
+        $allMimes = self::getAllMimes();
+        $ext      = self::getFileExt($file);
+        $res      = $allMimes[$ext] ?? '';
 
         return $res;
     }
