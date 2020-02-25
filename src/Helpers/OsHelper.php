@@ -32,7 +32,7 @@ class OsHelper {
      * @return bool
      */
     public static function isLinux(): bool {
-        return strtolower(PHP_OS) != 'linux';
+        return strtolower(PHP_OS) == 'linux';
     }
 
 
@@ -181,11 +181,9 @@ class OsHelper {
             $version = "?";
         }
         $res = [
-            'userAgent' => $userAgent,    //用户客户端信息
-            'name'      => $bname,        //浏览器名称
-            'version'   => $version,    //浏览器版本
-            'platform'  => $platform,    //使用平台
-            'pattern'   => $pattern        //匹配正则
+            'name'     => $bname,        //浏览器名称
+            'version'  => $version,    //浏览器版本
+            'platform' => $platform,    //使用平台
         ];
         return $res;
     }
@@ -235,9 +233,9 @@ class OsHelper {
         if (!empty($server)) {
             //获取代理ip
             if (isset($server["HTTP_X_FORWARDED_FOR"]) && preg_match_all('#(\d+\.){3}\d+#', $server['HTTP_X_FORWARDED_FOR'], $matches)) {
-                foreach ($matches[0] AS $xip) {
-                    if (!preg_match('#^(10|172\.16|192\.168)\.#', $xip)) {
-                        $ip = $xip;
+                foreach ($matches[0] as $xip) {
+                    $ip = $xip;
+                    if (!preg_match('/^(10|172\.16|192\.168)\./', $xip)) {
                         break;
                     }
                 }
@@ -274,14 +272,12 @@ class OsHelper {
         }
 
         if (!empty($server)) {
-            if (isset($server['SERVER_ADDR'])) {
-                $serverIp = $server['SERVER_ADDR'];
-            } else {
-                $serverIp = $server['LOCAL_ADDR'];
-            }
+            $serverIp = $server['SERVER_ADDR'] ?? ($server['LOCAL_ADDR'] ?? '');
         } elseif (getenv('SERVER_ADDR')) {
             $serverIp = getenv('SERVER_ADDR');
-        } else {
+        }
+
+        if (!isset($serverIp) || empty($serverIp)) {
             $serverIp = gethostbyname(gethostname());
         }
 
