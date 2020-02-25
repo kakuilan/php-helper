@@ -160,6 +160,6 @@ class RegularHelper {
      * 正则模式-连续的"//"或"\\"或"\/"或"/\"
      * @var string
      */
-    public static $patternDoubleSlash = '/(\/){2,}|(\\\){1,}/';
+    public static $patternDoubleSlash = '/[\/\\\\]{2,}/';
 
 }

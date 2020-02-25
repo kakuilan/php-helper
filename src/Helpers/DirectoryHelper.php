@@ -24,7 +24,7 @@ class DirectoryHelper {
      * @return bool
      */
     public static function mkdirDeep(string $dir, int $mode = 0766): bool {
-        if (empty($dir)) {
+        if ($dir == '') {
             return false;
         } elseif (is_dir($dir) && chmod($dir, $mode)) {
             return true;
@@ -33,35 +33,6 @@ class DirectoryHelper {
         }
 
         return false;
-    }
-
-
-    /**
-     * 批量改变目录模式(包括子目录和所属文件)
-     * @param string $path 路径
-     * @param int $filemode 文件模式
-     * @param int $dirmode 目录模式
-     */
-    public static function chmodBatch(string $path, int $filemode = 0766, int $dirmode = 0766): void {
-        if (empty($path)) {
-            return;
-        }
-
-        if (is_dir($path)) {
-            if (!chmod($path, $dirmode)) {
-                return;
-            }
-            $dh = opendir($path);
-            while (($file = readdir($dh)) !== false) {
-                if ($file != '.' && $file != '..') {
-                    $fullpath = $path . '/' . $file;
-                    self::chmodBatch($fullpath, $filemode, $dirmode);
-                }
-            }
-            closedir($dh);
-        } elseif (!is_link($path)) {
-            chmod($path, $filemode);
-        }
     }
 
 
@@ -106,7 +77,7 @@ class DirectoryHelper {
      */
     public static function getDirSize(string $path): int {
         $size = 0;
-        if (empty($path) || !is_dir($path)) {
+        if ($path == '' || !is_dir($path)) {
             return $size;
         }
 
@@ -123,6 +94,68 @@ class DirectoryHelper {
         }
         @closedir($dh);
         return $size;
+    }
+
+
+    /**
+     * 拷贝目录
+     * @param string $from 源目录
+     * @param string $dest 目标目录
+     * @param bool $cover 是否覆盖已存在的文件
+     * @return bool
+     */
+    public static function copyDir(string $from, string $dest, bool $cover = false): bool {
+        if (!file_exists($dest) && !mkdir($dest, 0766, true)) {
+            return false;
+        }
+
+        $dh = opendir($from);
+        while (false !== ($fileName = readdir($dh))) {
+            if (($fileName != ".") && ($fileName != "..")) {
+                $newFile = "$dest/$fileName";
+                if (!is_dir("$from/$fileName")) {
+                    if (file_exists($newFile) && !$cover) {
+                        continue;
+                    } elseif (!copy("$from/$fileName", $newFile)) {
+                        break;
+                    }
+                } else {
+                    self::copyDir("$from/$fileName", $newFile, $cover);
+                }
+            }
+        }
+        closedir($dh);
+
+        return true;
+    }
+
+
+    /**
+     * 批量改变目录模式(包括子目录和所属文件)
+     * @param string $path 路径
+     * @param int $filemode 文件模式
+     * @param int $dirmode 目录模式
+     */
+    public static function chmodBatch(string $path, int $filemode = 0766, int $dirmode = 0766): void {
+        if ($path == '') {
+            return;
+        }
+
+        if (is_dir($path)) {
+            if (!chmod($path, $dirmode)) {
+                return;
+            }
+            $dh = opendir($path);
+            while (($file = readdir($dh)) !== false) {
+                if ($file != '.' && $file != '..') {
+                    $fullpath = $path . '/' . $file;
+                    self::chmodBatch($fullpath, $filemode, $dirmode);
+                }
+            }
+            closedir($dh);
+        } elseif (!is_link($path)) {
+            chmod($path, $filemode);
+        }
     }
 
 
@@ -188,49 +221,40 @@ class DirectoryHelper {
 
 
     /**
-     * 拷贝目录
-     * @param string $from 源目录
-     * @param string $dest 目标目录
-     * @param bool $cover 是否覆盖已存在的文件
-     * @return bool
-     */
-    public static function copyDir(string $from, string $dest, bool $cover = false): bool {
-        if (!file_exists($dest) && !mkdir($dest, 0766, true)) {
-            return false;
-        }
-
-        $dh = opendir($from);
-        while (false !== ($fileName = readdir($dh))) {
-            if (($fileName != ".") && ($fileName != "..")) {
-                $newFile = "$dest/$fileName";
-                if (!is_dir("$from/$fileName")) {
-                    if (file_exists($newFile) && !$cover) {
-                        continue;
-                    } elseif (!copy("$from/$fileName", $newFile)) {
-                        break;
-                    }
-                } else {
-                    self::copyDir("$from/$fileName", $newFile, $cover);
-                }
-            }
-        }
-        closedir($dh);
-
-        return true;
-    }
-
-
-    /**
      * 格式化路径字符串(路径后面加/)
      * @param string $dir
      * @return string
      */
     public static function formatDir(string $dir): string {
-        if(empty($dir)) {
+        if ($dir == '') {
             return '';
         }
 
-        $dir = str_replace(["'", '#', '=', '`', '$', '%', '&', ';', '|'], '', $dir);
+        $order   = [
+            '\\',
+            "'",
+            '#',
+            '=',
+            '`',
+            '$',
+            '%',
+            '&',
+            ';',
+            '|'
+        ];
+        $replace = [
+            '/',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+        ];
+
+        $dir = str_replace($order, $replace, $dir);
         return rtrim(preg_replace(RegularHelper::$patternDoubleSlash, '/', $dir), ' /　') . '/';
     }
 
