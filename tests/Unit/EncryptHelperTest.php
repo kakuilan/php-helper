@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 use Error;
 use Exception;
 use Kph\Helpers\EncryptHelper;
+use Kph\Helpers\StringHelper;
 
 
 class EncryptHelperTest extends TestCase {
@@ -31,6 +32,12 @@ class EncryptHelperTest extends TestCase {
         $res2 = EncryptHelper::authcode('', '', false);
         $this->assertEquals('', $res1[0]);
         $this->assertEquals('', $res2[0]);
+
+        $res3 = EncryptHelper::authcode('hello', $key, false);
+        $this->assertEquals('', $res3[0]);
+
+        $res4 = EncryptHelper::authcode('681ff2aaPIUK-k3oHs4StYD', $key, false);
+        $this->assertEquals('', $res4[0]);
     }
 
 
@@ -53,6 +60,11 @@ class EncryptHelperTest extends TestCase {
 
         $res4 = EncryptHelper::easyDecrypt('e10adc39   ', $key);
         $this->assertEquals('', $res4);
+
+        $str = implode('', range(0, 99));
+        $res5 = EncryptHelper::easyEncrypt($str, $key);
+        $res6 = EncryptHelper::easyDecrypt($res5, $key);
+        $this->assertEquals($str, $res6);
     }
 
 
@@ -62,6 +74,11 @@ class EncryptHelperTest extends TestCase {
         $res2 = EncryptHelper::murmurhash3Int($origin, 3, false);
         $this->assertEquals(11, strlen($res1));
         $this->assertEquals(10, strlen($res2));
+
+        $origin .= '2';
+        $res3 = EncryptHelper::murmurhash3Int($origin);
+        $origin .= '3';
+        $res4 = EncryptHelper::murmurhash3Int($origin);
     }
 
 

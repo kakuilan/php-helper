@@ -112,7 +112,6 @@ class EncryptHelper {
                     return [substr($res, 26), $expTime];
                 }
             }
-
             return ['', 0];
         }
     }

@@ -74,7 +74,7 @@ class DateHelperTest extends TestCase {
         $res = DateHelper::getMicrosecond();
         $len = strlen($res);
         $this->assertGreaterThan(0, $res);
-        $this->assertEquals(6, $len);
+        $this->assertLessThanOrEqual(6, $len);
     }
 
 
