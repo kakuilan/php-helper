@@ -28,6 +28,8 @@ class DirectoryHelperTest extends TestCase {
 
         $res = DirectoryHelper::mkdirDeep($dir);
         $this->assertTrue($res);
+
+        DirectoryHelper::mkdirDeep('/root/hello');
     }
 
 

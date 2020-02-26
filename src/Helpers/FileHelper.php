@@ -101,7 +101,7 @@ class FileHelper {
         if (count($validFiles)) {
             //create the archive
             $zip = new \ZipArchive();
-            if ($zip->open($destination, $exist ? \ZIPARCHIVE::OVERWRITE : \ZIPARCHIVE::CREATE) !== true) {
+            if (@$zip->open($destination, $exist ? \ZIPARCHIVE::OVERWRITE : \ZIPARCHIVE::CREATE) !== true) {
                 return false;
             }
 
@@ -113,7 +113,7 @@ class FileHelper {
             }
 
             //close the zip -- done!
-            $zip->close();
+            @$zip->close();
 
             //check to make sure the file exists
             return file_exists($destination);

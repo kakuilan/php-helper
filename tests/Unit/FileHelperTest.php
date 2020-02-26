@@ -53,24 +53,39 @@ class FileHelperTest extends TestCase {
             TESTDIR . '../vendor',
         ];
         $dest  = TESTDIR . 'tmp/test.zip';
+        $dest2  = TESTDIR . 'tmp/hello/test.zip';
 
         $res1 = FileHelper::createZip($files, $dest, true);
         $res2 = FileHelper::createZip($files, $dest, false);
+        $res3 = FileHelper::createZip([], $dest2, false);
+        $res4 = FileHelper::createZip($files, $dest2, true);
         $this->assertTrue($res1);
         $this->assertFalse($res2);
+        $this->assertFalse($res3);
+        $this->assertFalse($res4);
     }
 
 
     public function testImg2Base64() {
         $img = TESTDIR . 'data/php_elephant.png';
         $str = FileHelper::img2Base64($img);
-
         $this->assertNotEmpty($str);
         $this->assertGreaterThan(1, strpos($str, 'png'));
 
         $img = TESTDIR . 'data/png.webp';
         $str = FileHelper::img2Base64($img);
         $this->assertGreaterThan(1, strpos($str, 'webp'));
+
+        $img = TESTDIR . 'data/banana.gif';
+        $str = FileHelper::img2Base64($img);
+        $this->assertGreaterThan(1, strpos($str, 'gif'));
+
+        $img = TESTDIR . 'data/green.jpg';
+        $str = FileHelper::img2Base64($img);
+        $this->assertGreaterThan(1, strpos($str, 'jpg'));
+
+        $str = FileHelper::img2Base64('');
+        $this->assertEmpty($str);
     }
 
 
@@ -95,6 +110,9 @@ class FileHelperTest extends TestCase {
         $file = TESTDIR . 'data/bom.txt';
         $arr  = FileHelper::readInArray($file);
         $this->assertGreaterThan(1, count($arr));
+
+        $arr  = FileHelper::readInArray('/tmp/hello/1234');
+        $this->assertEmpty($arr);
     }
 
 

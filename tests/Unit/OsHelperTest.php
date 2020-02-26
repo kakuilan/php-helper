@@ -68,7 +68,7 @@ class OsHelperTest extends TestCase {
 
     public function testIsWritable() {
         $res1 = OsHelper::isWritable(TESTDIR . 'tmp');
-        $res2 = OsHelper::isWritable('/root/tmp');
+        $res2 = OsHelper::isWritable('/root/tmp/hehe');
 
         $this->assertTrue($res1);
         $this->assertFalse($res2);
