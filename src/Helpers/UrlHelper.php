@@ -91,6 +91,9 @@ class UrlHelper {
         foreach ($params as $k => $v) {
             if (is_array($v)) {
                 foreach ($v as $k2 => $v2) {
+                    if (is_int($k2)) {
+                        $k2 = '';
+                    }
                     $res .= "&{$k}[{$k2}]={$v2}";
                 }
             } else {
@@ -143,7 +146,7 @@ class UrlHelper {
             return false;
         }
 
-        $header = get_headers($url, true);
+        $header = @get_headers($url, true);
 
         return isset($header[0]) && (strpos($header[0], '200') || strpos($header[0], '304'));
     }
@@ -160,17 +163,17 @@ class UrlHelper {
         if (!empty($url)) {
             if (!empty(array_intersect($protocols, ['http', 'https']))) {
                 $pattern = '@(http(s)?)?(://)?(([a-zA-Z])([-\w]+\.)+([^\s\.]+[^\s]*)+[^,.\s])@i';
-                $url     = preg_replace($pattern, '<a href="http$2://$4" target="{$target}">$0</a>', $url);
+                $url     = preg_replace($pattern, "<a href=\"http$2://$4\" target=\"{$target}\">$0</a>", $url);
             }
 
             if (!empty(array_intersect($protocols, ['ftp', 'ftps']))) {
-                $pattern = '/(ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/i';
-                $url     = preg_replace($pattern, '<a href="$0" target="{$target}">$0</a>', $url);
+                $pattern = '/(ftp|ftps)\:\/\/[-a-zA-Z0-9@:%_+.~#?&\/=]+(\/\S*)?/i';
+                $url     = preg_replace($pattern, "<a href=\"$0\" target=\"{$target}\">$0</a>", $url);
             }
 
             if (in_array('mail', $protocols)) {
                 $pattern = '/([^\s<]+?@[^\s<]+?\.[^\s<]+)(?<![\.,:])/';
-                $url     = preg_replace($pattern, '<a href="mailto:$0" target="{$target}">$0</a>', $url);
+                $url     = preg_replace($pattern, "<a href=\"mailto:$0\" target=\"{$target}\">$0</a>", $url);
             }
         }
 
