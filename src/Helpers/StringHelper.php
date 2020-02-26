@@ -426,9 +426,8 @@ class StringHelper {
             return '';
         }
 
-        $str = str_replace([chr(13), chr(10), "\n", "\r", "\t", '  '], '', $str);
-        $str = str_replace('&nbsp;', '', $str);
-        $str = preg_replace("/\s|　/i", "", $str);
+        $str = str_replace([chr(13), chr(10), "\n", "\r", "\t", ' ', '　', '&nbsp;'], '', $str);
+        $str = preg_replace("/\s/i", '', $str);
         return trim($str, " 　\t\n\r\0\x0B");
     }
 

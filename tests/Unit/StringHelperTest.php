@@ -182,4 +182,25 @@ EOF;
     }
 
 
+    public function testBr2nl() {
+        $str = 'hello <br/>world<br >你好';
+        $res = StringHelper::br2nl($str);
+        $this->assertFalse(stripos($res, 'br'));
+    }
+
+
+    public function testRemoveSpace() {
+        $str  = <<<EOF
+        hello World&nbsp;   你
+        好，世 界   
+        ！呵　呵
+EOF;
+        $res1 = StringHelper::removeSpace('');
+        $res2 = StringHelper::removeSpace($str);
+
+        $this->assertEmpty($res1);
+        $this->assertEquals('helloWorld你好，世界！呵呵', $res2);
+    }
+
+
 }
