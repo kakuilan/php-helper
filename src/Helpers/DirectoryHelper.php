@@ -26,7 +26,7 @@ class DirectoryHelper {
     public static function mkdirDeep(string $dir, int $mode = 0766): bool {
         if ($dir == '') {
             return false;
-        } elseif (is_dir($dir) && chmod($dir, $mode)) {
+        } elseif (is_dir($dir) && @chmod($dir, $mode)) {
             return true;
         } elseif (@mkdir($dir, $mode, true)) {//第三个参数为true即可以创建多级目录
             return true;
@@ -109,8 +109,8 @@ class DirectoryHelper {
             return false;
         }
 
-        $dh = opendir($from);
-        while (false !== ($fileName = readdir($dh))) {
+        $dh = @opendir($from);
+        while (false !== ($fileName = @readdir($dh))) {
             if (($fileName != ".") && ($fileName != "..")) {
                 $newFile = "$dest/$fileName";
                 if (!is_dir("$from/$fileName")) {
@@ -124,7 +124,7 @@ class DirectoryHelper {
                 }
             }
         }
-        closedir($dh);
+        @closedir($dh);
 
         return true;
     }
@@ -145,14 +145,14 @@ class DirectoryHelper {
             if (!@chmod($path, $dirmode)) {
                 return;
             }
-            $dh = opendir($path);
-            while (($file = readdir($dh)) !== false) {
+            $dh = @opendir($path);
+            while (($file = @readdir($dh)) !== false) {
                 if ($file != '.' && $file != '..') {
                     $fullpath = $path . '/' . $file;
                     self::chmodBatch($fullpath, $filemode, $dirmode);
                 }
             }
-            closedir($dh);
+            @closedir($dh);
         } elseif (!is_link($path)) {
             @chmod($path, $filemode);
         }

@@ -43,13 +43,13 @@ class FileHelper {
         if (!empty($file) && !empty($data)) {
             $dir = dirname($file);
             if (!is_dir($dir)) {
-                mkdir($dir, 0766, true);
+                @mkdir($dir, 0766, true);
             }
 
             if ($fp = @fopen($file, $append ? 'ab' : 'wb')) {
                 $res = @fwrite($fp, $data);
                 @fclose($fp);
-                chmod($file, $mode);
+                @chmod($file, $mode);
             }
         }
 
