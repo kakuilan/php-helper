@@ -42,6 +42,8 @@ https://github.com/wycto/helper
 https://github.com/yunkaiyueming/php_lib_code_center
 https://github.com/zhosoft/tools
 https://github.com/voku/portable-utf8
+https://github.com/mtibben/html2text
+
 
 promise
 https://github.com/hprose/hprose-php

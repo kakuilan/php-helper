@@ -442,10 +442,9 @@ class StringHelper {
             return '';
         }
 
-        $str = strip_tags($html);
-
         //移除html,js,css标签
         $search = [
+            "'<title[^>]*?>.*?<\/title>'si", // 去掉 title
             "'<script[^>]*?>.*?<\/script>'si", // 去掉 javascript
             "'<style[^>]*?>.*?<\/style>'si", // 去掉 css
             "'<[/!]*?[^<>]*?>'si", // 去掉 HTML 标记
@@ -468,6 +467,7 @@ class StringHelper {
             "",
             "",
             "",
+            "",
             "\1",
             "\"",
             "&",
@@ -481,7 +481,8 @@ class StringHelper {
             "chr(\1)"
         ];
 
-        $str = preg_replace($search, $replace, $str);
+        $str = preg_replace($search, $replace, $html);
+        $str = strip_tags($str);
         $str = self::removeSpace($str);
         $str = mb_convert_encoding($str, 'UTF-8');
 
