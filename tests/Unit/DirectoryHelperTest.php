@@ -22,6 +22,12 @@ class DirectoryHelperTest extends TestCase {
         $dir = TESTDIR . 'tmp/test/2020/0223';
         $res = DirectoryHelper::mkdirDeep($dir);
         $this->assertTrue($res);
+
+        $res = DirectoryHelper::mkdirDeep('');
+        $this->assertFalse($res);
+
+        $res = DirectoryHelper::mkdirDeep($dir);
+        $this->assertTrue($res);
     }
 
 
@@ -38,8 +44,10 @@ class DirectoryHelperTest extends TestCase {
     public function testGetDirSize() {
         $res = DirectoryHelper::getDirSize(TESTDIR);
         $this->assertGreaterThan(1, $res);
-    }
 
+        $res = DirectoryHelper::getDirSize('');
+        $this->assertEquals(0, $res);
+    }
 
 
     public function testCopyDirEmptyDirDelDir() {
@@ -47,17 +55,21 @@ class DirectoryHelperTest extends TestCase {
         $backupDir2 = TESTDIR . 'tmp/backup/2';
 
         $fromDir = dirname(TESTDIR) . '/src';
-        $res1 = DirectoryHelper::copyDir($fromDir, $backupDir1);
-        $res2 = DirectoryHelper::copyDir($fromDir, $backupDir1, true);
-        $res3 = DirectoryHelper::copyDir($fromDir, $backupDir2);
-        $res4 = DirectoryHelper::copyDir($fromDir, $backupDir2, true);
+        $res1    = DirectoryHelper::copyDir($fromDir, $backupDir1);
+        $res2    = DirectoryHelper::copyDir($fromDir, $backupDir1, true);
+        $res3    = DirectoryHelper::copyDir($fromDir, $backupDir2);
+        $res4    = DirectoryHelper::copyDir($fromDir, $backupDir2, true);
+        $res5    = DirectoryHelper::copyDir($fromDir, $backupDir2, false);
+        DirectoryHelper::copyDir($fromDir, '/root/tmp');
 
         $this->assertTrue($res1);
         $this->assertTrue($res2);
         $this->assertTrue($res3);
         $this->assertTrue($res4);
+        $this->assertTrue($res5);
 
         DirectoryHelper::chmodBatch('', 777, 777);
+        DirectoryHelper::chmodBatch('/root', 777, 777);
         DirectoryHelper::chmodBatch($backupDir1, 777, 777);
 
         //emptyDir

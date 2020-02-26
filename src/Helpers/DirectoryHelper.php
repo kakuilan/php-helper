@@ -105,7 +105,7 @@ class DirectoryHelper {
      * @return bool
      */
     public static function copyDir(string $from, string $dest, bool $cover = false): bool {
-        if (!file_exists($dest) && !mkdir($dest, 0766, true)) {
+        if (!file_exists($dest) && !@mkdir($dest, 0766, true)) {
             return false;
         }
 
