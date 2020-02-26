@@ -74,11 +74,11 @@ class OsHelper {
             if (!file_put_contents($path, 'php isWritable() test file')) {
                 return false;
             } else {
-                unlink($path);
+                @unlink($path);
             }
 
             return true;
-        } elseif (($fp = fopen($path, 'w+')) === false) {
+        } elseif (($fp = @fopen($path, 'w+')) === false) {
             return false;
         }
         @fclose($fp);
@@ -230,6 +230,7 @@ class OsHelper {
             $server = $_SERVER;
         }
 
+        $ip = '';
         if (!empty($server)) {
             //获取代理ip
             if (isset($server["HTTP_X_FORWARDED_FOR"]) && preg_match_all('#(\d+\.){3}\d+#', $server['HTTP_X_FORWARDED_FOR'], $matches)) {
@@ -239,18 +240,8 @@ class OsHelper {
                         break;
                     }
                 }
-            } else if (isset($server["HTTP_CLIENT_IP"])) {
-                $ip = $server["HTTP_CLIENT_IP"];
             } else {
-                $ip = $server["REMOTE_ADDR"];
-            }
-        } else {
-            if (getenv("HTTP_X_FORWARDED_FOR")) {
-                $ip = getenv("HTTP_X_FORWARDED_FOR");
-            } else if (getenv("HTTP_CLIENT_IP")) {
-                $ip = getenv("HTTP_CLIENT_IP");
-            } else {
-                $ip = getenv("REMOTE_ADDR");
+                $ip = $server["HTTP_CLIENT_IP"] ?? ($server["REMOTE_ADDR"] ?? '');
             }
         }
 

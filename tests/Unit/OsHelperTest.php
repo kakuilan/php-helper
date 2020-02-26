@@ -9,7 +9,6 @@
 
 namespace Kph\Tests\Unit;
 
-use phpDocumentor\Reflection\Types\Self_;
 use PHPUnit\Framework\TestCase;
 use Error;
 use Exception;
@@ -93,27 +92,74 @@ class OsHelperTest extends TestCase {
 
 
     public function testGetClientIp() {
-        $res = OsHelper::getClientIp(self::$server);
+        $server = self::$server;
+        $res    = OsHelper::getClientIp($server);
         $this->assertEquals('192.168.56.1', $res);
+
+        unset($server['HTTP_X_FORWARDED_FOR']);
+        $res = OsHelper::getClientIp($server);
+        $this->assertEquals('172.17.0.1', $res);
     }
 
 
     public function testGetServerIP() {
-        $res = OsHelper::getServerIP(self::$server);
+        $server = self::$server;
+        $res    = OsHelper::getServerIP($server);
+        $this->assertNotEmpty($res);
+        $this->assertNotEquals('0.0.0.0', $res);
+
+        $res = OsHelper::getServerIP([]);
         $this->assertNotEmpty($res);
         $this->assertNotEquals('0.0.0.0', $res);
     }
 
 
-    public function testGetDomain() {
-        $url = 'http://www.test.loc/index.php?name=hello&age=20&from=world';
-        $res1 = OsHelper::getDomain($url, false, self::$server);
-        $res2 = OsHelper::getDomain($url, true, self::$server);
+    public function testGetDomainUrlUri() {
+        $server = self::$server;
+        $url    = 'http://www.test.loc/index.php?name=hello&age=20&from=world';
+        $res1   = OsHelper::getDomain($url, false, $server);
+        $res2   = OsHelper::getDomain($url, true, $server);
 
         $this->assertEquals('www.test.loc', $res1);
         $this->assertEquals('test.loc', $res2);
+
+        $res3 = OsHelper::getUrl($server);
+        $this->assertEquals($url, $res3);
+
+        $res4 = OsHelper::getUri($server);
+        unset($server['REQUEST_URI']);
+        $res5 = OsHelper::getUri($server);
+        $this->assertEquals($res4, $res5);
     }
 
+
+    public function testIp2UnsignedInt() {
+        $ip1 = '172.17.0.1';
+        $ip2 = '192.168.56.1';
+        $ip3 = 'hello';
+
+        $res1 = OsHelper::ip2UnsignedInt($ip1);
+        $res2 = OsHelper::ip2UnsignedInt($ip2);
+        $res3 = OsHelper::ip2UnsignedInt($ip3);
+
+        $this->assertGreaterThan(1, $res1);
+        $this->assertGreaterThan(1, $res2);
+        $this->assertEquals(0, $res3);
+    }
+
+
+    public function testGetRemoteImageSize() {
+        $url = 'https://www.baidu.com/img/bd_logo1.png';
+
+        $res1 = OsHelper::getRemoteImageSize($url, 'hello');
+        $res2 = OsHelper::getRemoteImageSize($url, 'curl', true);
+
+        $this->assertNotEmpty($res1);
+        $this->assertEquals($res1['width'], $res2['width']);
+        $this->assertEquals($res1['height'], $res2['height']);
+        $this->assertEquals(0, $res1['size']);
+        $this->assertGreaterThan(1, $res2['size']);
+    }
 
 
 }
