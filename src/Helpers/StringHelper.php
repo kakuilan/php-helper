@@ -163,7 +163,7 @@ class StringHelper {
 
         if ($type == 5) { // 中文随机字
             for ($i = 0; $i < $len; $i++) {
-                $str .= self::cutStr($chars, floor(mt_rand(0, $charLen - 1)), 1);
+                $str .= mb_substr($chars, floor(mt_rand(0, $charLen - 1)), 1, 'UTF-8');
             }
         } else {
             $chars = str_shuffle($chars);
@@ -183,13 +183,11 @@ class StringHelper {
     public static function fixHtml(string $html): string {
         //关闭自闭合标签
         $startPos = strrpos($html, "<");
-
         if (empty($html) || false == $startPos) {
             return $html;
         }
 
         $trimString = substr($html, $startPos);
-
         if (false === strpos($trimString, ">")) {
             $html = substr($html, 0, $startPos);
         }
@@ -221,22 +219,22 @@ class StringHelper {
 
 
     /**
-     * 全角转半角字符
-     * @param string $str
-     * @return string
-     */
-    public static function SBC2DBC(string $str): string {
-        return str_replace(self::$SBCChars, self::$DBCChars, $str);
-    }
-
-
-    /**
      * 半角转全角字符
      * @param string $str
      * @return string
      */
     public static function DBC2SBC(string $str): string {
         return str_replace(self::$DBCChars, self::$SBCChars, $str);
+    }
+
+
+    /**
+     * 全角转半角字符
+     * @param string $str
+     * @return string
+     */
+    public static function SBC2DBC(string $str): string {
+        return str_replace(self::$SBCChars, self::$DBCChars, $str);
     }
 
 
@@ -279,11 +277,17 @@ class StringHelper {
      * @return string
      */
     public static function escape(string $str, $charset = 'UTF-8'): string {
-        preg_match_all("/[\x80-\xff].|[\x01-\x7f]+/", $str, $matchs);
-        $arr = $matchs[0] ?? [];
+        preg_match_all("/[^\x{00}-\x{ff}]|[\x{00}-\x{ff}]+/u", $str, $matches);
+        $arr = $matches[0] ?? [];
         foreach ($arr as $k => $v) {
-            $ar[$k] = ord($v[0]) < 128 ? rawurlencode($v) : '%u' . bin2hex(iconv($charset, 'UCS-2', $v));
+            if (ord($v[0]) < 128) {
+                $arr[$k] = rawurlencode($v);
+            } else {
+                //$arr[$k] = "%u" . bin2hex(@iconv($charset, "UCS-2", $v));
+                $arr[$k] = "%u" . bin2hex(mb_convert_encoding($v, 'UCS-2', $charset));
+            }
         }
+
         return join('', $arr);
     }
 
@@ -296,8 +300,20 @@ class StringHelper {
      */
     public static function unescape(string $str, $charset = 'UTF-8'): string {
         $str = rawurldecode($str);
-        $str = preg_replace("/\%u([0-9A-Z]{4})/es", iconv('UCS-2', $charset, pack('H4', '$1')), $str);
-        return $str;
+        preg_match_all("/%u.{4}|&#x.{4};|&#\d+;|.+/U", $str, $matches);
+        $arr = $matches[0] ?? [];
+
+        foreach ($arr as $k => $v) {
+            if (substr($v, 0, 2) == "%u") {
+                $arr[$k] = mb_convert_encoding(pack("H4", substr($v, -4)), $charset, 'UCS-2');
+            } elseif (substr($v, 0, 3) == "&#x") {
+                $arr[$k] = mb_convert_encoding(pack("H4", substr($v, 3, -1)), $charset, 'UCS-2');
+            } elseif (substr($v, 0, 2) == "&#") {
+                $arr[$k] = mb_convert_encoding(pack("H4", substr($v, 2, -1)), $charset, 'UCS-2');
+            }
+        }
+
+        return join('', $arr);
     }
 
 
@@ -308,15 +324,14 @@ class StringHelper {
      */
     public static function getFirstLetter(string $str): string {
         $res = '';
-        if (!empty($res)) {
+        if (!empty($str)) {
             $firstChar = ord(strtoupper($str[0]));
             if ($firstChar >= 65 && $firstChar <= 91) {
                 return strtoupper($str[0]);
-            } elseif ($firstChar >= 48 && $firstChar <= 57) {
-                return $res;
             }
 
-            $s   = iconv("UTF-8", "gb2312", $str);
+            //$s   = iconv("UTF-8", "gb2312", $str);
+            $s   = mb_convert_encoding($str, 'gb2312');
             $asc = ord($s[0]) * 256 + ord($s[1]) - 65536;
             if ($asc >= -20319 && $asc <= -20284)
                 return "A";
@@ -377,7 +392,7 @@ class StringHelper {
      */
     public static function matchImages(string $html): array {
         $images = [];
-        if (!empty($images)) {
+        if (!empty($html)) {
             preg_match_all('/<img.*src=(.*)[>|\\s]/iU', $html, $matchs);
             if (isset($matchs[1]) && count($matchs[1]) > 0) {
                 foreach ($matchs[1] as $v) {
