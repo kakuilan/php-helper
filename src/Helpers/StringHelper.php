@@ -444,41 +444,45 @@ class StringHelper {
 
         //移除html,js,css标签
         $search = [
-            "'<title[^>]*?>.*?<\/title>'si", // 去掉 title
-            "'<script[^>]*?>.*?<\/script>'si", // 去掉 javascript
-            "'<style[^>]*?>.*?<\/style>'si", // 去掉 css
-            "'<[/!]*?[^<>]*?>'si", // 去掉 HTML 标记
-            "'<!--[/!]*?[^<>]*?>'si", // 去掉 注释标记
-            "'([rn])[s]+'", // 去掉空白字符
-            "'&(quot|#34);'i", // 替换 HTML 实体
-            "'&(amp|#38);'i",
-            "'&(lt|#60);'i",
-            "'&(gt|#62);'i",
-            "'&(nbsp|#160);'i",
-            "'&(iexcl|#161);'i",
-            "'&(cent|#162);'i",
-            "'&(pound|#163);'i",
-            "'&(copy|#169);'i",
-            "'&#(d+);'" // 作为PHP代码运行
+            '/<title[^>]*?>.*?<\/title>/si', // 去掉 title
+            '/<script[^>]*?>.*?<\/script>/si', // 去掉 script
+            '/<style[^>]*?>.*?<\/style>/si', // 去掉 style
+            '/<option[^>]*?>.*?<\/option>/si', // 去掉 option
+            '/<button[^>]*?>.*?<\/button>/si', // 去掉 button
+            '/<!--[\/!]*?[^<>]*?>/si', // 去掉 注释标记
+            '/<[\/!]*?[^<>]*?>/si', // 去掉 HTML标记
+            '/([rn])[s]+/', // 去掉空白字符
+            '/&(quot|#34);/i', // 替换 " 的HTML实体
+            '/&(amp|#38);/i', // 替换 & 的HTML实体
+            '/&(lt|#60);/i', // 替换 < 的HTML实体
+            '/&(gt|#62);/i', // 替换 > 的HTML实体
+            '/&(nbsp|#160);/i', // 替换 空格 的HTML实体
+            '/&(iexcl|#161);/i', // 替换HTML实体
+            '/&(cent|#162);/i', // 替换HTML实体
+            '/&(pound|#163);/i', // 替换HTML实体
+            '/&(copy|#169);/i', // 替换HTML实体
+            '/&#(d+);/', // 作为PHP代码运行
         ];
 
         $replace = [
-            "",
-            "",
-            "",
-            "",
-            "",
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
             "\1",
-            "\"",
-            "&",
-            "<",
-            ">",
-            " ",
+            '',
+            '"',
+            '&',
+            '<',
+            '>',
+            ' ',
             chr(161),
             chr(162),
             chr(163),
             chr(169),
-            "chr(\1)"
+            "chr(\1)",
         ];
 
         $str = preg_replace($search, $replace, $html);
@@ -500,39 +504,81 @@ class StringHelper {
             return '';
         }
 
-        $str = preg_replace("@<(.*?)>@is", "", $html); //过滤标签
-        $str = preg_replace("/<\s*img\s+[^>]*?src\s*=\s*(\'|\")(.*?)\\1[^>]*?\/?\s*>/i", "", $str); //过滤img标签
-        $str = preg_replace("@<style(.*?)<\/style>@is", "", $str); //过滤css
-        $str = preg_replace("/\s+/", " ", $str); //过滤多余回车
-        $str = preg_replace("/<[ ]+/si", "<", $str); //过滤<__("<"号后面带空格)
-        $str = preg_replace("/<\!--.*?-->/si", "", $str); //注释
-        $str = preg_replace("/<(\!.*?)>/si", "", $str); //过滤DOCTYPE
-        $str = preg_replace("/<(\/?html.*?)>/si", "", $str); //过滤html标签
-        $str = preg_replace("/<(\/?head.*?)>/si", "", $str); //过滤head标签
-        $str = preg_replace("/<(\/?meta.*?)>/si", "", $str); //过滤meta标签
-        $str = preg_replace("/<(\/?body.*?)>/si", "", $str); //过滤body标签
-        $str = preg_replace("/<(\/?link.*?)>/si", "", $str); //过滤link标签
-        $str = preg_replace("/<(\/?form.*?)>/si", "", $str); //过滤form标签
-        $str = preg_replace("/cookie/si", "COOKIE", $str); //过滤COOKIE标签
-        $str = preg_replace("/<(applet.*?)>(.*?)<(\/applet.*?)>/si", "", $str); //过滤applet标签
-        $str = preg_replace("/<(\/?applet.*?)>/si", "", $str); //过滤applet标签
-        $str = preg_replace("/<(style.*?)>(.*?)<(\/style.*?)>/si", "", $str); //过滤style标签
-        $str = preg_replace("/<(\/?style.*?)>/si", "", $str); //过滤style标签
-        $str = preg_replace("/<(title.*?)>(.*?)<(\/title.*?)>/si", "", $str); //过滤title标签
-        $str = preg_replace("/<(\/?title.*?)>/si", "", $str); //过滤title标签
-        $str = preg_replace("/<(object.*?)>(.*?)<(\/object.*?)>/si", "", $str); //过滤object标签
-        $str = preg_replace("/<(\/?objec.*?)>/si", "", $str); //过滤object标签
-        $str = preg_replace("/<(noframes.*?)>(.*?)<(\/noframes.*?)>/si", "", $str); //过滤noframes标签
-        $str = preg_replace("/<(\/?noframes.*?)>/si", "", $str); //过滤noframes标签
-        $str = preg_replace("/<(i?frame.*?)>(.*?)<(\/i?frame.*?)>/si", "", $str); //过滤frame标签
-        $str = preg_replace("/<(\/?i?frame.*?)>/si", "", $str); //过滤frame标签
-        $str = preg_replace("/<(script.*?)>(.*?)<(\/script.*?)>/si", "", $str); //过滤script标签
-        $str = preg_replace("/<(\/?script.*?)>/si", "", $str); //过滤script标签
-        $str = preg_replace("/javascript/si", "Javascript", $str); //过滤script标签
-        $str = preg_replace("/vbscript/si", "Vbscript", $str); //过滤script标签
-        $str = preg_replace("/on([a-z]+)\s*=/si", "On\\1=", $str); //过滤script标签
-        $str = preg_replace("/&#/si", "&＃", $str); //过滤script标签
+        $search = [
+            '/\s+/', // 过滤多余回车
+            '/<[ ]+/si', // 过滤<__("<"号后面带空格)
+            '/<\!--.*?-->/is', // 过滤注释
+            '/<(\!.*?)>/is', // 过滤DOCTYPE
+            '/<(\/?html.*?)>/is', // 过滤 html 标签
+            '/<(\/?head.*?)>/is', // 过滤 head 标签
+            '/<(\/?meta.*?)>/is', // 过滤 meta 标签
+            '/<(\/?body.*?)>/is', // 过滤 body 标签
+            '/<(\/?link.*?)>/is', // 过滤 link 标签
+            '/<(\/?form.*?)>/is', // 过滤 form 标签
+            '/<style(.*?)<\/style>/is', // 过滤css
+            '/<(style.*?)>(.*?)<(\/style.*?)>/is', // 过滤 style 标签
+            '/<(\/?style.*?)>/is', // 过滤 style 标签
+            '/<(applet.*?)>(.*?)<(\/applet.*?)>/is', // 过滤 applet 标签
+            '/<(\/?applet.*?)>/is', // 过滤 applet 标签
+            '/<(title.*?)>(.*?)<(\/title.*?)>/is', // 过滤 title 标签
+            '/<(\/?title.*?)>/is', // 过滤 title 标签
+            '/<(object.*?)>(.*?)<(\/object.*?)>/is', // 过滤 object 标签
+            '/<(\/?objec.*?)>/is', // 过滤 object 标签
+            '/<(noframes.*?)>(.*?)<(\/noframes.*?)>/is', // 过滤 noframes 标签
+            '/<(\/?noframes.*?)>/is', // 过滤 noframes 标签
+            '/<(i?frame.*?)>(.*?)<(\/i?frame.*?)>/is', // 过滤 frame 标签
+            '/<(\/?i?frame.*?)>/is', // 过滤 frame 标签
+            '/<(script.*?)>(.*?)<(\/script.*?)>/is', // 过滤 script 标签
+            '/<(\/?script.*?)>/is', // 过滤 script 标签
+            "/<\s*img\s+[^>]*?src\s*=\s*(\'|\")(.*?)\\1[^>]*?\/?\s*>/is", // 过滤img标签
+            '/<option[^>]*?>.*?<\/option>/si', // 去掉 option
+            '/<button[^>]*?>.*?<\/button>/si', // 去掉 button
+            '/<(.*?)>/is', // 过滤标签
+            '/cookie/i',
+            '/javascript/is',
+            '/vbscript/is',
+            '/on([a-z]+)\s*=/is',
+            '/&#/is',
+        ];
 
+        $replace = [
+            ' ',
+            '<',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            'COOKIE',
+            'Javascript',
+            'Vbscript',
+            "On\\1=",
+            '&＃',
+        ];
+
+        $str = preg_replace($search, $replace, $html);
         return trim($str);
     }
 

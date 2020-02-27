@@ -289,13 +289,16 @@ EOF;
     }
 
 
-
     public function testGetText() {
         $res = StringHelper::getText(self::$html);
-        var_dump($res);
-
+        $this->assertNotEmpty($res);
     }
 
+
+    public function testRemoveHtml() {
+        $res = StringHelper::removeHtml(self::$html);
+        $this->assertNotEmpty($res);
+    }
 
 
 }
