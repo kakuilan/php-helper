@@ -301,4 +301,16 @@ EOF;
     }
 
 
+    public function testStringWordCount() {
+        $str  = 'hello ,world.你好，世　界！&nbsp;coder.&lt;&gt;字符实体。';
+        $res1 = StringHelper::stringWordCount($str, 0);
+        $res2 = StringHelper::stringWordCount($str, 1);
+        $res3 = StringHelper::stringWordCount($str, 2);
+
+        $this->assertEquals(3, $res2);
+        $this->assertEquals(11, $res3);
+        $this->assertGreaterThan($res3, $res1);
+    }
+
+
 }

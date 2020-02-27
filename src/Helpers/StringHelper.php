@@ -597,7 +597,8 @@ class StringHelper {
                 $len = mb_strlen(self::removeHtml(self::removeSpace($str)), 'UTF-8');
                 break;
             case 1:
-                $len = str_word_count(self::removeHtml(html_entity_decode($str, ENT_QUOTES, 'UTF-8')));
+                $str = self::removeHtml(html_entity_decode($str, ENT_QUOTES, 'UTF-8'));
+                $len = str_word_count($str);
                 break;
             case 2:
                 $str         = self::removeHtml(html_entity_decode($str, ENT_QUOTES, 'UTF-8'));
