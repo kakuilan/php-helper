@@ -56,7 +56,7 @@ class ValidateHelper {
      * @return bool
      */
     public static function isOdd($val): bool {
-        return boolval(is_numeric($val) & ($val & 1));
+        return self::isInteger($val) && boolval((intval($val) & 1));
     }
 
 
@@ -66,7 +66,7 @@ class ValidateHelper {
      * @return bool
      */
     public static function isEven($val): bool {
-        return boolval(is_numeric($val) & (!($val & 1)));
+        return self::isInteger($val) && boolval(!(intval($val) & 1));
     }
 
 
@@ -79,7 +79,7 @@ class ValidateHelper {
         $len = strlen($val);
         if ($len == 0) {
             return false;
-        } elseif (($val[0] != '{' || $val[$len - 1] != '}') || ($val[0] != '[' || $val[$len - 1] != ']')) {
+        } elseif (($val[0] != '{' || $val[$len - 1] != '}') && ($val[0] != '[' || $val[$len - 1] != ']')) {
             return false;
         }
 
@@ -122,12 +122,12 @@ class ValidateHelper {
 
 
     /**
-     * 是否固定电话/400
+     * 是否固定电话或400/800电话
      * @param string $val
      * @return bool
      */
     public static function isTel(string $val): bool {
-        return !empty($val) && (preg_match(RegularHelper::$patternTel, $val) || preg_match(RegularHelper::$patternTel400, $val));
+        return !empty($val) && (preg_match(RegularHelper::$patternTel, $val) || preg_match(RegularHelper::$patternTel4800, $val));
     }
 
 
@@ -216,47 +216,7 @@ class ValidateHelper {
      */
     public static function isUtf8(string $val): bool {
         if (!empty($val)) {
-            if (function_exists('mb_detect_encoding')) {
-                return 'UTF-8' === mb_detect_encoding($val, 'UTF-8', true);
-            }
-
-            $c    = 0;
-            $b    = 0;
-            $bits = 0;
-            $len  = strlen($val);
-            for ($i = 0; $i < $len; $i++) {
-                $c = ord($val[$i]);
-                if ($c > 128) {
-                    if (($c >= 254)) {
-                        return false;
-                    } elseif ($c >= 252) {
-                        $bits = 6;
-                    } elseif ($c >= 248) {
-                        $bits = 5;
-                    } elseif ($c >= 240) {
-                        $bits = 4;
-                    } elseif ($c >= 224) {
-                        $bits = 3;
-                    } elseif ($c >= 192) {
-                        $bits = 2;
-                    } else {
-                        return false;
-                    }
-                    if (($i + $bits) > $len) {
-                        return false;
-                    }
-
-                    while ($bits > 1) {
-                        $i++;
-                        $b = ord($val[$i]);
-                        if ($b < 128 || $b > 191) {
-                            return false;
-                        }
-
-                        $bits--;
-                    }
-                }
-            }
+            return 'UTF-8' === mb_detect_encoding($val, 'UTF-8', true);
         }
 
         return true;
@@ -270,11 +230,7 @@ class ValidateHelper {
      */
     public static function isAscii(string $val): bool {
         if (!empty($val)) {
-            if (function_exists('mb_detect_encoding')) {
-                return 'ASCII' === mb_detect_encoding($val, 'ASCII', true);
-            }
-
-            return !preg_match('/[\\x80-\\xff]+/', $val);
+            return 'ASCII' === mb_detect_encoding($val, 'ASCII', true);
         }
         return true;
     }
@@ -286,7 +242,7 @@ class ValidateHelper {
      * @return bool
      */
     public static function isChinese(string $val): bool {
-        return !empty($val) && preg_match(RegularHelper::$patternAllChinese, $val);
+        return !empty($val) && @preg_match(RegularHelper::$patternAllChinese, $val);
     }
 
 
@@ -296,7 +252,7 @@ class ValidateHelper {
      * @return bool
      */
     public static function hasChinese(string $val): bool {
-        return !empty($val) && preg_match(RegularHelper::$patternHasChinese, $val);
+        return !empty($val) && @preg_match(RegularHelper::$patternHasChinese, $val);
     }
 
 
@@ -329,7 +285,7 @@ class ValidateHelper {
      * @return bool
      */
     public static function hasLetter(string $val): bool {
-        return !empty($val) && preg_match(RegularHelper::$patternHasLetter, $val);
+        return !empty($val) && @preg_match(RegularHelper::$patternHasLetter, $val);
     }
 
 
@@ -405,7 +361,7 @@ class ValidateHelper {
      * @return bool
      */
     public static function startsWith(string $val, string $sub): bool {
-        return substr($val, 0, strlen($sub)) === $sub;
+        return $val != '' && substr($val, 0, strlen($sub)) === $sub;
     }
 
 
@@ -416,12 +372,7 @@ class ValidateHelper {
      * @return bool
      */
     public static function endsWith(string $val, string $sub): bool {
-        $len = strlen($sub);
-        if ($len == 0) {
-            return true;
-        }
-
-        return (substr($val, -$len) === $sub);
+        return $val != '' && (substr($val, -strlen($sub)) === $sub);
     }
 
 
@@ -481,9 +432,8 @@ class ValidateHelper {
 
         /*$match = [
             0 => 'data:img/jpg;base64,',
-            1 => 'data:img/jpg;base64,',
-            2 => 'img',
-            3 => 'jpg',
+            1 => 'img',
+            2 => 'jpg',
         ];*/
 
         return $match;
@@ -518,7 +468,7 @@ class ValidateHelper {
      * @return bool
      */
     public static function isIPv4(string $val): bool {
-        return filter_var($val, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) == true;
+        return !empty($val) && filter_var($val, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) == true;
     }
 
 
@@ -528,7 +478,7 @@ class ValidateHelper {
      * @return bool
      */
     public static function isIPv6(string $val): bool {
-        return filter_var($val, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) == true;
+        return !empty($val) && filter_var($val, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) == true;
     }
 
 

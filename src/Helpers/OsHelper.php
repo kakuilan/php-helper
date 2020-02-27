@@ -37,6 +37,24 @@ class OsHelper {
 
 
     /**
+     * 获取PHP路径
+     * @return string
+     */
+    public static function getPhpPath(): string {
+        $res   = '';
+        $paths = explode(PATH_SEPARATOR, getenv('PATH'));
+        foreach ($paths as $path) {
+            $file = $path . DIRECTORY_SEPARATOR . 'php';
+            if (file_exists($file) && is_executable($file)) {
+                $res = $file;
+                break;
+            }
+        }
+        return $res;
+    }
+
+
+    /**
      * 检查主机端口是否开放
      * @param string $host 主机/IP
      * @param int $port 端口

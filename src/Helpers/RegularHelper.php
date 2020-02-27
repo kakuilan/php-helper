@@ -52,10 +52,10 @@ class RegularHelper {
 
 
     /**
-     * 正则模式-座机号400
+     * 正则模式-座机号400/800
      * @var string
      */
-    public static $patternTel400 = "/^400(-\d{3,4}){2}$/";
+    public static $patternTel4800 = "/^[48]00\d?(-?\d{3,4}){2}$/";
 
 
     /**
@@ -97,7 +97,14 @@ class RegularHelper {
      * 正则模式-含中文
      * @var string
      */
-    public static $patternHasChinese = "/([\x81-\xfe][\x40-\xfe])/";
+    public static $patternHasChinese = "/[\\x{4e00}-\\x{9fa5}]/u";
+
+
+    /**
+     * 正则模式-宽字节(双字节)字符
+     * @var string
+     */
+    public static $patternWidthChar = "/[^\x00-\xff]/";
 
 
     /**
@@ -146,7 +153,7 @@ class RegularHelper {
      * 正则模式-base64编码图片
      * @var string
      */
-    public static $patternBase64Image = "/^(data:\s*(image|img)\/(\w+);base64,)/i";
+    public static $patternBase64Image = "/^data:\s*(image|img)\/(\w+);base64,/i";
 
 
     /**

@@ -55,6 +55,12 @@ class OsHelperTest extends TestCase {
         $this->assertTrue($res2);
     }
 
+    
+    public function testGetPhpPath() {
+        $res = OsHelper::getPhpPath();
+        $this->assertNotEmpty($res);
+    }
+
 
     public function testIsPortOpen() {
         $res1 = OsHelper::isPortOpen('localhost', 80);
