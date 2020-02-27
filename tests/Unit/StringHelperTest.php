@@ -12,6 +12,7 @@ namespace Kph\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use Error;
 use Exception;
+use Kph\Helpers\FileHelper;
 use Kph\Helpers\StringHelper;
 use Kph\Helpers\ValidateHelper;
 
@@ -310,6 +311,79 @@ EOF;
         $this->assertEquals(3, $res2);
         $this->assertEquals(11, $res3);
         $this->assertGreaterThan($res3, $res1);
+    }
+
+
+    public function testHideCard() {
+        $str1 = '331511199';
+        $str2 = '331511199911154000';
+        $res1 = StringHelper::hideCard('3315');
+        $res2 = StringHelper::hideCard($str1);
+        $res3 = StringHelper::hideCard($str2);
+
+        $this->assertEquals('******', $res1);
+        $this->assertNotEquals($str1, $res2);
+        $this->assertNotEquals($str2, $res3);
+    }
+
+
+    public function testHideMobile() {
+        $str  = '13812345678';
+        $res1 = StringHelper::hideMobile('0755123');
+        $res2 = StringHelper::hideMobile($str);
+
+        $this->assertEquals('***', $res1);
+        $this->assertNotEquals($str, $res2);
+    }
+
+
+    public function testHideTrueName() {
+        $tests = [
+            ['', '**'],
+            ['李四', '李**'],
+            ['张三丰', '张**'],
+            ['公孙先生', '公孙**'],
+            ['helloWorld', 'hel***rld'],
+            ['北京搜狗科技公司', '北京***公司'],
+            ['北京搜狗科技发展有限公司', '北京搜***限公司'],
+            ['工商发展银行深圳南山科苑梅龙路支行', '工商发展***龙路支行'],
+        ];
+
+        foreach ($tests as $test) {
+            $expected = StringHelper::hideTrueName($test[0]);
+            $this->assertEquals($test[1], $expected);
+        }
+    }
+
+
+    public function testCountBase64Byte() {
+        $img = TESTDIR . 'data/php_elephant.png';
+        $str = FileHelper::img2Base64($img);
+
+        $res1 = StringHelper::countBase64Byte('');
+        $res2 = StringHelper::countBase64Byte($str);
+
+        $this->assertEquals(0, $res1);
+        $this->assertGreaterThan(10000, $res2);
+    }
+
+
+    public function testStrXBin() {
+        $str = 'hello world.你好，世界！';
+
+        $res1 = StringHelper::str2Bin($str);
+        $res2 = StringHelper::bin2Str($res1);
+
+        $this->assertNotEmpty($res1);
+        $this->assertEquals($str, $res2);
+    }
+
+
+    public function testMultiExplode() {
+        $str = 'hello world.你好，世　界';
+
+        $res = StringHelper::multiExplode($str, ...[' ', '.', '，', '　']);
+        $this->assertEquals(5, count($res));
     }
 
 
