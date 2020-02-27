@@ -18,10 +18,10 @@ class DebugHelper {
 
 
     /**
-     * 错误捕获
+     * 错误日志捕获
      * @param string $logFile
      */
-    public static function errorHandler(string $logFile = ''): void {
+    public static function errorLogHandler(string $logFile = ''): void {
         if (empty($logFile)) {
             $logFile = '/tmp/phperr_' . date('Ymd') . '.log';
         }
