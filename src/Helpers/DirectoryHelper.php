@@ -213,6 +213,7 @@ class DirectoryHelper {
 
         //再删除目录
         rsort($dirs);
+        var_dump('$path:', $path, $dirs);
         foreach ($dirs as $dir) {
             @rmdir($dir);
         }
