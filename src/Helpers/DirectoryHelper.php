@@ -202,10 +202,10 @@ class DirectoryHelper {
             }
 
             //先删除文件
-            if (!is_dir($single)) {
-                @unlink($single);
+            if (is_dir($single)) {
+                array_push($dirs, $single);
             } else {
-                $dirs[] = $single;
+                @unlink($single);
             }
         }
 
