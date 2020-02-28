@@ -12,7 +12,10 @@ namespace Kph\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use Error;
 use Exception;
+use Throwable;
 use Kph\Helpers\DebugHelper;
+use Kph\Tests\Objects\BaseCls;
+use Kph\Tests\Objects\StrictCls;
 
 class DebugHelperTest extends TestCase {
 
@@ -23,7 +26,12 @@ class DebugHelperTest extends TestCase {
             $a   = $str{9};
         } catch (Exception $e) {
             DebugHelper::errorLogHandler();
+            error_clear_last();
         }
+
+        @$c = file_get_contents('helloworld');
+        DebugHelper::errorLogHandler();
+        error_clear_last();
 
         $logFile = '/tmp/phperr_' . date('Ymd') . '.log';
         $cont    = file_get_contents($logFile);
