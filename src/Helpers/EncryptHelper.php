@@ -234,17 +234,11 @@ class EncryptHelper {
         $h1 ^= ($h1 >= 0 ? $h1 >> 16 : (($h1 & 0x7fffffff) >> 16) | 0x8000);
 
         if ($unsign) {
-            if ($h1 >= 0) {
-                $base = '1' . str_repeat('0', 10);
-                $h1   = bcadd($base, $h1);
-            } else {
-                $h1 = abs($h1);
-            }
+            $h1 = ($h1 >= 0) ? bcadd('1' . str_repeat('0', 10), $h1) : abs($h1);
         }
 
         return $h1;
     }
-
 
 
 }
