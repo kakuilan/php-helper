@@ -30,7 +30,7 @@ class DebugHelper {
         ini_set('ignore_repeated_errors', 1);//不重复记录出现在同一个文件中的同一行代码上的错误信息
 
         $userDefinedErr = error_get_last();//获取最后发生的错误
-        if ($userDefinedErr['type'] > 0) {
+        if (is_array($userDefinedErr) && $userDefinedErr['type'] > 0) {
             switch ($userDefinedErr['type']) {
                 case 1:
                     $userDefinedErrType = '致命的运行时错误(E_ERROR)';
