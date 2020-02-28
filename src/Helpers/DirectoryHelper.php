@@ -201,6 +201,8 @@ class DirectoryHelper {
                 continue;
             }
 
+            var_dump('emptyDir $single:', $single);
+
             //先删除文件
             if (is_dir($single)) {
                 array_push($dirs, $single);
