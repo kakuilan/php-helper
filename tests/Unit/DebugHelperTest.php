@@ -19,7 +19,8 @@ class DebugHelperTest extends TestCase {
 
     public function testErrorHandler() {
         try {
-            trigger_error("A custom error has been triggered");
+            $str = 'hello';
+            $a   = $str{9};
         } catch (Exception $e) {
             DebugHelper::errorLogHandler();
         }
