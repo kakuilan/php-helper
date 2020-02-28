@@ -438,32 +438,34 @@ class ArrayHelper {
     public static function sortByMultiFields(array $arr, array ...$sorts): array {
         if (empty($arr)) {
             return [];
-        } elseif (empty($sorts)) {
-            return $arr;
         }
 
-        $sortConditions = [];
-        foreach ($sorts as $sortInfo) {
-            //$sortInfo必须形如['field', SORT_ASC],或者['field']
-            $file = strval(current($sortInfo));
-            $sort = intval($sortInfo[1] ?? SORT_DESC);
+        if(!empty($sorts)) {
+            $sortConditions = [];
+            foreach ($sorts as $sortInfo) {
+                //$sortInfo必须形如['field', SORT_ASC],或者['field']
+                $file = strval(current($sortInfo));
+                $sort = intval($sortInfo[1] ?? SORT_DESC);
 
-            $tmpArr = [];
-            foreach ($arr as $k => $item) {
-                //排序字段不存在
-                if (empty($file) || !isset($item[$file])) {
-                    return [];
+                $tmpArr = [];
+                foreach ($arr as $k => $item) {
+                    //排序字段不存在
+                    if (empty($file) || !isset($item[$file])) {
+                        return [];
+                    }
+
+                    $tmpArr[$k] = $item[$file];
                 }
 
-                $tmpArr[$k] = $item[$file];
+                array_push($sortConditions, $tmpArr, $sort);
             }
+            array_push($sortConditions, $arr);
 
-            array_push($sortConditions, $tmpArr, $sort);
+            array_multisort(... $sortConditions);
+            return end($sortConditions);
         }
-        array_push($sortConditions, $arr);
 
-        array_multisort(... $sortConditions);
-        return end($sortConditions);
+        return $arr;
     }
 
 
