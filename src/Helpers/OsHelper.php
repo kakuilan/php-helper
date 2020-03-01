@@ -98,6 +98,7 @@ class OsHelper {
 
         $bname    = Consts::UNKNOWN;
         $platform = Consts::UNKNOWN;
+        $ub       = '';
         $version  = '';
 
         //First get the platform?
@@ -140,9 +141,6 @@ class OsHelper {
         } elseif (preg_match('/Opera/i', $userAgent)) {
             $bname = 'Opera';
             $ub    = "Opera";
-        } elseif (preg_match('/Netscape/i', $userAgent)) {
-            $bname = 'Netscape';
-            $ub    = "Netscape";
         } elseif (preg_match('/Maxthon/i', $userAgent)) {
             $bname = 'Maxthon';
             $ub    = "Maxthon";
@@ -155,11 +153,9 @@ class OsHelper {
         }
 
         // finally get the correct version number
-        $known   = array('Version', $ub, 'other');
+        $known   = ['Version', $ub, 'other'];
         $pattern = '#(?<browser>' . join('|', $known) . ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
-        if (!preg_match_all($pattern, $userAgent, $matches)) {
-            // we have no matching number just continue
-        }
+        preg_match_all($pattern, $userAgent, $matches);
 
         // see how many we have
         $i = count($matches['browser']);
@@ -201,6 +197,10 @@ class OsHelper {
         $os = Consts::UNKNOWN;
         if (preg_match('/win/i', $userAgent)) {
             $os = 'Windows';
+        } elseif (preg_match('/iPhone|iPad|iPod/i', $userAgent)) {
+            $os = 'iOS';
+        } elseif (preg_match('/android/i', $userAgent)) {
+            $os = 'Android';
         } elseif (preg_match('/mac/i', $userAgent)) {
             $os = 'MAC';
         } elseif (preg_match('/linux/i', $userAgent)) {
@@ -209,10 +209,6 @@ class OsHelper {
             $os = 'Unix';
         } elseif (preg_match('/bsd/i', $userAgent)) {
             $os = 'BSD';
-        } elseif (preg_match('/iPhone|iPad|iPod/i', $userAgent)) {
-            $os = 'iOS';
-        } elseif (preg_match('/android/i', $userAgent)) {
-            $os = 'Android';
         }
 
         return $os;

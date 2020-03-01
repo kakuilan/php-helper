@@ -12,6 +12,7 @@ namespace Kph\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use Error;
 use Exception;
+use Kph\Consts;
 use Kph\Helpers\OsHelper;
 
 
@@ -86,14 +87,27 @@ class OsHelperTest extends TestCase {
 
         $this->assertGreaterThan(1, stripos($res['name'], 'Chrome'));
         $this->assertNotEmpty($res['platform']);
+        
+        $agents = ValidateHelperTest::$userAgents;
+        foreach ($agents as $agent) {
+            $res = OsHelper::getBrowser($agent);
+            $this->assertNotEmpty($res['name']);
+        }
     }
 
 
     public function testGetClientOS() {
         $agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36';
-        $res   = OsHelper::getClientOS($agent);
+        $res1  = OsHelper::getClientOS($agent);
+        $res2  = OsHelper::getClientOS('');
+        $this->assertEquals('Windows', $res1);
+        $this->assertEquals(Consts::UNKNOWN, $res2);
 
-        $this->assertEquals('Windows', $res);
+        $agents = ValidateHelperTest::$userAgents;
+        foreach ($agents as $agent) {
+            $res = OsHelper::getClientOS($agent);
+            $this->assertNotEmpty($res);
+        }
     }
 
 
@@ -105,6 +119,9 @@ class OsHelperTest extends TestCase {
         unset($server['HTTP_X_FORWARDED_FOR']);
         $res = OsHelper::getClientIp($server);
         $this->assertEquals('172.17.0.1', $res);
+
+        $res = OsHelper::getClientIp();
+        var_dump($res);
     }
 
 
