@@ -11,7 +11,6 @@ namespace Kph\Helpers;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use ParentIterator;
 
 /**
  * Class DirectoryHelper
@@ -58,14 +57,14 @@ class DirectoryHelper {
                 }
 
                 if ($type != 'file') {
-                    $tree[] = $single;
+                    array_push($tree, $single);
                 }
 
                 if ($recursive) {
                     $tree = array_merge($tree, self::getFileTree($single, $type, $recursive));
                 }
             } elseif ($type != 'dir') {
-                $tree[] = $single;
+                array_push($tree, $single);
             }
         }
 
@@ -205,7 +204,6 @@ class DirectoryHelper {
         foreach ($iterator as $single => $file) {
             $num++;
             $fpath = $file->getRealPath();
-            var_dump('$fpath:', $single, $fpath);
             if ($file->isDir()) {
                 array_push($dirs, $fpath);
             } else {
@@ -214,28 +212,8 @@ class DirectoryHelper {
             }
         }
 
-        //        foreach ($objects as $single => $object) {
-        //            $checkNull = strpos(substr($single, -3), "/."); //检查文件是否 . 或者 ..
-        //            if ($checkNull !== false) {
-        //                continue;
-        //            }
-        //
-        //            var_dump('$single:', $single);
-        //
-        //            //先删除文件
-        //            if (is_dir($single)) {
-        //                var_dump('111111111');
-        //                array_push($dirs, $single);
-        //            } else {
-        //                var_dump('222222222');
-        //                @unlink($single);
-        //            }
-        //        }
-
         //再删除目录
         rsort($dirs);
-        var_dump('$path:', $path, $dirs);
-        var_dump('emptyDir $iterator----------:', $path, $num);
         foreach ($dirs as $dir) {
             @rmdir($dir);
         }
