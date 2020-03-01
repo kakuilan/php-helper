@@ -201,10 +201,10 @@ class DirectoryHelper {
         $iterator = new RecursiveIteratorIterator($dir, RecursiveIteratorIterator::SELF_FIRST);
 
         $num = 0;
-        foreach ($iterator as $file) {
+        foreach ($iterator as $single => $file) {
             $num++;
             $fpath = $file->getRealPath();
-            var_dump('$fpath:', $fpath);
+            var_dump('$fpath:', $single, $fpath);
             if ($file->isDir()) {
                 array_push($dirs, $fpath);
             } else {

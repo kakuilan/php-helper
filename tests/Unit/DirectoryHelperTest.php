@@ -74,6 +74,7 @@ class DirectoryHelperTest extends TestCase {
         DirectoryHelper::copyDir($fromDir, '/root/tmp');
         $files1 = DirectoryHelper::getFileTree($backupDir1);
         $files2 = DirectoryHelper::getFileTree($backupDir2);
+        var_dump('tree-------:', $files1, $files2);
         $this->assertGreaterThan(1, $files1);
         $this->assertGreaterThan(1, $files2);
 
