@@ -9,6 +9,7 @@
 
 namespace Kph\Tests\Unit;
 
+use Kph\Helpers\ValidateHelper;
 use PHPUnit\Framework\TestCase;
 use Error;
 use Exception;
@@ -87,7 +88,7 @@ class OsHelperTest extends TestCase {
 
         $this->assertGreaterThan(1, stripos($res['name'], 'Chrome'));
         $this->assertNotEmpty($res['platform']);
-        
+
         $agents = ValidateHelperTest::$userAgents;
         foreach ($agents as $agent) {
             $res = OsHelper::getBrowser($agent);
@@ -117,7 +118,7 @@ class OsHelperTest extends TestCase {
         $this->assertEquals('192.168.56.1', $res);
 
         $server['HTTP_X_FORWARDED_FOR'] = '220.181.38.148';
-        $res    = OsHelper::getClientIp($server);
+        $res                            = OsHelper::getClientIp($server);
         $this->assertEquals('220.181.38.148', $res);
 
         unset($server['HTTP_X_FORWARDED_FOR']);
@@ -161,6 +162,15 @@ class OsHelperTest extends TestCase {
         unset($server['REQUEST_URI']);
         $res5 = OsHelper::getUri($server);
         $this->assertEquals($res4, $res5);
+
+        $res6 = OsHelper::getDomain('', true, $server);
+        $this->assertEquals('test.loc', $res6);
+
+        $res7 = OsHelper::getUrl();
+        $this->assertFalse(ValidateHelper::isUrl($res7));
+
+        $res8 = OsHelper::getUri();
+        $this->assertNotEmpty($res8);
     }
 
 
@@ -168,14 +178,17 @@ class OsHelperTest extends TestCase {
         $ip1 = '172.17.0.1';
         $ip2 = '192.168.56.1';
         $ip3 = 'hello';
+        $ip4 = '200.117.248.17';
 
         $res1 = OsHelper::ip2UnsignedInt($ip1);
         $res2 = OsHelper::ip2UnsignedInt($ip2);
         $res3 = OsHelper::ip2UnsignedInt($ip3);
+        $res4 = OsHelper::ip2UnsignedInt($ip4);
 
         $this->assertGreaterThan(1, $res1);
         $this->assertGreaterThan(1, $res2);
         $this->assertEquals(0, $res3);
+        $this->assertGreaterThan(1, $res4);
     }
 
 
@@ -184,21 +197,37 @@ class OsHelperTest extends TestCase {
 
         $res1 = OsHelper::getRemoteImageSize($url, 'hello');
         $res2 = OsHelper::getRemoteImageSize($url, 'curl', true);
+        $res3 = OsHelper::getRemoteImageSize('http://test.loc/img/hello.jpg');
 
         $this->assertNotEmpty($res1);
         $this->assertEquals($res1['width'], $res2['width']);
         $this->assertEquals($res1['height'], $res2['height']);
         $this->assertEquals(0, $res1['size']);
         $this->assertGreaterThan(1, $res2['size']);
+        $this->assertEmpty($res3);
+
+        OsHelper::getRemoteImageSize('https://raw.githubusercontent.com/kakuilan/kgo/master/testdata/gopher10th-large.jpg', 'curl', true, 1, 24);
     }
 
 
     public function testCurlDownload() {
+        $des1 = $backupDir1 = TESTDIR . 'tmp/download.txt';
+        $des2 = $backupDir1 = TESTDIR . 'tmp/hello/download.txt';
+
         $res1 = OsHelper::curlDownload('http://test.loc/hello', '', [], false);
         $res2 = OsHelper::curlDownload('https://www.baidu.com/', '', [], true);
+        $res3 = OsHelper::curlDownload('hello world');
+
+        $res4 = OsHelper::curlDownload('https://www.baidu.com/', $des1, [], false);
+        $res5 = OsHelper::curlDownload('https://www.baidu.com/', $des1, [], true);
+        $res6 = OsHelper::curlDownload('https://www.baidu.com/', $des2, [], false);
 
         $this->assertFalse($res1);
         $this->assertNotEmpty($res2);
+        $this->assertFalse($res3);
+        $this->assertTrue($res4);
+        $this->assertNotEmpty($res5);
+        $this->assertFalse($res6);
     }
 
 

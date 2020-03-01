@@ -325,7 +325,7 @@ class OsHelper {
         $protocal  = ($server['SERVER_PORT'] ?? '') == '443' ? 'https://' : 'http://';
         $phpSelf   = $server['PHP_SELF'] ?? $server['SCRIPT_NAME'];
         $pathInfo  = $server['PATH_INFO'] ?? '';
-        $relateUrl = $server['REQUEST_URI'] ?? $phpSelf . (isset($server['QUERY_STRING']) ? '?' . $server['QUERY_STRING'] : $pathInfo);
+        $relateUrl = $server['REQUEST_URI'] ?? ltrim($phpSelf, '/') . (isset($server['QUERY_STRING']) ? '?' . $server['QUERY_STRING'] : $pathInfo);
         return $protocal . ($server['HTTP_HOST'] ?? '') . $relateUrl;
     }
 
@@ -344,7 +344,7 @@ class OsHelper {
             return $server['REQUEST_URI'];
         }
 
-        $uri = ($server['PHP_SELF'] ?? '') . "?" . ($server['argv'][0] ?? ($server['QUERY_STRING'] ?? ''));
+        $uri = ($server['PHP_SELF'] ?? '') . "?" . ($server['QUERY_STRING'] ?? ($server['argv'][0] ?? ''));
         return $uri;
     }
 
@@ -362,7 +362,7 @@ class OsHelper {
         $long = ip2long($ip);
         if ($long == false) {
             $long = 0;
-        } elseif ($long < 0) {
+        } else {
             $long = sprintf('%u', $long);
         }
 
@@ -371,16 +371,17 @@ class OsHelper {
 
 
     /**
-     * 获取远程图片宽高和大小
+     * 获取远程图片宽高和大小.获取失败,返回空数组;否则返回非空数组.
      * @param string $url 图片地址
      * @param string $type 获取方式:curl或fread
      * @param bool $isGetFilesize 是否获取远程图片的体积大小, 默认false不获取, 设置为 true 时 $type 将强制为 fread
+     * @param int $timeout 超时,秒
      * @param int $length 读取长度
-     * @param int $times 尝试次数
+     * @param int $trys 最多尝试次数
      * @param null $handle 文件句柄
      * @return array
      */
-    public static function getRemoteImageSize(string $url, string $type = 'curl', bool $isGetFilesize = false, int $length = 168, int $times = 1, $handle = null): array {
+    public static function getRemoteImageSize(string $url, string $type = 'curl', bool $isGetFilesize = false, int $timeout = 2, int $length = 168, int $trys = 3, $handle = null): array {
         if (!in_array($type, ['curl', 'fread'])) {
             $type = 'curl';
         }
@@ -389,21 +390,18 @@ class OsHelper {
         if ($isGetFilesize) {
             $type = 'fread';
         }
-        $handle = ($type == 'fread' && empty($handle)) ? fopen($url, 'rb') : null;
+        $handle = ($type == 'fread' && empty($handle)) ? @fopen($url, 'rb') : null;
         $res    = [];
 
-        if (!is_null($handle)) {
+        if (!is_null($handle) && is_resource($handle)) {
             // 或者使用 socket 二进制方式读取, 需要获取图片体积大小最好使用此方法
-            if (!$handle) {
-                return $res;
-            }
             // 只取头部固定长度168字节数据
             $dataBlock = fread($handle, $length);
         } else {
             // 据说 CURL 能缓存DNS 效率比 socket 高
             $ch = curl_init($url);
             // 超时设置
-            curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+            curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
             // 取前面 168 个字符 通过四张测试图读取宽高结果都没有问题,若获取不到数据可适当加大数值
             curl_setopt($ch, CURLOPT_RANGE, "0-{$length}");
             // 跟踪301跳转
@@ -422,8 +420,9 @@ class OsHelper {
         $str64 = base64_encode($dataBlock);
         $size  = getimagesize('data:image/jpeg;base64,' . $str64);
         if (empty($size)) {
-            if ($times < 3) {
-                $res = self::getRemoteImageSize($url, $type, $isGetFilesize, $length * 10, ($times + 1), $handle);
+            if ($trys > 0) {
+                var_dump('0000000000', $trys);
+                $res = self::getRemoteImageSize($url, $type, $isGetFilesize, $timeout, $length * 10, ($trys - 1), $handle);
                 return $res;
             }
             return [];
