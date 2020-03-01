@@ -9,6 +9,8 @@
 
 namespace Kph\Helpers;
 
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 /**
  * Class DirectoryHelper
@@ -193,23 +195,39 @@ class DirectoryHelper {
             return false;
         }
 
-        $dirs    = [];
-        $objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path), \RecursiveIteratorIterator::SELF_FIRST);
-        foreach ($objects as $single => $object) {
-            $checkNull = strpos(substr($single, -3), "/."); //检查文件是否 . 或者 ..
-            if ($checkNull !== false) {
-                continue;
-            }
+        $dirs = [];
 
-            var_dump('emptyDir $single:', $single);
+        $dir      = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
+        $iterator = new RecursiveIteratorIterator($dir, RecursiveIteratorIterator::SELF_FIRST);
 
-            //先删除文件
-            if (is_dir($single)) {
-                array_push($dirs, $single);
+        var_dump('emptyDir $iterator:');
+        foreach ($iterator as $file) {
+            $path = $file->getRealPath();
+            var_dump('$path:', $path);
+            if ($file->isDir()) {
+                array_push($dirs, $path);
             } else {
-                @unlink($single);
+                @unlink($path);
             }
         }
+
+        //        foreach ($objects as $single => $object) {
+        //            $checkNull = strpos(substr($single, -3), "/."); //检查文件是否 . 或者 ..
+        //            if ($checkNull !== false) {
+        //                continue;
+        //            }
+        //
+        //            var_dump('$single:', $single);
+        //
+        //            //先删除文件
+        //            if (is_dir($single)) {
+        //                var_dump('111111111');
+        //                array_push($dirs, $single);
+        //            } else {
+        //                var_dump('222222222');
+        //                @unlink($single);
+        //            }
+        //        }
 
         //再删除目录
         rsort($dirs);
