@@ -116,12 +116,16 @@ class OsHelperTest extends TestCase {
         $res    = OsHelper::getClientIp($server);
         $this->assertEquals('192.168.56.1', $res);
 
+        $server['HTTP_X_FORWARDED_FOR'] = '220.181.38.148';
+        $res    = OsHelper::getClientIp($server);
+        $this->assertEquals('220.181.38.148', $res);
+
         unset($server['HTTP_X_FORWARDED_FOR']);
         $res = OsHelper::getClientIp($server);
         $this->assertEquals('172.17.0.1', $res);
 
         $res = OsHelper::getClientIp();
-        var_dump($res);
+        $this->assertEquals('0.0.0.0', $res);
     }
 
 
@@ -131,9 +135,13 @@ class OsHelperTest extends TestCase {
         $this->assertNotEmpty($res);
         $this->assertNotEquals('0.0.0.0', $res);
 
-        $res = OsHelper::getServerIP([]);
+        $res = OsHelper::getServerIP();
         $this->assertNotEmpty($res);
         $this->assertNotEquals('0.0.0.0', $res);
+
+        putenv("SERVER_ADDR='192.168.1.1'");
+        $res = OsHelper::getServerIP([]);
+        $this->assertNotEquals('192.168.1.1', $res);
     }
 
 

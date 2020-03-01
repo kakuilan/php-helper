@@ -252,8 +252,8 @@ class OsHelper {
      * @param array $server server信息
      * @return string
      */
-    public static function getServerIP(array $server = []): string {
-        if (empty($server)) {
+    public static function getServerIP(array $server = null): string {
+        if (is_null($server)) {
             $server = $_SERVER;
         }
 
