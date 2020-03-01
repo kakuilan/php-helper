@@ -101,17 +101,17 @@ class OsHelper {
         $ub       = '';
         $version  = '';
 
-        //First get the platform?
-        if (preg_match('/linux/i', $userAgent)) {
-            $platform = 'Linux';
-        } elseif (preg_match('/iPhone/i', $userAgent)) {
-            $platform = 'iPhone';
-        } elseif (preg_match('/iPad/i', $userAgent)) {
+        //First get the platform
+        if (preg_match('/iPad/i', $userAgent)) {
             $platform = 'iPad';
         } elseif (preg_match('/iPod/i', $userAgent)) {
             $platform = 'iPod';
+        } elseif (preg_match('/iPhone/i', $userAgent)) {
+            $platform = 'iPhone';
         } elseif (preg_match('/android/i', $userAgent)) {
             $platform = 'Android';
+        } elseif (preg_match('/linux/i', $userAgent)) {
+            $platform = 'Linux';
         } elseif (preg_match('/macintosh|mac os x/i', $userAgent)) {
             $platform = 'MAC';
         } elseif (preg_match('/windows|win32/i', $userAgent)) {
@@ -468,11 +468,11 @@ class OsHelper {
             return $res;
         }
 
-        if (!empty($savefile) && file_exists($savefile)) {
+        if (empty($savefile)) {
+            $savefile = tempnam(sys_get_temp_dir(), uniqid(date('ymd-His'), true));
+        } elseif (file_exists($savefile)) {
             $res = $returnContent ? file_get_contents($savefile) : true;
             return $res;
-        } elseif (empty($savefile)) {
-            $savefile = tempnam(sys_get_temp_dir(), uniqid(date('ymd-His'), true));
         }
 
         $fp = @fopen($savefile, 'w+');
