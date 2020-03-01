@@ -200,9 +200,7 @@ class DirectoryHelper {
         $dir      = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
         $iterator = new RecursiveIteratorIterator($dir, RecursiveIteratorIterator::CHILD_FIRST);
 
-        $num = 0;
         foreach ($iterator as $single => $file) {
-            $num++;
             $fpath = $file->getRealPath();
             if ($file->isDir()) {
                 array_push($dirs, $fpath);

@@ -55,7 +55,7 @@ class OsHelperTest extends TestCase {
         $this->assertTrue($res2);
     }
 
-    
+
     public function testGetPhpPath() {
         $res = OsHelper::getPhpPath();
         $this->assertNotEmpty($res);
@@ -165,6 +165,15 @@ class OsHelperTest extends TestCase {
         $this->assertEquals($res1['height'], $res2['height']);
         $this->assertEquals(0, $res1['size']);
         $this->assertGreaterThan(1, $res2['size']);
+    }
+
+
+    public function testCurlDownload() {
+        $res1 = OsHelper::curlDownload('http://test.loc/hello', '', [], false);
+        $res2 = OsHelper::curlDownload('https://www.baidu.com/', '', [], true);
+
+        $this->assertFalse($res1);
+        $this->assertNotEmpty($res2);
     }
 
 

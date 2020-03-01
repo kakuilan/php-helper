@@ -10,6 +10,9 @@
 namespace Kph\Helpers;
 
 use Kph\Consts;
+use Error;
+use Exception;
+use Throwable;
 
 /**
  * Class OsHelper
@@ -432,7 +435,7 @@ class OsHelper {
             // 跟踪301跳转
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
             // 返回结果
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             $dataBlock = curl_exec($ch);
             curl_close($ch);
         }
@@ -477,5 +480,76 @@ class OsHelper {
 
         return $res;
     }
+
+
+    /**
+     * curl下载
+     * @param string $url URL地址
+     * @param string $savefile 保存路径
+     * @param array $param 其他参数:timeout,connect_timeout
+     * @param bool $returnContent 是否返回下载文件的内容
+     * @return bool|string
+     */
+    public static function curlDownload(string $url, string $savefile = '', array $param = [], bool $returnContent = false) {
+        $res = $returnContent ? '' : false;
+        if (empty($url) || !ValidateHelper::isUrl($url)) {
+            return $res;
+        }
+
+        if (!empty($savefile) && file_exists($savefile)) {
+            $res = $returnContent ? file_get_contents($savefile) : true;
+            return $res;
+        } elseif (empty($savefile)) {
+            $savefile = tempnam(sys_get_temp_dir(), uniqid(date('ymd-His'), true));
+        }
+
+        $fp = @fopen($savefile, 'w+');
+        if ($fp === false) {
+            return $res;
+        }
+
+        $timeout     = intval($param['timeout'] ?? 5);
+        $conntimeout = intval($param['connect_timeout'] ?? 1);
+
+        //Create a cURL handle.
+        $ch = curl_init($url);
+
+        //Pass our file handle to cURL.
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // 获取的信息以文件流的形式返回
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); // 使用自动跳转
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // 对认证证书来源的检查
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); // 从证书中检查SSL加密算法是否存在
+        curl_setopt($ch, CURLOPT_COOKIEJAR, "cookie");
+        curl_setopt($ch, CURLOPT_COOKIEFILE, "cookie");
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+
+        //Timeout if the file doesn't download after N seconds.
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $conntimeout);
+
+        //Execute the request.
+        curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            //var_dump('err:', curl_error($ch));
+            return $res;
+        }
+
+        //Get the HTTP status code.
+        $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        //Close the cURL handler.
+        @curl_close($ch);
+
+        //Close the file handler.
+        @fclose($fp);
+
+        if ($statusCode == 200) {
+            $res = $returnContent ? file_get_contents($savefile) : true;
+        }
+
+        return $res;
+    }
+
 
 }
