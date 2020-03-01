@@ -63,6 +63,7 @@ class FileHelperTest extends TestCase {
         $this->assertFalse($res2);
         $this->assertFalse($res3);
         $this->assertFalse($res4);
+        FileHelper::createZip($files, '/root/tmp/test.zip', true);
     }
 
 
