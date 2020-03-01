@@ -104,14 +104,6 @@ class OsHelper {
         //First get the platform?
         if (preg_match('/linux/i', $userAgent)) {
             $platform = 'Linux';
-        } elseif (preg_match('/macintosh|mac os x/i', $userAgent)) {
-            $platform = 'MAC';
-        } elseif (preg_match('/windows|win32/i', $userAgent)) {
-            $platform = 'Windows';
-        } elseif (preg_match('/unix/i', $userAgent)) {
-            $platform = 'Unix';
-        } elseif (preg_match('/bsd/i', $userAgent)) {
-            $platform = 'BSD';
         } elseif (preg_match('/iPhone/i', $userAgent)) {
             $platform = 'iPhone';
         } elseif (preg_match('/iPad/i', $userAgent)) {
@@ -120,6 +112,14 @@ class OsHelper {
             $platform = 'iPod';
         } elseif (preg_match('/android/i', $userAgent)) {
             $platform = 'Android';
+        } elseif (preg_match('/macintosh|mac os x/i', $userAgent)) {
+            $platform = 'MAC';
+        } elseif (preg_match('/windows|win32/i', $userAgent)) {
+            $platform = 'Windows';
+        } elseif (preg_match('/unix/i', $userAgent)) {
+            $platform = 'Unix';
+        } elseif (preg_match('/bsd/i', $userAgent)) {
+            $platform = 'BSD';
         }
 
         // Next get the name of the useragent yes seperately and for good reason
@@ -132,6 +132,9 @@ class OsHelper {
         } elseif (preg_match('/Edge/i', $userAgent)) {//win10 Edge浏览器 添加了chrome内核标记 在判断Chrome之前匹配
             $bname = 'Microsoft Edge';
             $ub    = "Edge";
+        } elseif (preg_match('/Maxthon/i', $userAgent)) {
+            $bname = 'Maxthon';
+            $ub    = "Maxthon";
         } elseif (preg_match('/Chrome/i', $userAgent)) {
             $bname = 'Google Chrome';
             $ub    = "Chrome";
@@ -141,9 +144,6 @@ class OsHelper {
         } elseif (preg_match('/Opera/i', $userAgent)) {
             $bname = 'Opera';
             $ub    = "Opera";
-        } elseif (preg_match('/Maxthon/i', $userAgent)) {
-            $bname = 'Maxthon';
-            $ub    = "Maxthon";
         } elseif (preg_match('/Lynx/i', $userAgent)) {
             $bname = 'Lynx';
             $ub    = "Lynx";
@@ -163,12 +163,12 @@ class OsHelper {
             //we will have two since we are not using 'other' argument yet
             //see if version is before or after the name
             if (strripos($userAgent, "Version") < strripos($userAgent, $ub)) {
-                $version = $matches['version'][0];
+                $version = $matches['version'][0] ?? '';
             } else {
-                $version = $matches['version'][1];
+                $version = $matches['version'][1] ?? '';
             }
         } else {
-            $version = $matches['version'][0];
+            $version = $matches['version'][0] ?? '';
         }
 
         // check if we have a number
@@ -295,7 +295,7 @@ class OsHelper {
         }
 
         $parse  = parse_url(strtolower($url));
-        $domain = null;
+        $domain = '';
         if (isset($parse['host'])) {
             $domain = $parse['host'];
         }
@@ -421,7 +421,6 @@ class OsHelper {
         $size  = getimagesize('data:image/jpeg;base64,' . $str64);
         if (empty($size)) {
             if ($trys > 0) {
-                var_dump('0000000000', $trys);
                 $res = self::getRemoteImageSize($url, $type, $isGetFilesize, $timeout, $length * 10, ($trys - 1), $handle);
                 return $res;
             }

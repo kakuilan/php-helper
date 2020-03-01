@@ -94,6 +94,9 @@ class OsHelperTest extends TestCase {
             $res = OsHelper::getBrowser($agent);
             $this->assertNotEmpty($res['name']);
         }
+
+        $res = OsHelper::getBrowser();
+        $this->assertEquals(Consts::UNKNOWN, $res['name']);
     }
 
 
@@ -171,6 +174,9 @@ class OsHelperTest extends TestCase {
 
         $res8 = OsHelper::getUri();
         $this->assertNotEmpty($res8);
+
+        $res9 = OsHelper::getDomain('');
+        $this->assertEmpty($res9);
     }
 
 
@@ -184,11 +190,13 @@ class OsHelperTest extends TestCase {
         $res2 = OsHelper::ip2UnsignedInt($ip2);
         $res3 = OsHelper::ip2UnsignedInt($ip3);
         $res4 = OsHelper::ip2UnsignedInt($ip4);
+        $res5 = OsHelper::ip2UnsignedInt('');
 
         $this->assertGreaterThan(1, $res1);
         $this->assertGreaterThan(1, $res2);
         $this->assertEquals(0, $res3);
         $this->assertGreaterThan(1, $res4);
+        $this->assertEquals(0, $res5);
     }
 
 
