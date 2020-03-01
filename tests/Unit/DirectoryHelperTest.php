@@ -55,6 +55,8 @@ class DirectoryHelperTest extends TestCase {
     public function testCopyDirEmptyDirDelDir() {
         $backupDir1 = TESTDIR . 'tmp/backup/1';
         $backupDir2 = TESTDIR . 'tmp/backup/2';
+        DirectoryHelper::chmodBatch($backupDir1, 766, 766);
+        DirectoryHelper::chmodBatch($backupDir2, 766, 766);
 
         $fromDir = dirname(TESTDIR) . '/src';
         $res1    = DirectoryHelper::copyDir($fromDir, $backupDir1);
@@ -62,13 +64,18 @@ class DirectoryHelperTest extends TestCase {
         $res3    = DirectoryHelper::copyDir($fromDir, $backupDir2);
         $res4    = DirectoryHelper::copyDir($fromDir, $backupDir2, true);
         $res5    = DirectoryHelper::copyDir($fromDir, $backupDir2, false);
-        DirectoryHelper::copyDir($fromDir, '/root/tmp');
 
         $this->assertTrue($res1);
         $this->assertTrue($res2);
         $this->assertTrue($res3);
         $this->assertTrue($res4);
         $this->assertTrue($res5);
+
+        DirectoryHelper::copyDir($fromDir, '/root/tmp');
+        $files1 = DirectoryHelper::getFileTree($backupDir1);
+        $files2 = DirectoryHelper::getFileTree($backupDir2);
+        $this->assertGreaterThan(1, $files1);
+        $this->assertGreaterThan(1, $files2);
 
         DirectoryHelper::chmodBatch('', 777, 777);
         DirectoryHelper::chmodBatch('/root', 777, 777);

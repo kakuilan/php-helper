@@ -119,7 +119,7 @@ class DirectoryHelper {
                     if (file_exists($newFile) && !$cover) {
                         continue;
                     } elseif (!copy("$from/$fileName", $newFile)) {
-                        break;
+                        return false;
                     }
                 } else {
                     self::copyDir("$from/$fileName", $newFile, $cover);
@@ -208,6 +208,7 @@ class DirectoryHelper {
             if ($file->isDir()) {
                 array_push($dirs, $fpath);
             } else {
+                //先删除文件
                 @unlink($fpath);
             }
         }
