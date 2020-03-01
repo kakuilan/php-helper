@@ -200,14 +200,15 @@ class DirectoryHelper {
         $dir      = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
         $iterator = new RecursiveIteratorIterator($dir, RecursiveIteratorIterator::SELF_FIRST);
 
-        var_dump('emptyDir $iterator:');
+        $num = 0;
         foreach ($iterator as $file) {
-            $path = $file->getRealPath();
-            var_dump('$path:', $path);
+            $num++;
+            $fpath = $file->getRealPath();
+            var_dump('$fpath:', $fpath);
             if ($file->isDir()) {
-                array_push($dirs, $path);
+                array_push($dirs, $fpath);
             } else {
-                @unlink($path);
+                @unlink($fpath);
             }
         }
 
@@ -232,6 +233,7 @@ class DirectoryHelper {
         //再删除目录
         rsort($dirs);
         var_dump('$path:', $path, $dirs);
+        var_dump('emptyDir $iterator----------:', $path, $num);
         foreach ($dirs as $dir) {
             @rmdir($dir);
         }
