@@ -71,13 +71,6 @@ class DirectoryHelperTest extends TestCase {
         $this->assertTrue($res4);
         $this->assertTrue($res5);
 
-        DirectoryHelper::copyDir($fromDir, '/root/tmp');
-        $files1 = DirectoryHelper::getFileTree($backupDir1);
-        $files2 = DirectoryHelper::getFileTree($backupDir2);
-        var_dump('tree-------:', $files1, $files2);
-        $this->assertGreaterThan(1, $files1);
-        $this->assertGreaterThan(1, $files2);
-
         DirectoryHelper::chmodBatch('', 777, 777);
         DirectoryHelper::chmodBatch('/root', 777, 777);
         DirectoryHelper::chmodBatch($backupDir1, 777, 777);
@@ -95,6 +88,12 @@ class DirectoryHelperTest extends TestCase {
         $this->assertFalse($res7);
         $this->assertTrue($res8);
         $this->assertFalse(is_dir($backupDir2));
+
+        DirectoryHelper::copyDir($fromDir, '/root/tmp');
+        $files1 = DirectoryHelper::getFileTree($backupDir1);
+        $files2 = DirectoryHelper::getFileTree($backupDir2);
+        $this->assertEquals(0, count($files1));
+        $this->assertEquals(0, count($files2));
     }
 
 
