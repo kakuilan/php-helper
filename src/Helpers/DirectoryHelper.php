@@ -11,6 +11,7 @@ namespace Kph\Helpers;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use ParentIterator;
 
 /**
  * Class DirectoryHelper
@@ -198,7 +199,7 @@ class DirectoryHelper {
         $dirs = [];
 
         $dir      = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
-        $iterator = new RecursiveIteratorIterator($dir, RecursiveIteratorIterator::SELF_FIRST);
+        $iterator = new RecursiveIteratorIterator($dir, RecursiveIteratorIterator::CHILD_FIRST);
 
         $num = 0;
         foreach ($iterator as $single => $file) {
