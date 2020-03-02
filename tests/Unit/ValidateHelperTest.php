@@ -244,6 +244,7 @@ class ValidateHelperTest extends TestCase {
             ['220103201901014845', true],
             ['51343620190101690X', true],
             ['13020919930405236X', true],
+            [140721199304324027, false],
             [140721199304054027, true],
         ];
         foreach ($tests as $test) {
@@ -405,8 +406,8 @@ class ValidateHelperTest extends TestCase {
             ["1990/01/02 03:14", true],
             ["1990-01-02 03:14:59", true],
             ["1990/01/02 03:14:59", true],
-            ["2990-00-00 03:14:59", true],
-            ["hell-00-00 03:14:59", false],
+            ["2990-00-00 03:14:59", false], //2989-11-30
+            ["2020-02-30 03:14:59", false],
         ];
         foreach ($tests as $test) {
             $expected = ValidateHelper::isDate2time($test[0]);

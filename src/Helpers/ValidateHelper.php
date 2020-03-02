@@ -336,9 +336,12 @@ class ValidateHelper {
             return 0;
         }
 
-        $val      .= substr('1970-00-00 00:00:00', strlen($val), 19);
+        $val      .= substr('1970-01-01 00:00:01', strlen($val), 19);
+        $date     = substr($val, 0, 10);
         $unixTime = strtotime($val);
-        if (!$unixTime) {
+
+        //检查日期
+        if (!$unixTime || date('Y-m-d', $unixTime) != $date) {
             $unixTime = 0;
         }
 
