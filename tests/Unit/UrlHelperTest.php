@@ -18,7 +18,7 @@ use Kph\Helpers\UrlHelper;
 class UrlHelperTest extends TestCase {
 
     public function testCnUrlencodeDecode() {
-        $url  = "http://www.abc3210.com/s?wd=博客&name=张 三&age=20&qu='quote'";
+        $url  = "http://www.abc3210.com/s?wd=博客&name=张 三&age=20&qu='quote'&#4096;";
         $res1 = UrlHelper::cnUrlencode($url);
         $res2 = UrlHelper::cnUrldecode($res1);
 
