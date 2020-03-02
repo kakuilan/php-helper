@@ -111,6 +111,7 @@ class ValidateHelperTest extends TestCase {
 
     public function testIsJson() {
         $tests = [
+            ['', false],
             ['hello', false],
             [123, false],
             ['{"id":"1"}', true],
