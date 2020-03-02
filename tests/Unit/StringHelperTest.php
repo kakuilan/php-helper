@@ -145,9 +145,11 @@ EOF;
     public function testRandNumber() {
         $res1 = StringHelper::randNumber();
         $res2 = StringHelper::randNumber(10);
+        $res3 = StringHelper::randNumber(20);
 
         $this->assertEquals(6, strlen($res1));
         $this->assertEquals(10, strlen($res2));
+        $this->assertEquals(20, strlen($res3));
     }
 
 
@@ -159,6 +161,7 @@ EOF;
         $res5 = StringHelper::randString(10, 4);
         $res6 = StringHelper::randString(10, 5);
         $res7 = StringHelper::randString(10, 0, '!@#$%^&*');
+        $res8 = StringHelper::randString(30);
 
         $this->assertEquals(6, strlen($res1));
         $this->assertTrue(ValidateHelper::isLetter($res2));
@@ -167,6 +170,7 @@ EOF;
         $this->assertTrue(ValidateHelper::isLowerLetter($res5));
         $this->assertTrue(ValidateHelper::isChinese($res6));
         $this->assertEquals(10, strlen($res7));
+        $this->assertEquals(30, strlen($res8));
     }
 
 
@@ -200,6 +204,11 @@ EOF;
 
         $res = StringHelper::getClosestWord($str, $arr);
         $this->assertEquals($item, $res[0]);
+
+        array_push($arr, $str);
+        $res = StringHelper::getClosestWord($str, $arr);
+        $this->assertEquals($str, $res[0]);
+        $this->assertEquals(0, $res[1]);
     }
 
 
@@ -208,8 +217,11 @@ EOF;
 
         $res1 = StringHelper::escape($str);
         $res2 = StringHelper::unescape($res1);
-
         $this->assertEquals($str, $res2);
+
+        $str2 = 'I will &#x2702;display &#9986;';
+        $res3 = StringHelper::unescape($str2);
+        $this->assertEquals(17, mb_strlen($res3));
     }
 
 
@@ -293,12 +305,15 @@ EOF;
     public function testGetText() {
         $res = StringHelper::getText(self::$html);
         $this->assertNotEmpty($res);
+
+        $this->assertEmpty(StringHelper::getText(''));
     }
 
 
     public function testRemoveHtml() {
         $res = StringHelper::removeHtml(self::$html);
         $this->assertNotEmpty($res);
+        $this->assertEmpty(StringHelper::removeHtml(''));
     }
 
 
@@ -384,6 +399,11 @@ EOF;
 
         $res = StringHelper::multiExplode($str, ...[' ', '.', '，', '　']);
         $this->assertEquals(5, count($res));
+
+        $res2 = StringHelper::multiExplode('');
+        $res3 = StringHelper::multiExplode($str);
+        $this->assertEmpty($res2);
+        $this->assertEquals($str, $res3[0]);
     }
 
 
