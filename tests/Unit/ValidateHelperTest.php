@@ -517,10 +517,12 @@ class ValidateHelperTest extends TestCase {
 
         $res1 = ValidateHelper::isBase64Image('hello world');
         $res2 = ValidateHelper::isBase64Image($str);
+        $res3 = ValidateHelper::isBase64Image('hello base64 world');
 
         $this->assertFalse($res1);
         $this->assertNotEmpty($res2);
         $this->assertEquals('png', $res2[2]);
+        $this->assertFalse($res3);
     }
 
 

@@ -163,7 +163,6 @@ class ValidateHelper {
 
         //省市代码
         if (!in_array(substr($val, 0, 2), array_keys($city))) {
-            var_dump('0000000');
             return false;
         }
 
