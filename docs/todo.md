@@ -2,7 +2,6 @@
 - GeoDistance
 
 
-
 ### 常用函数库  
 https://bitbucket.org/justusmeyer/php-helper
 https://gitee.com/wuwenbin/php-helper
@@ -50,3 +49,9 @@ https://github.com/hprose/hprose-php
 https://github.com/streamcommon/promise
 https://github.com/php-promise/promise
 https://docs.aws.amazon.com/zh_cn/sdk-for-php/v3/developer-guide/guide_promises.html
+
+
+### 静态检查
+```sh
+phpstan analyze src
+```

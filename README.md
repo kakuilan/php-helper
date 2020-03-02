@@ -1,7 +1,7 @@
 # php-helper
 k`s php helper/library/utils  
 php 常用函数库/工具集,仅测试支持php 7.2/7.3/7.4  
-包括字符串、数组、验证等操作
+包括数组、文件、验证、字符串、加解密等操作,具体见src/Helpers  
 
 
 ### 相关
@@ -27,7 +27,3 @@ cd tests
 phpunit
 ```
 
-### 静态检查
-```sh
-phpstan analyze src
-```
