@@ -24,7 +24,7 @@ class ValidateHelper {
      * @return bool
      */
     public static function isInteger($val, $bigInt = false): bool {
-        if (!is_scalar($val) || !is_numeric($val)) {
+        if (!is_numeric($val)) {
             return false;
         }
 
@@ -43,9 +43,6 @@ class ValidateHelper {
      * @return bool
      */
     public static function isFloat($val): bool {
-        if (!is_scalar($val)) {
-            return false;
-        }
         return is_numeric($val) && is_float($val + 0);
     }
 
