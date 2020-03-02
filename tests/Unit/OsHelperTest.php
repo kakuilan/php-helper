@@ -223,12 +223,12 @@ class OsHelperTest extends TestCase {
         $des2 = $backupDir1 = TESTDIR . 'tmp/hello/download.txt';
 
         $res1 = OsHelper::curlDownload('http://test.loc/hello', '', [], false);
-        $res2 = OsHelper::curlDownload('https://www.baidu.com/', '', [], true);
+        $res2 = OsHelper::curlDownload('https://www.baidu.com/', '', ['connect_timeout' => 5, 'timeout' => 5], true);
         $res3 = OsHelper::curlDownload('hello world');
 
-        $res4 = OsHelper::curlDownload('https://www.baidu.com/', $des1, [], false);
-        $res5 = OsHelper::curlDownload('https://www.baidu.com/', $des1, [], true);
-        $res6 = OsHelper::curlDownload('https://www.baidu.com/', $des2, [], false);
+        $res4 = OsHelper::curlDownload('https://www.baidu.com/', $des1, ['connect_timeout' => 5, 'timeout' => 5], false);
+        $res5 = OsHelper::curlDownload('https://www.baidu.com/', $des1, ['connect_timeout' => 5, 'timeout' => 5], true);
+        $res6 = OsHelper::curlDownload('https://www.baidu.com/', $des2, ['connect_timeout' => 5, 'timeout' => 5], false);
 
         $this->assertFalse($res1);
         $this->assertNotEmpty($res2);
