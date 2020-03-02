@@ -203,8 +203,8 @@ class OsHelperTest extends TestCase {
     public function testGetRemoteImageSize() {
         $url = 'https://www.baidu.com/img/bd_logo1.png';
 
-        $res1 = OsHelper::getRemoteImageSize($url, 'hello');
-        $res2 = OsHelper::getRemoteImageSize($url, 'curl', true);
+        $res1 = OsHelper::getRemoteImageSize($url, 'hello', false, 5, 256);
+        $res2 = OsHelper::getRemoteImageSize($url, 'curl', true, 5, 256);
         $res3 = OsHelper::getRemoteImageSize('http://test.loc/img/hello.jpg');
 
         $this->assertNotEmpty($res1);

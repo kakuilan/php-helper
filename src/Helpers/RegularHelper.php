@@ -104,7 +104,7 @@ class RegularHelper {
      * 正则模式-宽字节(双字节)字符
      * @var string
      */
-    public static $patternWidthChar = "/[^\x00-\xff]/";
+    public static $patternWidthChar = "/[^\\x{00}-\\x{ff}]/u";
 
 
     /**

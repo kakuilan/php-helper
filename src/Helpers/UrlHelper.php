@@ -25,7 +25,8 @@ class UrlHelper {
      * @return string
      */
     public static function cnUrlencode(string $url): string {
-        if (preg_match_all(RegularHelper::$patternChineseChar, $url, $matchArray)) {//匹配中文，返回数组
+        //if (preg_match_all(RegularHelper::$patternChineseChar, $url, $matchArray)) {//匹配中文，返回数组
+        if (preg_match_all(RegularHelper::$patternWidthChar, $url, $matchArray)) {//匹配双字节字符，返回数组
             foreach ($matchArray[0] as $key => $val) {
                 $url = str_replace($val, urlencode($val), $url); //将转译替换中文
             }
