@@ -236,7 +236,8 @@ class ValidateHelperTest extends TestCase {
         $tests = [
             ['', false],
             ['hello', false],
-            [123456789012345678, false],
+            [103456789012345678, false],
+            [130503670401001, true],
             [331511199911154000, false],
             ['410107199109141000', false],
             [120105201901018140, true],

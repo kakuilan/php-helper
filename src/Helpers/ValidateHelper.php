@@ -163,6 +163,7 @@ class ValidateHelper {
 
         //省市代码
         if (!in_array(substr($val, 0, 2), array_keys($city))) {
+            var_dump('0000000');
             return false;
         }
 
@@ -170,12 +171,7 @@ class ValidateHelper {
 
         //将15位身份证升级到17位
         if ($len == 15) {
-            // 如果身份证顺序码是996 997 998 999，这些是为百岁以上老人的特殊编码
-            if (array_search(substr($val, 12, 3), ['996', '997', '998', '999']) !== false) {
-                $val = substr($val, 0, 6) . '18' . substr($val, 6, 9);
-            } else {
-                $val = substr($val, 0, 6) . '19' . substr($val, 6, 9);
-            }
+            $val = substr($val, 0, 6) . '19' . substr($val, 6, 9);
         }
 
         //检查生日
