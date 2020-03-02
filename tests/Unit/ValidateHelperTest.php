@@ -406,6 +406,7 @@ class ValidateHelperTest extends TestCase {
             ["1990-01-02 03:14:59", true],
             ["1990/01/02 03:14:59", true],
             ["2990-00-00 03:14:59", true],
+            ["hell-00-00 03:14:59", false],
         ];
         foreach ($tests as $test) {
             $expected = ValidateHelper::isDate2time($test[0]);
