@@ -161,7 +161,7 @@ EOF;
         $res5 = StringHelper::randString(10, 4);
         $res6 = StringHelper::randString(10, 5);
         $res7 = StringHelper::randString(10, 0, '!@#$%^&*');
-        $res8 = StringHelper::randString(30);
+        $res8 = StringHelper::randString(60);
 
         $this->assertEquals(6, strlen($res1));
         $this->assertTrue(ValidateHelper::isLetter($res2));
@@ -170,7 +170,7 @@ EOF;
         $this->assertTrue(ValidateHelper::isLowerLetter($res5));
         $this->assertTrue(ValidateHelper::isChinese($res6));
         $this->assertEquals(10, strlen($res7));
-        $this->assertEquals(30, strlen($res8));
+        $this->assertEquals(60, strlen($res8));
     }
 
 
