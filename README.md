@@ -27,3 +27,6 @@ cd tests
 phpunit
 ```
 
+### 更新日志
+详见[[CHANGELOG]](/docs/changelog.md)
+
