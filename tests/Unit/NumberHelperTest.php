@@ -60,4 +60,27 @@ class NumberHelperTest extends TestCase {
 
 
 
+    public function testGeoDistance() {
+        $lat1 = 30.0;
+        $lng1 = 45.0;
+        $lat2 = 40.0;
+        $lng2 = 90.0;
+
+        $res1 = NumberHelper::geoDistance($lng1, $lat1, $lng2, $lat2);
+
+        $lat1 = 390.0;
+        $lng1 = 405.0;
+        $lat2 = -320.0;
+        $lng2 = 90.0;
+
+        $res2 = NumberHelper::geoDistance($lng1, $lat1, $lng2, $lat2);
+
+        $res3 = number_format($res1, 7, '.', '');
+        $res4 = number_format($res2, 7, '.', '');
+
+        $this->assertEquals('4199598.4916152', $res3);
+        $this->assertEquals($res3, $res4);
+    }
+
+
 }

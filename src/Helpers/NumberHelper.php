@@ -77,15 +77,41 @@ class NumberHelper {
         $count = 0;
         $total = 0;
         foreach ($vals as $val) {
-            if(is_numeric($val)) {
+            if (is_numeric($val)) {
                 $total += floatval($val);
                 $count++;
             }
         }
 
-        if($count>0) {
+        if ($count > 0) {
             $res = $total / $count;
         }
+
+        return $res;
+    }
+
+
+    /**
+     * 获取地理距离/米.
+     * 参数分别为两点的经度和纬度.lat:-90~90,lng:-180~180.
+     * @param float $lng1 起点经度
+     * @param float $lat1 起点纬度
+     * @param float $lng2 终点经度
+     * @param float $lat2 终点纬度
+     * @return float
+     */
+    public static function geoDistance(float $lng1 = 0, float $lat1 = 0, float $lng2 = 0, float $lat2 = 0): float {
+        $earthRadius = 6371000.0;
+        $lat1        = ($lat1 * pi()) / 180;
+        $lng1        = ($lng1 * pi()) / 180;
+        $lat2        = ($lat2 * pi()) / 180;
+        $lng2        = ($lng2 * pi()) / 180;
+
+        $calcLongitude = $lng2 - $lng1;
+        $calcLatitude  = $lat2 - $lat1;
+        $stepOne       = pow(sin($calcLatitude / 2), 2) + cos($lat1) * cos($lat2) * pow(sin($calcLongitude / 2), 2);
+        $stepTwo       = 2 * asin(min(1, sqrt($stepOne)));
+        $res           = $earthRadius * $stepTwo;
 
         return $res;
     }
