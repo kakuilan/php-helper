@@ -992,5 +992,53 @@ class StringHelper {
         return false;
     }
 
-    
+
+    /**
+     * 移除before之前的字符串
+     * @param string $str
+     * @param string $before
+     * @param bool $include 是否移除包括before本身
+     * @return string
+     */
+    public static function removeBefore(string $str, string $before, bool $include = false): string {
+        if ($str == '' || $before == '') {
+            return $str;
+        }
+
+        $i = mb_strpos($str, $before);
+        if ($i !== false) {
+            if ($include) {
+                $i += mb_strlen($before);
+            }
+            $str = mb_substr($str, $i);
+        }
+
+        return $str;
+    }
+
+
+    /**
+     * 移除after之后的字符串
+     * @param string $str
+     * @param string $after
+     * @param bool $include 是否移除包括after本身
+     * @return string
+     */
+    public static function removeAfter(string $str, string $after, bool $include = false) {
+        if ($str == '' || $after == '') {
+            return $str;
+        }
+
+        $i = mb_strpos($str, $after);
+        if ($i !== false) {
+            if (!$include) {
+                $i += mb_strlen($after);
+            }
+            $str = mb_substr($str, 0, $i);
+        }
+
+        return $str;
+    }
+
+
 }
