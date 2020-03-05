@@ -449,4 +449,64 @@ EOF;
     }
 
 
+    public function testToCamelCase() {
+        $tests = [
+            ['', ''],
+            ['some_words', 'SomeWords'],
+            ['http_server', 'HttpServer'],
+            ['no_https', 'NoHttps'],
+            ['_complex__case_', '_Complex_Case_'],
+            ['some words', 'SomeWords'],
+        ];
+        foreach ($tests as $test) {
+            $expected = StringHelper::toCamelCase($test[0]);
+            $this->assertEquals($test[1], $expected);
+        }
+    }
+
+
+    public function testToSnakeCase() {
+        $tests = [
+            ['', ''],
+            ["FirstName", "first_name"],
+            ["HTTPServer", "http_server"],
+            ["NoHTTPS", "no_https"],
+            ["GO_PATH", "go_path"],
+            ["GO PATH", "go_path"],
+            ["GO-PATH", "go_path"],
+            ["HTTP2XX", "http_2xx"],
+            ["http2xx", "http_2xx"],
+            ["HTTP20xOK", "http_20x_ok"],
+        ];
+        foreach ($tests as $test) {
+            $expected = StringHelper::toSnakeCase($test[0]);
+            $this->assertEquals($test[1], $expected);
+        }
+    }
+
+
+    public function testToKebabCase() {
+        $tests = [
+            ['', ''],
+            ["你helloWorld", "你hello-world"],
+            ["A", "a"],
+            ["HellOW好orld", "hell-o-w好orld"],
+            ["-FirstName", "-first-name"],
+            ["FirstName", "first-name"],
+            ["HTTPServer", "http-server"],
+            ["NoHTTPS", "no-https"],
+            ["GO_PATH", "go-path"],
+            ["GO PATH", "go-path"],
+            ["GO-PATH", "go-path"],
+            ["HTTP2XX", "http-2xx"],
+            ["http2xx", "http-2xx"],
+            ["HTTP20xOK", "http-20x-ok"],
+        ];
+        foreach ($tests as $test) {
+            $expected = StringHelper::toKebabCase($test[0]);
+            $this->assertEquals($test[1], $expected);
+        }
+    }
+
+
 }

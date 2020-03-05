@@ -800,4 +800,172 @@ class StringHelper {
     }
 
 
+    /**
+     * 是否字符转换连接符
+     * @param string $str
+     * @return bool
+     */
+    private static function isCaseConnector(string $str): bool {
+        return mb_strlen($str) == 1 && ($str == '-' || $str == '_' || ValidateHelper::isSpace($str));
+    }
+
+
+    /**
+     * 驼峰转为小写
+     * @param string $str
+     * @param string $connector 连接符
+     * @return string
+     */
+    private static function camelCaseToLowerCase(string $str, string $connector): string {
+        if ($str == '') {
+            return '';
+        }
+
+        $res  = [];
+        $prev = $r0 = $r1 = '';
+        $r0   = $connector;
+
+        while (mb_strlen($str) > 0) {
+            $prev = $r0;
+            $r0   = mb_substr($str, 0, 1);
+            $str  = mb_substr($str, 1);
+
+            switch ($r0) {
+                case ValidateHelper::isUpperLetter($r0):
+                    if ($prev != $connector && !is_numeric($prev)) {
+                        array_push($res, $connector);
+                    }
+
+                    array_push($res, strtolower($r0));
+
+                    if (strlen($str) == 0) {
+                        break;
+                    }
+
+                    $r0  = mb_substr($str, 0, 1);
+                    $str = mb_substr($str, 1);
+
+                    if (!ValidateHelper::isUpperLetter($r0)) {
+                        array_push($res, $r0);
+                        break;
+                    }
+
+                    while (mb_strlen($str) > 0) {
+                        $r1  = $r0;
+                        $r0  = mb_substr($str, 0, 1);
+                        $str = mb_substr($str, 1);
+
+                        if (!ValidateHelper::isUpperLetter($r0)) {
+                            if (self::isCaseConnector($r0)) {
+                                $r0 = $connector;
+                                array_push($res, strtolower($r1));
+                            } elseif (is_numeric($r0)) {
+                                array_push($res, strtolower($r1));
+                                array_push($res, $connector);
+                                array_push($res, $r0);
+                            } else {
+                                array_push($res, $connector);
+                                array_push($res, strtolower($r1));
+                                array_push($res, $r0);
+                            }
+
+                            break;
+                        }
+
+                        array_push($res, strtolower($r1));
+                    }
+
+                    if (strlen($str) == 0 || $r0 == $connector) {
+                        array_push($res, strtolower($r0));
+                    }
+
+                    break;
+                case is_numeric($r0):
+                    if ($prev != $connector && !is_numeric($prev)) {
+                        array_push($res, $connector);
+                    }
+                    array_push($res, $r0);
+
+                    break;
+                default:
+                    if (self::isCaseConnector($r0)) {
+                        $r0 = $connector;
+                    }
+                    array_push($res, $r0);
+                    break;
+            }
+        }
+
+        return implode('', $res);
+    }
+
+
+    /**
+     * 转为驼峰写法
+     * @param string $str
+     * @return string
+     */
+    public static function toCamelCase(string $str): string {
+        if ($str == '') {
+            return '';
+        }
+
+        $res = [];
+        $r0  = $r1 = '';
+
+        while (strlen($str) > 0) {
+            $r0  = mb_substr($str, 0, 1);
+            $str = mb_substr($str, 1);
+
+            if (!self::isCaseConnector($r0)) {
+                $r0 = strtoupper($r0);
+                break;
+            }
+
+            array_push($res, $r0);
+        }
+
+        while (strlen($str) > 0) {
+            $r1  = $r0;
+            $r0  = mb_substr($str, 0, 1);
+            $str = mb_substr($str, 1);
+
+            if (self::isCaseConnector($r0) && self::isCaseConnector($r1)) {
+                array_push($res, $r1);
+                continue;
+            }
+
+            if (self::isCaseConnector($r1)) {
+                $r0 = strtoupper($r0);
+            } else {
+                $r0 = strtolower($r0);
+                array_push($res, $r1);
+            }
+        }
+        array_push($res, $r0);
+
+        return implode('', $res);
+    }
+
+
+    /**
+     * 转为蛇形写法
+     * @param string $str
+     * @return string
+     */
+    public static function toSnakeCase(string $str): string {
+        return self::camelCaseToLowerCase($str, '_');
+    }
+
+
+    /**
+     * 转为串形写法
+     * @param string $str
+     * @return string
+     */
+    public static function toKebabCase(string $str): string {
+        return self::camelCaseToLowerCase($str, '-');
+    }
+
+
 }
