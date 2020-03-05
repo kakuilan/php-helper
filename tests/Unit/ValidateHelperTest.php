@@ -621,4 +621,32 @@ class ValidateHelperTest extends TestCase {
     }
 
 
+    public function testIsSpace() {
+        $tests = [
+            ['', false],
+            ["    　", true],
+            ["    　\r\n\t", false],
+            ["hello     world", false],
+        ];
+        foreach ($tests as $test) {
+            $expected = ValidateHelper::isSpace($test[0]);
+            $this->assertEquals($test[1], $expected);
+        }
+    }
+
+
+    public function testIsWhitespace() {
+        $tests = [
+            ['', false],
+            ["    　", true],
+            ["    　\r\n\t", true],
+            ["hello     world", false],
+        ];
+        foreach ($tests as $test) {
+            $expected = ValidateHelper::isWhitespace($test[0]);
+            $this->assertEquals($test[1], $expected);
+        }
+    }
+
+
 }

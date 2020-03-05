@@ -302,6 +302,26 @@ class ValidateHelper {
 
 
     /**
+     * 字符串是否全空格
+     * @param string $str
+     * @return bool
+     */
+    public static function isSpace(string $str): bool {
+        return $str != '' && preg_match(RegularHelper::$patternSpace, $str, $macht);
+    }
+
+
+    /**
+     * 字符串是否全空白符
+     * @param string $str
+     * @return bool
+     */
+    public static function isWhitespace(string $str): bool {
+        return $str != '' && preg_match(RegularHelper::$patternWhitespace, $str, $macht);
+    }
+
+
+    /**
      * 是否词语(不以下划线开头的中文、英文、数字、下划线)
      * @param string $val
      * @return bool
@@ -510,5 +530,7 @@ class ValidateHelper {
 
         return false;
     }
+
+
 
 }

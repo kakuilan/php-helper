@@ -171,6 +171,20 @@ class RegularHelper {
 
 
     /**
+     * 正则模式-全空格(包括半角/全角空格和TAB)
+     * @var string
+     */
+    public static $patternSpace = '/^[(\xc2\xa0)|[:blank:]]+$/u';
+
+
+    /**
+     * 正则模式-全空白符
+     * @var string
+     */
+    public static $patternWhitespace = '/^[(\xc2\xa0)|\s]+$/u';
+
+
+    /**
      * 正则模式-连续的空白符
      * @var string
      */
