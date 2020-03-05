@@ -509,4 +509,21 @@ EOF;
     }
 
 
+    public function testDstrpos() {
+        $str = 'hello world. 你好，世界！';
+        $arr = ['php', 'Hello', 'today'];
+
+        $res1 = StringHelper::dstrpos($str, $arr, false, false);
+        $this->assertTrue($res1);
+
+        $res2 = StringHelper::dstrpos($str, $arr, true, false);
+        $res3 = StringHelper::dstrpos($str, $arr, true, true);
+        $this->assertEquals('Hello', $res2);
+        $this->assertFalse($res3);
+
+        $res4 = StringHelper::dstrpos('', $arr);
+        $this->assertFalse($res4);
+    }
+
+
 }

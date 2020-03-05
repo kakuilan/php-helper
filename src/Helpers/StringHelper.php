@@ -968,4 +968,29 @@ class StringHelper {
     }
 
 
+    /**
+     * 检查字符串 $str 是否包含数组$arr的元素之一
+     * @param string $str
+     * @param array $arr 字符串数组
+     * @param bool $returnValue 是否返回匹配的值
+     * @param bool $case 是否检查大小写
+     * @return bool|mixed
+     */
+    public static function dstrpos(string $str, array $arr, bool $returnValue = false, bool $case = false) {
+        if (empty($str) || empty($arr)) {
+            return false;
+        }
+
+        foreach ($arr as $v) {
+            $v = strval($v);
+            if ($case ? strpos($str, $v) !== false : stripos($str, $v) !== false) {
+                $return = $returnValue ? $v : true;
+                return $return;
+            }
+        }
+
+        return false;
+    }
+
+    
 }
