@@ -169,4 +169,11 @@ class RegularHelper {
      */
     public static $patternDoubleSlash = '/[\/\\\\]{2,}/';
 
+
+    /**
+     * 正则模式-连续的空白符
+     * @var string
+     */
+    public static $patternWhitespaceDuplicate = '/[(\xc2\xa0)|\s]{2,}/u';
+
 }

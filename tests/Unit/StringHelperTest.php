@@ -291,14 +291,17 @@ EOF;
     public function testRemoveSpace() {
         $str  = <<<EOF
         hello World&nbsp;   你
+        how 　are you?　\r\n\t
         好，世 界   
         ！呵　呵
 EOF;
         $res1 = StringHelper::removeSpace('');
-        $res2 = StringHelper::removeSpace($str);
+        $res2 = StringHelper::removeSpace($str, true);
+        $res3 = StringHelper::removeSpace($str, false);
 
         $this->assertEmpty($res1);
-        $this->assertEquals('helloWorld你好，世界！呵呵', $res2);
+        $this->assertEquals('helloWorld你howareyou?好，世界！呵呵', $res2);
+        $this->assertEquals('hello World&nbsp; 你 how are you? 好，世 界 ！呵　呵', $res3);
     }
 
 
