@@ -417,18 +417,33 @@ class StringHelper {
 
 
     /**
-     * 移除字符串中的空格
+     * 去除字符串前后空格
      * @param string $str
      * @return string
      */
-    public static function removeSpace(string $str): string {
+    public static function trim(string $str): string {
+        return trim($str, " \t\n\r\v\f\0\x0B　");
+    }
+
+
+    /**
+     * 移除字符串中的空格
+     * @param string $str
+     * @param bool $all 为true时移除全部空白,为false时只替换连续的空白字符为一个空格
+     * @return string
+     */
+    public static function removeSpace(string $str, bool $all = true): string {
         if ($str == '') {
             return '';
         }
 
-        $str = str_replace([chr(13), chr(10), "\n", "\r", "\t", ' ', '　', '&nbsp;'], '', $str);
-        $str = preg_replace("/\s/i", '', $str);
-        return trim($str, " 　\t\n\r\0\x0B");
+        // 先将2个以上的连续空白符转为空格
+        $str = preg_replace(RegularHelper::$patternWhitespaceDuplicate, ' ', $str);
+        if ($all) {
+            $str = str_replace([chr(13), chr(10), ' ', '　', '&nbsp;'], '', $str);
+        }
+
+        return self::trim($str);
     }
 
 
