@@ -377,7 +377,6 @@ class ValidateHelper {
      * @return bool
      */
     public static function startsWith(string $val, string $sub, bool $ignoreCase = false): bool {
-        //return $val != '' && substr($val, 0, strlen($sub)) === $sub;
         if ($val != '' && $sub != '') {
             $pos = $ignoreCase ? mb_stripos($val, $sub) : mb_strpos($val, $sub);
             return $pos === 0;
@@ -394,7 +393,6 @@ class ValidateHelper {
      * @return bool
      */
     public static function endsWith(string $val, string $sub, bool $ignoreCase = false): bool {
-        //return $val != '' && (substr($val, -strlen($sub)) === $sub);
         if ($val != '' && $sub != '') {
             $pos = $ignoreCase ? mb_strripos($val, $sub) : mb_strrpos($val, $sub);
             return (mb_strlen($val) - mb_strlen($sub)) === $pos;

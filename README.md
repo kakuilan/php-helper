@@ -28,5 +28,5 @@ phpunit
 ```
 
 ### 更新日志
-详见[[CHANGELOG]](/docs/changelog.md)
+详见[[Changelog]](/docs/changelog.md)
 
