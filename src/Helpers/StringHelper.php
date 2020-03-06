@@ -998,14 +998,15 @@ class StringHelper {
      * @param string $str
      * @param string $before
      * @param bool $include 是否移除包括before本身
+     * @param bool $ignoreCase 是否忽略大小写
      * @return string
      */
-    public static function removeBefore(string $str, string $before, bool $include = false): string {
+    public static function removeBefore(string $str, string $before, bool $include = false, bool $ignoreCase = false): string {
         if ($str == '' || $before == '') {
             return $str;
         }
 
-        $i = mb_strpos($str, $before);
+        $i = $ignoreCase ? mb_stripos($str, $before) : mb_strpos($str, $before);
         if ($i !== false) {
             if ($include) {
                 $i += mb_strlen($before);
@@ -1022,14 +1023,15 @@ class StringHelper {
      * @param string $str
      * @param string $after
      * @param bool $include 是否移除包括after本身
+     * @param bool $ignoreCase 是否忽略大小写
      * @return string
      */
-    public static function removeAfter(string $str, string $after, bool $include = false) {
+    public static function removeAfter(string $str, string $after, bool $include = false, bool $ignoreCase = false): string {
         if ($str == '' || $after == '') {
             return $str;
         }
 
-        $i = mb_strpos($str, $after);
+        $i = $ignoreCase ? mb_stripos($str, $after) : mb_strpos($str, $after);
         if ($i !== false) {
             if (!$include) {
                 $i += mb_strlen($after);

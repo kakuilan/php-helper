@@ -526,4 +526,35 @@ EOF;
     }
 
 
+    public function testRemoveBefore() {
+        $tests = [
+            ['', '', false, false, ''],
+            ['hello world learn php', 'world', false, false, 'world learn php'],
+            ['hello world learn php', 'world', true, false, ' learn php'],
+            ['hello world learn php', 'World', false, false, 'hello world learn php'],
+            ['hello world learn php', 'World', false, true, 'world learn php'],
+        ];
+        foreach ($tests as $test) {
+            $expected = StringHelper::removeBefore($test[0], $test[1], $test[2], $test[3]);
+            $this->assertEquals($test[4], $expected);
+        }
+    }
+
+
+    public function testRemoveAfter() {
+        $tests = [
+            ['', '', false, false, ''],
+            ['hello world learn php', 'learn', false, false, 'hello world learn'],
+            ['hello world learn php', 'learn', true, false, 'hello world '],
+            ['hello world learn php', 'Learn', false, false, 'hello world learn php'],
+            ['hello world learn php', 'Learn', false, true, 'hello world learn'],
+        ];
+        foreach ($tests as $test) {
+            $expected = StringHelper::removeAfter($test[0], $test[1], $test[2], $test[3]);
+            $this->assertEquals($test[4], $expected);
+        }
+    }
+
+
+
 }
