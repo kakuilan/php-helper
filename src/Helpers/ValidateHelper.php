@@ -373,10 +373,16 @@ class ValidateHelper {
      * 字符串$val是否以$sub为开头
      * @param string $val
      * @param string $sub
+     * @param bool $ignoreCase 是否忽略大小写
      * @return bool
      */
-    public static function startsWith(string $val, string $sub): bool {
-        return $val != '' && substr($val, 0, strlen($sub)) === $sub;
+    public static function startsWith(string $val, string $sub, bool $ignoreCase = false): bool {
+        //return $val != '' && substr($val, 0, strlen($sub)) === $sub;
+        if ($val != '' && $sub != '') {
+            $pos = $ignoreCase ? mb_stripos($val, $sub) : mb_strpos($val, $sub);
+            return $pos === 0;
+        }
+        return false;
     }
 
 
@@ -384,10 +390,17 @@ class ValidateHelper {
      * 字符串$val是否以$sub为结尾
      * @param string $val
      * @param string $sub
+     * @param bool $ignoreCase 是否忽略大小写
      * @return bool
      */
-    public static function endsWith(string $val, string $sub): bool {
-        return $val != '' && (substr($val, -strlen($sub)) === $sub);
+    public static function endsWith(string $val, string $sub, bool $ignoreCase = false): bool {
+        //return $val != '' && (substr($val, -strlen($sub)) === $sub);
+        if ($val != '' && $sub != '') {
+            $pos = $ignoreCase ? mb_strripos($val, $sub) : mb_strrpos($val, $sub);
+            return (mb_strlen($val) - mb_strlen($sub)) === $pos;
+        }
+
+        return false;
     }
 
 
@@ -530,7 +543,6 @@ class ValidateHelper {
 
         return false;
     }
-
 
 
 }

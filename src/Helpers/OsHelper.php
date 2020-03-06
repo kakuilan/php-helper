@@ -503,7 +503,6 @@ class OsHelper {
         curl_exec($ch);
 
         if (curl_errno($ch)) {
-            //var_dump('err:', curl_error($ch));
             return $res;
         }
 
