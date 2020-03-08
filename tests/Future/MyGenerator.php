@@ -61,9 +61,9 @@ class MyGenerator {
      * @param int $b
      * @param mixed $callback
      */
-    public static function asyncSum(int $a, int $b, $callback=null) {
+    public static function asyncSum(int $a, int $b, $callback = null) {
         $total = $a + $b;
-        if(!empty($callback) && is_callable($callback)) {
+        if (!empty($callback) && is_callable($callback)) {
             $total = $callback($total);
         }
 
@@ -100,8 +100,18 @@ class MyGenerator {
      * @param $c
      * @param $d
      */
-    public static function asyncSumError($a, $b, $c, $d):void {
+    public static function asyncSumError($a, $b, $c, $d): void {
         return;
+    }
+
+
+    /**
+     * @return Generator
+     */
+    public static function genZero2Ten() {
+        for ($i = 1; $i <= 10; $i++) {
+            yield $i;
+        }
     }
 
 

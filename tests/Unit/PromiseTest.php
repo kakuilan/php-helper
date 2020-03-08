@@ -175,28 +175,27 @@ class PromiseTest extends TestCase {
         //        $res = $promise->getResult();
         //        $this->assertEquals($res, 99);
 
-        $fn1 = function (string $url) {
+        $fn      = function (string $url) {
             $res = yield OsHelper::curlDownload($url, '', [], true);
             if (empty($res)) {
                 throw new Exception('download fail.');
             }
             return $res;
         };
-        $fn2 = function (string $url) {
-            $res = yield OsHelper::curlDownload($url, '', [], true);
-            if (empty($res)) {
-                throw new RuntimeException('download fail.');
-            }
-            return $res;
-        };
-
-        $promise = Concurrent\co($fn1, 'http://test.loc/hello');
+        $promise = Concurrent\co($fn, 'http://test.loc/hello');
         $res     = $promise->getResult();
         $this->assertNull($res);
 
-        $promise = Concurrent\co($fn2, 'http://test.loc/hello');
+        $promise = Concurrent\co(MyGenerator::genZero2Ten());
         $res     = $promise->getResult();
-        $this->assertNull($res);
+        $this->assertEquals(10, $res);
+
+        $promise = Concurrent\co(function () {
+            yield new Exception('gen throw exception');
+        });
+        $res     = $promise->getResult();
+        $this->assertTrue($res instanceof Exception);
+
     }
 
 

@@ -468,8 +468,9 @@ class OsHelper {
             return $res;
         }
 
+        $tempFile = tempnam(sys_get_temp_dir(), uniqid(date('ymd-His'), true));
         if (empty($savefile)) {
-            $savefile = tempnam(sys_get_temp_dir(), uniqid(date('ymd-His'), true));
+            $savefile = $tempFile;
         } elseif (file_exists($savefile)) {
             $res = $returnContent ? file_get_contents($savefile) : true;
             return $res;
@@ -491,8 +492,8 @@ class OsHelper {
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); // 使用自动跳转
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // 对认证证书来源的检查
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); // 从证书中检查SSL加密算法是否存在
-        curl_setopt($ch, CURLOPT_COOKIEJAR, "cookie");
-        curl_setopt($ch, CURLOPT_COOKIEFILE, "cookie");
+        curl_setopt($ch, CURLOPT_COOKIEJAR, $tempFile . "-cookie");
+        curl_setopt($ch, CURLOPT_COOKIEFILE, $tempFile . "-cookie");
         curl_setopt($ch, CURLOPT_FILE, $fp);
 
         //Timeout if the file doesn't download after N seconds.
