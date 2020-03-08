@@ -1,0 +1,29 @@
+<?php
+/**
+ * Copyright (c) 2020 kakuilan@163.com All rights reserved
+ * User: kakuilan
+ * Date: 2020/3/8
+ * Time: 15:59
+ * Desc:
+ */
+
+namespace Kph\Tests\Future;
+
+
+/**
+ * Class SuccessFuture
+ * @package Kph\Tests\Future
+ */
+class SuccessFuture {
+
+
+    /**
+     * @param callable $resolve
+     * @param callable $reject
+     */
+    public function then(callable $resolve, callable $reject) {
+        var_dump('=====111111');
+        $resolve('OK');
+    }
+
+}

@@ -22,7 +22,11 @@ use Kph\Helpers\OsHelper;
 use Kph\Tests\Objects\BaseCls;
 use Kph\Tests\Objects\BaseServ;
 use Kph\Tests\Objects\MathCls;
+use Kph\Tests\Future\ExceptionFuture;
+use Kph\Tests\Future\FailFuture;
 use Kph\Tests\Future\MyGenerator;
+use Kph\Tests\Future\SuccessFuture;
+use Kph\Tests\Future\UncatchableFuture;
 use RuntimeException;
 use Throwable;
 
@@ -340,7 +344,6 @@ class PromiseTest extends TestCase {
         $promise1 = Concurrent\toPromise(MyGenerator::randName());
         $promise2 = Concurrent\toPromise(MyGenerator::randAddr());
         $promise3 = Concurrent\toPromise(MyGenerator::randNum());
-
         $promise4 = Concurrent\race([$promise1, $promise2, $promise3])->then(function ($ret) {
             return $ret;
         });
@@ -357,9 +360,10 @@ class PromiseTest extends TestCase {
         $this->assertTrue($promise->isRejected());
 
         $fn      = function () {
-            throw new Exception('error');
+            $res = OsHelper::curlDownload('https://www.baidu.com/', '', ['connect_timeout' => 5, 'timeout' => 5], true);
+            return $res;
         };
-        $promise = Concurrent\any([1, 2, 3, $fn]);
+        $promise = Concurrent\any([$fn, 1, 2, 3,]);
         $res     = $promise->getResult();
         $this->assertNotEmpty($res);
 
@@ -683,15 +687,44 @@ class PromiseTest extends TestCase {
             $future->then(function () use ($msg) {
                 throw new UncatchableException($msg);
             });
-        } catch (Throwable $e) {}
+        } catch (Throwable $e) {
+        }
 
         $future = new Future(function () {
             return 2;
         });
         $future->then(3);
 
+        $future = new Future(function () {
+            throw new Exception('error');
+        });
+        $future->then(3);
+
         $future = new Future();
         $future->resolve($future);
+        $this->assertTrue($future->isRejected());
+
+        // resolve-succe
+        $future = new Future();
+        $future->resolve(SuccessFuture::class);
+        $this->assertTrue($future->isFulfilled());
+
+        // resolve-fail
+        $future = new Future();
+        $future->resolve(FailFuture::class);
+        $this->assertTrue($future->isRejected());
+
+        // resolve-uncatch
+        try {
+            $future = new Future();
+            $future->resolve(UncatchableFuture::class);
+        } catch (UncatchableException $e) {
+            $this->assertNotEmpty($e->getMessage());
+        }
+
+        // resolve-except
+        $future = new Future();
+        $future->resolve(ExceptionFuture::class);
         $this->assertTrue($future->isRejected());
 
 

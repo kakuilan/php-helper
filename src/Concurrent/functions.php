@@ -373,7 +373,7 @@ function race(array $array): Future {
 
 
 /**
- * race的改进版
+ * race的改进版,返回数组中最先返回的promise数据.
  * 对于 race 函数,如果输入的数组为空,返回的 promise 对象将永远保持为待定（pending）状态.
  * 而对于 any 函数,如果输入的数组为空,返回的 promise 对象将被设置为失败状态,失败原因是一个 RangeException 对象.
  * @param array $array

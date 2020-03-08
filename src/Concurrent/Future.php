@@ -153,6 +153,7 @@ class Future extends BaseObject {
      * @throws Throwable
      */
     public function resolve($value) {
+        var_dump('resolve----000000000', $value);
         if ($value === $this) {
             $this->reject(new TypeError('Self resolution'));
             return;
@@ -161,40 +162,49 @@ class Future extends BaseObject {
             return;
         }
 
-        if ((($value !== null) && is_object($value)) || (is_string($value) && class_exists($value, false))) {
-            if (method_exists($value, 'then')) {
-                $then   = [$value, 'then'];
-                $notrun = true;
-                $self   = $this;
-                try {
-                    call_user_func($then, function ($y) use (&$notrun, $self) {
-                        if ($notrun) {
-                            $notrun = false;
-                            $self->resolve($y);
-                        }
-                    }, function ($r) use (&$notrun, $self) {
-                        if ($notrun) {
-                            $notrun = false;
-                            $self->reject($r);
-                        }
-                    });
-                } catch (UncatchableException $e) {
-                    $previou = $e->getPrevious();
-                    throw (is_object($previou) ? $previou : $e);
-                } catch (Throwable $e) {
+        $then = null;
+        if (is_callable($value)) {
+            $then = $value;
+        } elseif (is_object($value)  && method_exists($value, 'then')) {
+            $then = [$value, 'then'];
+        }elseif(is_string($value) && class_exists($value) && method_exists($value, 'then')){
+            $obj = new $value();
+            $then = [$obj, 'then'];
+        }
+
+        if(!is_null($then)) {
+
+            $notrun = true;
+            $self   = $this;
+            try {
+                call_user_func($then, function ($y) use (&$notrun, $self) {
                     if ($notrun) {
                         $notrun = false;
-                        $this->reject($e);
+                        $self->resolve($y);
                     }
+                }, function ($r) use (&$notrun, $self) {
+                    if ($notrun) {
+                        $notrun = false;
+                        $self->reject($r);
+                    }
+                });
+            } catch (UncatchableException $e) {
+                $previou = $e->getPrevious();
+                throw (is_object($previou) ? $previou : $e);
+            } catch (Throwable $e) {
+                if ($notrun) {
+                    $notrun = false;
+                    $this->reject($e);
                 }
-                return;
             }
+            return;
         }
 
         if ($this->state === self::PENDING) {
             $this->state = self::FULFILLED;
             $this->value = $value;
             while (count($this->subscribers) > 0) {
+                var_dump('resolve----1111111');
                 $subscriber = array_shift($this->subscribers);
                 $this->privateResolve($subscriber['onfulfill'], $subscriber['next'], $value);
             }
@@ -243,7 +253,6 @@ class Future extends BaseObject {
         } elseif ($this->state === self::REJECTED) {
             $this->privateReject($onreject, $next, $this->reason);
         } else {
-            var_dump('33333333');
             array_push($this->subscribers, ['onfulfill' => $onfulfill, 'onreject' => $onreject, 'next' => $next]);
         }
 
