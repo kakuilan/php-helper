@@ -153,7 +153,6 @@ class Future extends BaseObject {
      * @throws Throwable
      */
     public function resolve($value) {
-        var_dump('resolve----000000000', $value);
         if ($value === $this) {
             $this->reject(new TypeError('Self resolution'));
             return;
@@ -162,6 +161,7 @@ class Future extends BaseObject {
             return;
         }
 
+        var_dump('resolve----000000000', $value, $this->state);
         $then = null;
         if (is_callable($value)) {
             $then = $value;
@@ -173,7 +173,6 @@ class Future extends BaseObject {
         }
 
         if(!is_null($then)) {
-
             $notrun = true;
             $self   = $this;
             try {

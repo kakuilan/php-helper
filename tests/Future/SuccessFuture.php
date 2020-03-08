@@ -22,7 +22,6 @@ class SuccessFuture {
      * @param callable $reject
      */
     public function then(callable $resolve, callable $reject) {
-        var_dump('=====111111');
         $resolve('OK');
     }
 

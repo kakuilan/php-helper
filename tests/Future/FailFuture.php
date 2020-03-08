@@ -24,7 +24,6 @@ class FailFuture {
      * @param callable $reject
      */
     public function then(callable $resolve, callable $reject) {
-        var_dump('=====22222222');
         $reject('fail');
     }
 

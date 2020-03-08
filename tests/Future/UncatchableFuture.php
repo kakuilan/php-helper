@@ -25,7 +25,6 @@ class UncatchableFuture {
      * @throws UncatchableException
      */
     public function then(callable $resolve, callable $reject) {
-        var_dump('=====333333333');
         throw new UncatchableException('Un callable');
     }
 

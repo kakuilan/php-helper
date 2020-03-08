@@ -25,7 +25,6 @@ class ExceptionFuture {
      * @throws Exception
      */
     public function then(callable $resolve, callable $reject) {
-        var_dump('=====4444444');
         throw new Exception('has error');
     }
 

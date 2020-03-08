@@ -723,10 +723,13 @@ class PromiseTest extends TestCase {
         }
 
         // resolve-except
+        $obj    = new ExceptionFuture();
         $future = new Future();
-        $future->resolve(ExceptionFuture::class);
+        $future->resolve($obj);
         $this->assertTrue($future->isRejected());
 
+        $future = new Future();
+        $future->then(1, 2)->resolve('https://www.google.com/');
 
     }
 
