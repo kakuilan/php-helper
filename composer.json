@@ -7,7 +7,7 @@
     "php utils"
   ],
   "homepage": "https://github.com/kakuilan/php-helper",
-  "license": "Apache License",
+  "license": "Apache-2.0",
   "authors": [
     {
       "name": "kakuilan",
