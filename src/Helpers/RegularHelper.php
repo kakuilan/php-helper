@@ -185,6 +185,13 @@ class RegularHelper {
 
 
     /**
+     * 正则模式-多字节字符
+     * @var string
+     */
+    public static $patternMultibyte = '/[^\x00-\x7F]/u';
+
+
+    /**
      * 正则模式-连续的空白符
      * @var string
      */

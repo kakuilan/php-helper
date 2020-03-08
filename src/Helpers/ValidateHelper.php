@@ -307,7 +307,7 @@ class ValidateHelper {
      * @return bool
      */
     public static function isSpace(string $str): bool {
-        return $str != '' && preg_match(RegularHelper::$patternSpace, $str, $macht);
+        return $str != '' && preg_match(RegularHelper::$patternSpace, $str);
     }
 
 
@@ -317,7 +317,17 @@ class ValidateHelper {
      * @return bool
      */
     public static function isWhitespace(string $str): bool {
-        return $str != '' && preg_match(RegularHelper::$patternWhitespace, $str, $macht);
+        return $str != '' && preg_match(RegularHelper::$patternWhitespace, $str);
+    }
+
+
+    /**
+     * 字符串是否含有多字节字符
+     * @param string $str
+     * @return bool
+     */
+    public static function isMultibyte(string $str):bool {
+        return $str != '' && preg_match(RegularHelper::$patternMultibyte, $str);
     }
 
 

@@ -654,4 +654,26 @@ class ValidateHelperTest extends TestCase {
     }
 
 
+    public function testIsMultibyte() {
+        $tests = [
+            ['', false],
+            [" ", false],
+            [" \r\n\t", false],
+            ['abc', false],
+            ['123', false],
+            ['<>@;.-=', false],
+            ["hello ,world", false],
+            ['ひらがな・カタカナ、．漢字', true],
+            ['你好，世界 foobar', true],
+            ['test@＠example.com', true],
+            ['1234abcDEｘｙｚ', true],
+            ['안녕하세요', true],
+        ];
+        foreach ($tests as $test) {
+            $expected = ValidateHelper::isMultibyte($test[0]);
+            $this->assertEquals($test[1], $expected);
+        }
+    }
+
+
 }

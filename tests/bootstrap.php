@@ -14,3 +14,5 @@ error_reporting(E_ALL);
 ini_set('display_errors', 0);
 
 $loader = require __DIR__ . '/../vendor/autoload.php';
+$logFile = TESTDIR . 'tmp/phperr_' . date('Ymd') . '.log';
+register_shutdown_function('\Kph\Helpers\DebugHelper::errorLogHandler', $logFile);

@@ -18,6 +18,7 @@
   "require": {
     "php": "^7.2",
     "ext-curl": "*",
+    "ext-dom": "*",
     "ext-json": "*",
     "ext-mbstring": "*"
   },
