@@ -78,19 +78,19 @@ class Future extends BaseObject {
     /**
      * Future constructor.
      * @param mixed|null $computation
-     * @throws Exception
+     * @throws Throwable
      */
     public function __construct($computation = null) {
         if (is_callable($computation)) {
             try {
                 $this->resolve(call_user_func($computation));
             } catch (UncatchableException $e) {
-                throw $e->getPrevious();
+                $previou = $e->getPrevious();
+                throw (is_object($previou) ? $previou : $e);
             } catch (Throwable $e) {
                 $this->reject($e);
             }
         }
-
     }
 
 
@@ -99,14 +99,15 @@ class Future extends BaseObject {
      * @param callable $callback
      * @param Future $next
      * @param mixed $params
-     * @throws Exception
+     * @throws Throwable
      */
     private function privateCall(callable $callback, Future $next, $params) {
         try {
             $r = call_user_func($callback, $params);
             $next->resolve($r);
         } catch (UncatchableException $e) {
-            throw $e->getPrevious();
+            $previou = $e->getPrevious();
+            throw (is_object($previou) ? $previou : $e);
         } catch (Throwable $e) {
             $next->reject($e);
         }
@@ -118,7 +119,7 @@ class Future extends BaseObject {
      * @param callable $onfulfill 成功事件
      * @param Future $next
      * @param mixed $params
-     * @throws Exception
+     * @throws Throwable
      */
     private function privateResolve($onfulfill, Future $next, $params) {
         if (is_callable($onfulfill)) {
@@ -134,7 +135,7 @@ class Future extends BaseObject {
      * @param callable $onreject 失败事件
      * @param Future $next
      * @param mixed $params
-     * @throws Exception
+     * @throws Throwable
      */
     private function privateReject($onreject, Future $next, $params) {
         if (is_callable($onreject)) {
@@ -149,7 +150,7 @@ class Future extends BaseObject {
      * 解决
      * 该方法可以将状态为待定（pending）的 promise 对象变为成功（fulfilled）状态
      * @param mixed $value
-     * @throws Exception
+     * @throws Throwable
      */
     public function resolve($value) {
         if ($value === $this) {
@@ -178,7 +179,8 @@ class Future extends BaseObject {
                         }
                     });
                 } catch (UncatchableException $e) {
-                    throw $e->getPrevious();
+                    $previou = $e->getPrevious();
+                    throw (is_object($previou) ? $previou : $e);
                 } catch (Throwable $e) {
                     if ($notrun) {
                         $notrun = false;
@@ -204,7 +206,7 @@ class Future extends BaseObject {
      * 拒绝
      * 该方法可以将状态为待定（pending）的 promise 对象变为失败（rejected）状态
      * @param $reason
-     * @throws Exception
+     * @throws Throwable
      */
     public function reject($reason) {
         if ($this->state === self::PENDING) {
@@ -224,7 +226,7 @@ class Future extends BaseObject {
      * @param mixed $onfulfill 当成功时的执行体
      * @param mixed $onreject 当失败时的执行体
      * @return Future
-     * @throws Exception
+     * @throws Throwable
      */
     public function then($onfulfill, $onreject = null): Future {
         if (!is_callable($onfulfill)) {
@@ -241,6 +243,7 @@ class Future extends BaseObject {
         } elseif ($this->state === self::REJECTED) {
             $this->privateReject($onreject, $next, $this->reason);
         } else {
+            var_dump('33333333');
             array_push($this->subscribers, ['onfulfill' => $onfulfill, 'onreject' => $onreject, 'next' => $next]);
         }
 
@@ -253,7 +256,7 @@ class Future extends BaseObject {
      * 类似then,但无返回值,不支持链式调用;用于单元测试.
      * @param $onfulfill
      * @param null $onreject
-     * @throws Exception
+     * @throws Throwable
      */
     public function done($onfulfill, $onreject = null): void {
         $this->then($onfulfill, $onreject)->then(null, function (Throwable $error) {
@@ -266,7 +269,7 @@ class Future extends BaseObject {
      * 失败
      * 该方法是 done(null, $onreject) 的简化.用于单元测试.
      * @param $onreject
-     * @throws Exception
+     * @throws Throwable
      */
     public function fail($onreject): void {
         $this->done(null, $onreject);
@@ -277,7 +280,7 @@ class Future extends BaseObject {
      * 当完成时(无论成功或失败).
      * @param callable $fn 执行体
      * @return Future
-     * @throws Exception
+     * @throws Throwable
      */
     public function whenComplete(callable $fn): Future {
         return $this->then(function ($v) use ($fn) {
@@ -296,7 +299,7 @@ class Future extends BaseObject {
      * 是then(oncomplete, oncomplete)的简化
      * @param callable $oncomplete
      * @return Future
-     * @throws Exception
+     * @throws Throwable
      */
     public function complete(callable $oncomplete = null): Future {
         $oncomplete = $oncomplete ?: function ($v) {
@@ -311,7 +314,7 @@ class Future extends BaseObject {
      * 无论成功或失败,不支持链式.
      * 是done(oncomplete, oncomplete) 的简化
      * @param callable $oncomplete
-     * @throws Exception
+     * @throws Throwable
      */
     public function always(callable $oncomplete): void {
         $this->done($oncomplete, $oncomplete);
@@ -321,7 +324,7 @@ class Future extends BaseObject {
     /**
      * 将当前 promise 对象的值充填到参数所表示的 promise 对象中
      * @param $future
-     * @throws Exception
+     * @throws Throwable
      */
     public function fill($future): void {
         $this->then([$future, 'resolve'], [$future, 'reject']);
@@ -332,7 +335,7 @@ class Future extends BaseObject {
      * then成功后简写,将结果(单一值)作为回调参数.
      * @param callable $onfulfilledCallback
      * @return Future
-     * @throws Exception
+     * @throws Throwable
      */
     public function tap(callable $onfulfilledCallback): Future {
         return $this->then(function ($result) use ($onfulfilledCallback) {
@@ -346,7 +349,7 @@ class Future extends BaseObject {
      * then成功后简写,将结果(数组)作为回调参数.
      * @param callable $onfulfilledCallback
      * @return Future
-     * @throws Exception
+     * @throws Throwable
      */
     public function spread(callable $onfulfilledCallback): Future {
         return $this->then(function ($array) use ($onfulfilledCallback) {
@@ -442,7 +445,7 @@ class Future extends BaseObject {
      * @param $onreject
      * @param callable $fn
      * @return Future
-     * @throws Exception
+     * @throws Throwable
      */
     public function catchError($onreject, callable $fn = null): Future {
         if (is_callable($fn)) {
@@ -463,7 +466,7 @@ class Future extends BaseObject {
      * 获取状态或结果key的值
      * @param string $key
      * @return string|Future
-     * @throws Exception
+     * @throws Throwable
      */
     public function __get(string $key) {
         if ($key == 'state') {
@@ -480,7 +483,7 @@ class Future extends BaseObject {
      * @param string $method 方法名
      * @param array $args 参数
      * @return Future
-     * @throws Exception
+     * @throws Throwable
      */
     public function __call(string $method, array $args): Future {
         if ($args === null) {

@@ -209,17 +209,17 @@ class PromiseTest extends TestCase {
 
         try {
             $fn      = function () {
-                throw new UncatchableException('none');
+                throw new UncatchableException('uncatchable error');
             };
             $promise = Concurrent\sync($fn);
             $fail    = $promise->isRejected();
             $this->assertTrue($fail);
-        } catch (Error $e) {
+        } catch (Throwable $e) {
             $this->assertNotEmpty($e->getMessage());
         }
 
         $fn      = function () {
-            throw new Error('none');
+            throw new Error('an Error');
         };
         $promise = Concurrent\sync($fn);
         $fail    = $promise->isRejected();
@@ -659,5 +659,42 @@ class PromiseTest extends TestCase {
         }
     }
 
+
+    public function testFuture() {
+        $msg = 'has error';
+        try {
+            $future = new Future(function () use ($msg) {
+                throw new UncatchableException($msg);
+            });
+        } catch (Throwable $e) {
+            $err = $e->getMessage();
+            $this->assertEquals($msg, $err);
+        }
+
+        $future = new Future(function () use ($msg) {
+            throw new Exception($msg);
+        });
+        $this->assertTrue($future->isRejected());
+
+        try {
+            $future = new Future(function () {
+                return 1;
+            });
+            $future->then(function () use ($msg) {
+                throw new UncatchableException($msg);
+            });
+        } catch (Throwable $e) {}
+
+        $future = new Future(function () {
+            return 2;
+        });
+        $future->then(3);
+
+        $future = new Future();
+        $future->resolve($future);
+        $this->assertTrue($future->isRejected());
+
+
+    }
 
 }

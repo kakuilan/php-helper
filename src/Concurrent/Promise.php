@@ -23,7 +23,7 @@ class Promise extends Future {
     /**
      * Promise constructor.
      * @param null $executor
-     * @throws Exception
+     * @throws Throwable
      */
     public function __construct($executor = null) {
         parent::__construct();
@@ -32,7 +32,7 @@ class Promise extends Future {
             $self = $this;
             call_user_func($executor, function ($value = null) use ($self) {
                 $self->resolve($value);
-            }, function ($reason=null) use ($self) {
+            }, function ($reason = null) use ($self) {
                 $self->reject($reason);
             });
         }

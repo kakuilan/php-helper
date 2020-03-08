@@ -43,7 +43,7 @@ function makeClosureFun($callback, ...$params): callable {
     $n = $f->getNumberOfParameters();
 
     $fn = function () use ($callback, $params, $n) {
-        $m = count($params);
+        $m   = count($params);
         $res = null;
         switch ($n) {
             case ($n == 1 && $m >= 1):
@@ -51,10 +51,10 @@ function makeClosureFun($callback, ...$params): callable {
                 break;
             case ($n > 1 && $m >= $n):
                 $newParams = array_slice($params, 0, $n);
-                $res= call_user_func($callback, ...$newParams);
+                $res       = call_user_func($callback, ...$newParams);
                 break;
             default:
-                $res= call_user_func($callback);
+                $res = call_user_func($callback);
         }
 
         return $res;
@@ -252,8 +252,9 @@ function sync($computation): Future {
     try {
         return toPromise(call_user_func($computation));
     } catch (UncatchableException $e) {
-        throw $e->getPrevious();
-    }catch (Throwable $e) {
+        $previou = $e->getPrevious();
+        throw (is_object($previou) ? $previou : $e);
+    } catch (Throwable $e) {
         return error($e);
     }
 }
@@ -298,7 +299,7 @@ function promisify(callable $fn): callable {
         };
         try {
             call_user_func_array($fn, $args);
-        }catch (Throwable $e) {
+        } catch (Throwable $e) {
             $future->reject($e);
         }
         return $future;
