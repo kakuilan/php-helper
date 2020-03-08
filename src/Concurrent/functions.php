@@ -13,7 +13,7 @@ use Closure;
 use Error;
 use Exception;
 use Generator;
-use Kph\Concurrent\Exception\UncatchableException;
+use Kph\Exceptions\UncatchableException;
 use Kph\Concurrent\Future;
 use Kph\Objects\BaseObject;
 use ReflectionException;
@@ -213,6 +213,7 @@ function co($generator, ...$args): Future {
         try {
             $next = $generator->send($value);
             if ($generator->valid()) {
+                var_dump('0000000');
                 toPromise($next)->then($onfulfilled, $onrejected);
             } else {
                 if (method_exists($generator, "getReturn")) {
@@ -222,18 +223,17 @@ function co($generator, ...$args): Future {
                     $future->resolve($value);
                 }
             }
-        } catch (Exception $e) {
-            $future->reject($e);
         } catch (Throwable $e) {
+            var_dump('222222222');
             $future->reject($e);
         }
     };
     $onrejected  = function ($err) use (&$onfulfilled, $generator, $future) {
         try {
+            var_dump('333333333');
             $onfulfilled($generator->throw($err));
-        } catch (Exception $e) {
-            $future->reject($e);
         } catch (Throwable $e) {
+            var_dump('555555555');
             $future->reject($e);
         }
     };

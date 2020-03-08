@@ -14,7 +14,7 @@ use Closure;
 use Error;
 use Exception;
 use Generator;
-use Kph\Concurrent\Exception\UncatchableException;
+use Kph\Exceptions\UncatchableException;
 use Kph\Objects\BaseObject;
 use ReflectionException;
 use ReflectionFunction;

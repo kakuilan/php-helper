@@ -18,10 +18,11 @@ use Kph\Concurrent;
 use Kph\Concurrent\Exception\UncatchableException;
 use Kph\Concurrent\Future;
 use Kph\Concurrent\Promise;
+use Kph\Helpers\OsHelper;
 use Kph\Tests\Objects\BaseCls;
 use Kph\Tests\Objects\BaseServ;
 use Kph\Tests\Objects\MathCls;
-use Kph\Tests\Objects\MyGenerator;
+use Kph\Tests\Feature\MyGenerator;
 use RuntimeException;
 use Throwable;
 
@@ -173,6 +174,29 @@ class PromiseTest extends TestCase {
         //        $promise = Concurrent\co(MyGenerator::num());
         //        $res = $promise->getResult();
         //        $this->assertEquals($res, 99);
+
+        $fn1 = function (string $url) {
+            $res = yield OsHelper::curlDownload($url, '', [], true);
+            if (empty($res)) {
+                throw new Exception('download fail.');
+            }
+            return $res;
+        };
+        $fn2 = function (string $url) {
+            $res = yield OsHelper::curlDownload($url, '', [], true);
+            if (empty($res)) {
+                throw new RuntimeException('download fail.');
+            }
+            return $res;
+        };
+
+        $promise = Concurrent\co($fn1, 'http://test.loc/hello');
+        $res     = $promise->getResult();
+        $this->assertNull($res);
+
+        $promise = Concurrent\co($fn2, 'http://test.loc/hello');
+        $res     = $promise->getResult();
+        $this->assertNull($res);
     }
 
 
