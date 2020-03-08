@@ -181,40 +181,26 @@ class StringHelper {
      * @return string
      */
     public static function fixHtml(string $html): string {
-        //关闭自闭合标签
-        $startPos = strrpos($html, "<");
-        if (empty($html) || false == $startPos) {
-            return $html;
+        $isMultibyte = ValidateHelper::isMultibyte($html);
+        $hasBodyTag  = preg_match_all("/<(\/?(html|body).*?)>/is", $html, $bodyMatch);
+
+        $doc = new \DOMDocument();
+        if ($isMultibyte) {
+            $html = mb_convert_encoding($html, 'html-entities', 'UTF-8');
         }
 
-        $trimString = substr($html, $startPos);
-        if (false === strpos($trimString, ">")) {
-            $html = substr($html, 0, $startPos);
+        @$doc->loadHTML($html);
+        $res = $doc->saveHTML();
+        if ($isMultibyte) {
+            $res = html_entity_decode($res);
         }
 
-        //非自闭合html标签列表
-        preg_match_all("/<([_0-9a-zA-Z-\:]+)\s*([^>]*)>/is", $html, $startTags);
-        preg_match_all("/<\/([_0-9a-zA-Z-\:]+)>/is", $html, $closeTags);
-
-        if (!empty($startTags[1]) && is_array($startTags[1])) {
-            krsort($startTags[1]);
-            $closeTagsIsArray = is_array($closeTags[1]);
-            foreach ($startTags[1] as $key => $tag) {
-                $attrLength = strlen($startTags[2][$key]);
-                if ($attrLength > 0 && "/" == trim($startTags[2][$key][$attrLength - 1])) {
-                    continue;
-                }
-                if (!empty($closeTags[1]) && $closeTagsIsArray) {
-                    if (false !== ($index = array_search($tag, $closeTags[1]))) {
-                        unset($closeTags[1][$index]);
-                        continue;
-                    }
-                }
-                $html .= "</{$tag}>";
-            }
+        if (!$hasBodyTag) {
+            $res = preg_replace("/<(\!DOCTYPE.*?)>/is", '', $res);
+            $res = preg_replace("/<(\/?(html|body).*?)>/is", '', $res);
         }
 
-        return preg_replace("/\<br\s*\/\>\s*\<\/p\>/is", '</p>', $html);
+        return trim($res);
     }
 
 

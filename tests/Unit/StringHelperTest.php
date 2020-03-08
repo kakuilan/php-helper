@@ -177,13 +177,26 @@ EOF;
     public function testFixHtml() {
         $str1 = '这是一段被截断的html文本<a href="#"';
         $str2 = '这是一段被截断的html文本<a href="#">';
+        $str3 = <<<EOF
+    <html>
+     <head>
+      <title>test</title>
+     </head>
+     <body>
+      <p>error</i>
+     </body>
+    </html>
+EOF;
+
         $res1 = StringHelper::fixHtml($str1);
         $res2 = StringHelper::fixHtml($str2);
         $res3 = StringHelper::fixHtml('hello');
+        $res4 = StringHelper::fixHtml($str3);
 
-        $this->assertFalse(stripos($res1, 'a'));
-        $this->assertEquals(2, substr_count($res2, 'a'));
-        $this->assertEquals('hello', $res3);
+        $this->assertGreaterThan(0, stripos($res1, '</a>'));
+        $this->assertGreaterThan(0, stripos($res2, '</a>'));
+        $this->assertEquals('<p>hello</p>', $res3);
+        $this->assertGreaterThan(0, stripos($res4, 'DOCTYPE'));
     }
 
 
@@ -554,7 +567,6 @@ EOF;
             $this->assertEquals($test[4], $expected);
         }
     }
-
 
 
 }
