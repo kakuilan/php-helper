@@ -74,7 +74,7 @@ function isGenerator($var): bool {
     if (is_callable($var) && !is_object($var)) {
         try {
             $var = call_user_func($var);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
         }
     }
 
@@ -257,9 +257,7 @@ function sync($computation): Future {
         return toPromise(call_user_func($computation));
     } catch (UncatchableException $e) {
         throw $e->getPrevious();
-    } catch (Exception $e) {
-        return error($e);
-    } catch (Throwable $e) {
+    }catch (Throwable $e) {
         return error($e);
     }
 }
@@ -304,9 +302,7 @@ function promisify(callable $fn): callable {
         };
         try {
             call_user_func_array($fn, $args);
-        } catch (Exception $e) {
-            $future->reject($e);
-        } catch (Throwable $e) {
+        }catch (Throwable $e) {
             $future->reject($e);
         }
         return $future;

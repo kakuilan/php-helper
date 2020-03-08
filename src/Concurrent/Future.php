@@ -86,8 +86,6 @@ class Future extends BaseObject {
                 $this->resolve(call_user_func($computation));
             } catch (UncatchableException $e) {
                 throw $e->getPrevious();
-            } catch (Exception $e) {
-                $this->reject($e);
             } catch (Throwable $e) {
                 $this->reject($e);
             }
@@ -109,8 +107,6 @@ class Future extends BaseObject {
             $next->resolve($r);
         } catch (UncatchableException $e) {
             throw $e->getPrevious();
-        } catch (Exception $e) {
-            $next->reject($e);
         } catch (Throwable $e) {
             $next->reject($e);
         }
@@ -183,11 +179,6 @@ class Future extends BaseObject {
                     });
                 } catch (UncatchableException $e) {
                     throw $e->getPrevious();
-                } catch (Exception $e) {
-                    if ($notrun) {
-                        $notrun = false;
-                        $this->reject($e);
-                    }
                 } catch (Throwable $e) {
                     if ($notrun) {
                         $notrun = false;

@@ -18,6 +18,7 @@ use Kph\Interfaces\Jsonable;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
+use Throwable;
 
 /**
  * Class StrictObject
@@ -172,7 +173,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
             try {
                 $res = is_null($this->$name);
             } catch (Error $e) {
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
             }
         }
 
