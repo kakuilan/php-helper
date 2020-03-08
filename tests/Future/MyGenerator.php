@@ -7,7 +7,7 @@
  * Desc:
  */
 
-namespace Kph\Tests\Feature;
+namespace Kph\Tests\Future;
 
 use Faker\Factory;
 use Generator;

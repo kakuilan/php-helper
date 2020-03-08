@@ -224,16 +224,16 @@ function co($generator, ...$args): Future {
                 }
             }
         } catch (Throwable $e) {
-            var_dump('222222222');
+            var_dump('11111111111');
             $future->reject($e);
         }
     };
     $onrejected  = function ($err) use (&$onfulfilled, $generator, $future) {
         try {
-            var_dump('333333333');
+            var_dump('22222222222222');
             $onfulfilled($generator->throw($err));
         } catch (Throwable $e) {
-            var_dump('555555555');
+            var_dump('33333333333333');
             $future->reject($e);
         }
     };

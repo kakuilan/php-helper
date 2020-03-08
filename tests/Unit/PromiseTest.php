@@ -15,14 +15,14 @@ use Exception;
 use Faker\Factory;
 use Generator;
 use Kph\Concurrent;
-use Kph\Concurrent\Exception\UncatchableException;
+use Kph\Exceptions\UncatchableException;
 use Kph\Concurrent\Future;
 use Kph\Concurrent\Promise;
 use Kph\Helpers\OsHelper;
 use Kph\Tests\Objects\BaseCls;
 use Kph\Tests\Objects\BaseServ;
 use Kph\Tests\Objects\MathCls;
-use Kph\Tests\Feature\MyGenerator;
+use Kph\Tests\Future\MyGenerator;
 use RuntimeException;
 use Throwable;
 
