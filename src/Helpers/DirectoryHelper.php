@@ -190,13 +190,12 @@ class DirectoryHelper {
      * @param string $path
      * @return bool
      */
-    public static function emptyDir(string $path): bool {
+    public static function clearDir(string $path): bool {
         if (empty($path) || !is_dir($path)) {
             return false;
         }
 
-        $dirs = [];
-
+        $dirs     = [];
         $dir      = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
         $iterator = new RecursiveIteratorIterator($dir, RecursiveIteratorIterator::CHILD_FIRST);
 

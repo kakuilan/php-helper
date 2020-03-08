@@ -52,7 +52,7 @@ class DirectoryHelperTest extends TestCase {
     }
 
 
-    public function testCopyDirEmptyDirDelDir() {
+    public function testCopyDirclearDirDelDir() {
         $backupDir1 = TESTDIR . 'tmp/backup/1';
         $backupDir2 = TESTDIR . 'tmp/backup/2';
         DirectoryHelper::chmodBatch($backupDir1, 766, 766);
@@ -75,9 +75,9 @@ class DirectoryHelperTest extends TestCase {
         DirectoryHelper::chmodBatch('/root', 777, 777);
         DirectoryHelper::chmodBatch($backupDir1, 777, 777);
 
-        //emptyDir
-        $res5 = DirectoryHelper::emptyDir('');
-        $res6 = DirectoryHelper::emptyDir($backupDir1);
+        //clearDir
+        $res5 = DirectoryHelper::clearDir('');
+        $res6 = DirectoryHelper::clearDir($backupDir1);
         $this->assertFalse($res5);
         $this->assertTrue($res6);
         $this->assertTrue(is_dir($backupDir1));

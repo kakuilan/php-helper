@@ -11,6 +11,6 @@ define('DS', str_replace('\\', '/', DIRECTORY_SEPARATOR));
 define('PS', PATH_SEPARATOR);
 define('TESTDIR', str_replace('\\', '/', __DIR__ . DS)); //根目录
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
+ini_set('display_errors', 0);
 
 $loader = require __DIR__ . '/../vendor/autoload.php';
