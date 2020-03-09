@@ -9,6 +9,7 @@
 
 namespace Kph\Tests\Unit;
 
+use Kph\Exceptions\BaseException;
 use PHPUnit\Framework\TestCase;
 use Error;
 use Exception;
@@ -729,7 +730,156 @@ class PromiseTest extends TestCase {
         $this->assertTrue($future->isRejected());
 
         $future = new Future();
-        $future->then(1, 2)->resolve('https://www.google.com/');
+        $future->then(1, 2);
+        $future->resolve(3);
+        $this->assertTrue($future->isFulfilled());
+
+        $future = new Future();
+        $future->then(1, 2);
+        $future->reject('has error');
+        $this->assertTrue($future->isRejected());
+
+        // done
+        $future = new Future();
+        $future->done(function () {
+            return 'done';
+        });
+        $future->resolve('hello');
+        $this->assertTrue($future->isCompleted());
+
+        // fail
+        try {
+            $future = new Future();
+            $future->fail(function () {
+                throw new Exception('task fail');
+            });
+            $future->reject('world');
+        } catch (Throwable $e) {
+            $this->assertEquals('task fail', $e->getMessage());
+        }
+
+        // complete
+        $num    = 0;
+        $future = new Future();
+        $future->complete(function ($v) use (&$num) {
+            $num += intval($v);
+        });
+        $future->resolve(3);
+        $this->assertEquals(3, $num);
+
+        $future = new Future();
+        $future->complete();
+        $future->reject('none');
+
+        // always
+        $future = new Future();
+        $future->always(function ($v) use (&$num) {
+            $num += intval($v);
+        });
+        $future->reject(4);
+        $this->assertEquals(7, $num);
+
+        // tap -fail
+        $future = new Future();
+        $future->tap(function ($v) use (&$num) {
+            $num += intval($v);
+        });
+        $future->reject(1);
+        $this->assertEquals(7, $num);
+
+        // tap -sucess
+        $future = new Future();
+        $future->tap(function ($v) use (&$num) {
+            $num += intval($v);
+        });
+        $future->resolve(1);
+        $this->assertEquals(8, $num);
+
+        // spread -错误的结果类型
+        $future  = new Future();
+        $future2 = $future->spread(function (array $arr) use ($num) {
+            foreach ($arr as &$item) {
+                $item = intval($item) + $num;
+            }
+            return $arr;
+        });
+        $future->resolve(1); //结果不是数组,spread调用失败
+        $e = $future2->getReason();
+        $this->assertTrue($future2->isRejected());
+        $this->assertTrue(false !== strpos($e->getMessage(), 'call_user_func_array() expects parameter 2 to be array, int given'));
+
+        // spread -结果类型是数组
+        $future  = new Future();
+        $future2 = $future->spread(function ($a, $b) use ($num) {
+            return (intval($a) + intval($b)) + $num;
+        });
+        $future->resolve([1, 2]);
+        $this->assertEquals(11, $future2->getResult());
+
+        // catchError-1
+        $future  = new Future();
+        $future2 = $future->catchError(1);
+        $future->reject(2);
+        $this->assertEquals(2, $future2->getReason());
+
+        // catchError-2
+        $msg = 'this is a UncatchableException';
+        $p   = Concurrent\reject(new UncatchableException('has error'));
+        $p->catchError(function ($reason) use ($msg) {
+            return $msg;
+        }, function ($reason) {
+            return $reason instanceof BaseException;
+        })->then(function ($value) use ($msg) {
+            $this->assertEquals($msg, $value);
+        });
+
+        // catchError-3
+        $msg = 'this is a string reason';
+        $p   = Concurrent\reject($msg);
+        $p->catchError(function ($reason) use ($msg) {
+            return strrev($reason);
+        }, function ($reason) {
+            return $reason instanceof BaseException;
+        })->then(function ($value) use ($msg) {
+            $this->assertEquals($msg, $value);
+        });
+
+        // catchError-4
+        $err = 'has error';
+        try {
+            $p = Concurrent\reject(new UncatchableException($err));
+            $p->catchError(function ($reason) {
+                return 1;
+            }, function ($reason) {
+                return false;
+            })->then(function ($value) {
+                return 2;
+            });
+        } catch (Throwable $e) {
+            $this->assertEquals($err, $e->getMessage());
+        }
+
+        // __get -1
+        $p    = Concurrent\resolve(['name' => 'zhang3', 'age' => 18]);
+        $stat = $p->state;
+        $p2   = $p->name;
+        $this->assertEquals(Future::FULFILLED, $stat);
+        $this->assertEquals('zhang3', $p2->getResult());
+
+        // __get -2
+        $p    = Concurrent\resolve((object)['name' => 'zhang3', 'age' => 18]);
+        $stat = $p->state;
+        $p2   = $p->age;
+        $this->assertEquals(Future::FULFILLED, $stat);
+        $this->assertEquals(18, $p2->getResult());
+
+        // __get -3
+        $obj = new MyGenerator();
+        $p   = Concurrent\resolve($obj);
+        $p2  = $p->call1();
+        $p3  = $p->call2(3, 6);
+        $this->assertGreaterThan(0, $p2->getResult());
+        $this->assertEquals(9, $p3->getResult());
 
     }
 

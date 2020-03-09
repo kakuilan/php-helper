@@ -115,4 +115,14 @@ class MyGenerator {
     }
 
 
+    public function call1() {
+        return mt_rand(1, 9);
+    }
+
+
+    public function call2($a, $b) {
+        return intval($a) + intval($b);
+    }
+
+
 }

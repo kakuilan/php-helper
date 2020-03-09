@@ -13,6 +13,7 @@ namespace Kph\Concurrent;
 use Kph\Objects\BaseObject;
 use ReflectionMethod;
 use Exception;
+use Throwable;
 
 /**
  * Class Wrapper
@@ -31,7 +32,7 @@ class Wrapper extends BaseObject {
      * @param $name
      * @param array $arguments
      * @return Future
-     * @throws Exception
+     * @throws Throwable
      */
     public function __call($name, array $arguments):Future {
         $method = [$this->obj, $name];

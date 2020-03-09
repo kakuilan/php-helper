@@ -10,6 +10,7 @@
 namespace Kph\Concurrent;
 
 use Exception;
+use Throwable;
 
 /**
  * Class CallableWrapper
@@ -20,7 +21,7 @@ class CallableWrapper extends Wrapper {
     /**
      * 当尝试以调用函数的方式调用一个对象时，__invoke() 方法会被自动调用
      * @return Future
-     * @throws Exception
+     * @throws Throwable
      */
     public function __invoke() {
         $obj = $this->obj;

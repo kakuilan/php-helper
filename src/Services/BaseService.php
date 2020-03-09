@@ -11,6 +11,7 @@ namespace Kph\Services;
 
 use Kph\Objects\StrictObject;
 use Exception;
+use Throwable;
 
 /**
  * Class BaseService
@@ -36,7 +37,7 @@ class BaseService extends StrictObject {
     /**
      * BaseService constructor.
      * @param array $vars
-     * @throws Exception
+     * @throws Throwable
      */
     public function __construct($vars = []) {
         parent::__construct($vars);

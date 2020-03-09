@@ -44,7 +44,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
     /**
      * StrictObject constructor.
      * @param array $vars
-     * @throws Exception
+     * @throws Throwable
      */
     public function __construct(array $vars = []) {
         foreach ($vars as $field => $value) {
@@ -70,7 +70,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
     /**
      * 获取未定义时警告
      * @param string $name 名称
-     * @throws Exception
+     * @throws Throwable
      */
     protected function __undefinedGetWarn(string $name) {
         throw new Exception('Undefined readable property: ' . static::class . '::' . $name);
@@ -80,7 +80,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
     /**
      * 设置未定义时警告
      * @param string $name
-     * @throws Exception
+     * @throws Throwable
      */
     protected function __undefinedSetWarn(string $name) {
         throw new Exception('Undefined writable property: ' . static::class . '::' . $name);
@@ -90,7 +90,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
     /**
      * 检查是否空属性
      * @param string $name
-     * @throws Exception
+     * @throws Throwable
      */
     protected function __checkEmptyProperty(string $name) {
         if (is_null($name) || trim($name) === '') {
@@ -103,7 +103,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
      * 获取属性值或调用获取方法,如 get(name) => getName()
      * @param string $name
      * @return mixed|void
-     * @throws Exception
+     * @throws Throwable
      */
     final public function get(string $name) {
         $this->__checkEmptyProperty($name);
@@ -134,7 +134,7 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
      * @param string $name
      * @param mixed $value
      * @return bool|void
-     * @throws Exception
+     * @throws Throwable
      */
     final public function set(string $name, $value = null) {
         $this->__checkEmptyProperty($name);

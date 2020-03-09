@@ -30,7 +30,7 @@ use RangeException;
  * @param mixed ...$params 参数
  * @return callable
  * @throws ReflectionException
- * @throws Exception
+ * @throws Throwable
  */
 function makeClosureFun($callback, ...$params): callable {
     if (is_array($callback) && count($callback) == 2) {
@@ -99,7 +99,7 @@ function isGenerator($var): bool {
  * 根据错误构造future
  * @param mixed $e
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function error($e): Future {
     $future = new Future();
@@ -112,7 +112,7 @@ function error($e): Future {
  * 根据值构造future
  * @param mixed $v
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function value($v): Future {
     $future = new Future();
@@ -125,7 +125,7 @@ function value($v): Future {
  * 构造成功的future
  * @param mixed $value
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function resolve($value): Future {
     return value($value);
@@ -136,7 +136,7 @@ function resolve($value): Future {
  * 构造失败的future
  * @param mixed $reason
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function reject($reason): Future {
     return error($reason);
@@ -167,7 +167,7 @@ function isPromise($obj): bool {
  * 将对象转为Future
  * @param mixed $obj
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function toFuture($obj): Future {
     return isFuture($obj) ? $obj : value($obj);
@@ -178,7 +178,7 @@ function toFuture($obj): Future {
  * 将对象转为Promise
  * @param mixed $obj
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function toPromise($obj): Future {
     if (isFuture($obj)) {
@@ -198,7 +198,7 @@ function toPromise($obj): Future {
  * @param mixed $generator 生成器
  * @param mixed ...$args
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function co($generator, ...$args): Future {
     if (is_callable($generator)) {
@@ -246,7 +246,7 @@ function co($generator, ...$args): Future {
  * 而通过 sync 函数返回的生成器函数或生成器会作为协程执行之后，返回执行结果
  * @param callable $computation
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function sync($computation): Future {
     try {
@@ -264,7 +264,7 @@ function sync($computation): Future {
  * 快速创建promise
  * @param callable $executor
  * @return Promise
- * @throws Exception
+ * @throws Throwable
  */
 function promise(callable $executor): Promise {
     $promise = new Promise($executor);
@@ -312,7 +312,7 @@ function promisify(callable $fn): callable {
  * 其值为数组参数中所有 promise 对象的最终展开值组成的数组，其数组元素与原数组元素一一对应
  * @param array $array
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function all(array $array): Future {
     return toFuture($array)->then(function ($array) {
@@ -348,7 +348,7 @@ function all(array $array): Future {
  * 类似all,但参数形式不同
  * @param mixed $args
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function join(...$args): Future {
     return all($args);
@@ -359,7 +359,7 @@ function join(...$args): Future {
  * race返回数组中最先返回的promise数据
  * @param array $array promise数组
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function race(array $array): Future {
     return toFuture($array)->then(function ($array) {
@@ -378,7 +378,7 @@ function race(array $array): Future {
  * 而对于 any 函数,如果输入的数组为空,返回的 promise 对象将被设置为失败状态,失败原因是一个 RangeException 对象.
  * @param array $array
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function any(array $array): Future {
     return toFuture($array)->then(function ($array) {
@@ -416,7 +416,7 @@ function any(array $array): Future {
  * 其值为数组参数中所有 promise 对象的 inspect 方法返回值，其数组元素与原数组元素一一对应
  * @param array $array
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function settle(array $array): Future {
     return toFuture($array)->then(function ($array) {
@@ -453,7 +453,7 @@ function settle(array $array): Future {
  * @param callable $handler
  * @param mixed ...$args $handler的参数,可以是promise
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function run(callable $handler, ...$args): Future {
     return all($args)->then(function ($args) use ($handler) {
@@ -466,7 +466,7 @@ function run(callable $handler, ...$args): Future {
  * 包装执行函数
  * @param $handler
  * @return Closure|CallableWrapper|Future|Wrapper
- * @throws Exception
+ * @throws Throwable
  */
 function wrap($handler) {
     if (is_object($handler)) {
@@ -495,7 +495,7 @@ function wrap($handler) {
  * @param array $array
  * @param callable $callback
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function each(array $array, callable $callback): Future {
     return all($array)->then(function ($array) use ($callback) {
@@ -512,7 +512,7 @@ function each(array $array, callable $callback): Future {
  * @param array $array
  * @param callable $callback
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function every(array $array, callable $callback): Future {
     return all($array)->then(function ($array) use ($callback) {
@@ -534,7 +534,7 @@ function every(array $array, callable $callback): Future {
  * @param array $array
  * @param callable $callback
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function some(array $array, callable $callback): Future {
     return all($array)->then(function ($array) use ($callback) {
@@ -556,7 +556,7 @@ function some(array $array, callable $callback): Future {
  * @param callable $callback
  * @param bool $preserveKeys 是否保持键
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function filter(array $array, callable $callback, $preserveKeys = false): Future {
     return all($array)->then(function ($array) use ($callback, $preserveKeys) {
@@ -585,7 +585,7 @@ function filter(array $array, callable $callback, $preserveKeys = false): Future
  * @param array $array
  * @param callable $callback
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function map(array $array, callable $callback): Future {
     return all($array)->then(function ($array) use ($callback) {
@@ -607,7 +607,7 @@ function map(array $array, callable $callback): Future {
  * @param callable $callback
  * @param null $initial 结果的初始值
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function reduce(array $array, callable $callback, $initial = null): Future {
     if ($initial !== null) {
@@ -632,7 +632,7 @@ function reduce(array $array, callable $callback, $initial = null): Future {
  * @param mixed $searchElement 要查找的元素
  * @param bool $strict 为 true 时，使用 === 运算符进行相等测试
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function search(array $array, $searchElement, $strict = false): Future {
     return all($array)->then(function ($array) use ($searchElement, $strict) {
@@ -650,7 +650,7 @@ function search(array $array, $searchElement, $strict = false): Future {
  * @param $searchElement
  * @param bool $strict
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function includes(array $array, $searchElement, $strict = false): Future {
     return all($array)->then(function ($array) use ($searchElement, $strict) {
@@ -667,7 +667,7 @@ function includes(array $array, $searchElement, $strict = false): Future {
  * 对比 array1 和其他一个或者多个数组，返回在 array1 中但是不在其他数组里的值
  * @param array ...$params
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function diff(array ...$params): Future {
     $args = [];
@@ -685,7 +685,7 @@ function diff(array ...$params): Future {
  * 用回调函数比较数据来计算数组的差集
  * @param mixed ...$params 不定参数.注意,最后一个参数为回调函数
  * @return Future
- * @throws Exception
+ * @throws Throwable
  */
 function udiff(...$params): Future {
     $callback = array_pop($params); //最后一个参数为回调函数

@@ -14,6 +14,7 @@ use Closure;
 use Error;
 use Exception;
 use Generator;
+use Kph\Exceptions\BaseException;
 use Kph\Exceptions\UncatchableException;
 use Kph\Objects\BaseObject;
 use ReflectionException;
@@ -161,7 +162,6 @@ class Future extends BaseObject {
             return;
         }
 
-        var_dump('resolve----000000000', $value, $this->state);
         $then = null;
         if (is_callable($value)) {
             $then = $value;
@@ -203,7 +203,6 @@ class Future extends BaseObject {
             $this->state = self::FULFILLED;
             $this->value = $value;
             while (count($this->subscribers) > 0) {
-                var_dump('resolve----1111111');
                 $subscriber = array_shift($this->subscribers);
                 $this->privateResolve($subscriber['onfulfill'], $subscriber['next'], $value);
             }
@@ -354,7 +353,7 @@ class Future extends BaseObject {
 
 
     /**
-     * then成功后简写,将结果(数组)作为回调参数.
+     * then成功后简写,将结果(数组)作为回调函数的参数.
      * @param callable $onfulfilledCallback
      * @return Future
      * @throws Throwable
@@ -461,8 +460,10 @@ class Future extends BaseObject {
             return $this->then(null, function ($e) use ($self, $onreject, $fn) {
                 if (call_user_func($fn, $e)) {
                     return $self->then(null, $onreject);
-                } else {
+                } elseif($e instanceof Throwable) {
                     throw $e;
+                }else{
+                    throw new BaseException(strval($e));
                 }
             });
         }
@@ -481,7 +482,14 @@ class Future extends BaseObject {
             return $this->state;
         }
         return $this->then(function ($result) use ($key) {
-            return $result->$key ?? null;
+            $res = null;
+            if (is_object($result)) {
+                $res = $result->$key ?? null;
+            }elseif (is_array($result)) {
+                $res = $result[$key] ?? null;
+            }
+
+            return $res;
         });
     }
 
@@ -494,9 +502,6 @@ class Future extends BaseObject {
      * @throws Throwable
      */
     public function __call(string $method, array $args): Future {
-        if ($args === null) {
-            $args = [];
-        }
         return $this->then(function ($result) use ($method, $args) {
             return all($args)->then(function ($args) use ($result, $method) {
                 return call_user_func_array([$result, $method], $args);
