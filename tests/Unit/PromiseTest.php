@@ -804,9 +804,10 @@ class PromiseTest extends TestCase {
             return $arr;
         });
         $future->resolve(1); //结果不是数组,spread调用失败
-        $e = $future2->getReason();
         $this->assertTrue($future2->isRejected());
-        $this->assertTrue(false !== strpos($e->getMessage(), 'call_user_func_array() expects parameter 2 to be array, int given'));
+        // call_user_func_array() expects parameter 2 to be array, int given
+        $e = $future2->getReason();
+        $this->assertTrue($e instanceof Throwable);
 
         // spread -结果类型是数组
         $future  = new Future();
