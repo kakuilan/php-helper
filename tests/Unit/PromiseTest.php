@@ -873,7 +873,7 @@ class PromiseTest extends TestCase {
         $this->assertEquals(Future::FULFILLED, $stat);
         $this->assertEquals(18, $p2->getResult());
 
-        // __get -3
+        // __call
         $obj = new MyGenerator();
         $p   = Concurrent\resolve($obj);
         $p2  = $p->call1();
