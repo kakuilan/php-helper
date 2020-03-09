@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2019 LKK/lanq.net All rights reserved
+ * Copyright (c) 2020 LKK/lanq.net All rights reserved
  * User: kakuilan@163.com
  * Date: 2020/2/12
  * Time: 10:16
