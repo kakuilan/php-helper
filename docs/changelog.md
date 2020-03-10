@@ -1,11 +1,25 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.0.5]- 2020-03-10
+#### Added
+- 常量`Consts::DELIMITER`
+- 常量`Consts::PAAMAYIM_NEKUDOTAYIM`
+
+#### Fixed
+- none
+
+#### Changed
+- none
+
+#### Removed
+- none
+
 ## [v0.0.4]- 2020-03-09
 #### Added
-- `ValidateHelper::isMultibyte`
-- `Kph\Exceptions\BaseException`
-- `Kph\Exceptions\UncatchableException`
+- 方法`ValidateHelper::isMultibyte`
+- 类`Kph\Exceptions\BaseException`
+- 类`Kph\Exceptions\UncatchableException`
 
 #### Fixed
 - 修复`StringHelper::fixHtml`BUG,使用DOMDocument替代正则
@@ -20,14 +34,14 @@ All notable changes to this project will be documented in this file.
 
 ## [v0.0.3]- 2020-03-06
 #### Added
-- `StringHelper::trim`
-- `StringHelper::toCamelCase`
-- `StringHelper::toSnakeCase`
-- `StringHelper::toKebabCase`
-- `StringHelper::removeBefore`
-- `StringHelper::removeAfter`
-- `ValidateHelper::isSpace`
-- `ValidateHelper::isWhitespace`
+- 方法`StringHelper::trim`
+- 方法`StringHelper::toCamelCase`
+- 方法`StringHelper::toSnakeCase`
+- 方法`StringHelper::toKebabCase`
+- 方法`StringHelper::removeBefore`
+- 方法`StringHelper::removeAfter`
+- 方法`ValidateHelper::isSpace`
+- 方法`ValidateHelper::isWhitespace`
 
 #### Fixed
 - none
@@ -43,8 +57,8 @@ All notable changes to this project will be documented in this file.
 
 ## [v0.0.2]- 2020-03-03
 #### Added
-- `NumberHelper::geoDistance`
-- `StringHelper::removeEmoji`
+- 方法`NumberHelper::geoDistance`
+- 方法`StringHelper::removeEmoji`
 
 #### Fixed
 - none
