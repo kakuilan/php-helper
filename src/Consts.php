@@ -42,8 +42,10 @@ class Consts {
     const TTL_ONE_MINUTE = 60; //缓存时间1分钟
 
 
-    const DYNAMIC_KEY_LEN = 8; //authcode动态密钥长度,须<32
-    const UNKNOWN         = 'Unknown'; //未知字符串
+    const UNKNOWN              = 'Unknown'; //未知字符串
+    const DELIMITER            = '$@#KSYS#@$'; //本库自定义分隔符
+    const PAAMAYIM_NEKUDOTAYIM = '::'; //范围解析操作符-双冒号
+    const DYNAMIC_KEY_LEN      = 8; //authcode动态密钥长度,须<32
 
 
 }
