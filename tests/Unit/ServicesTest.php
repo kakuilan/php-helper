@@ -26,7 +26,7 @@ class ServicesTest extends TestCase {
 
         // 获取最终父类的实例化
         $serv2     = BaseServ::getFinalInstance();
-        $servName2 = $serv2->getClassShortName();
+        $servName2 = $serv2::getShortName();
         $this->assertEquals($servName2, 'BaseObject');
         $this->assertTrue(BaseServ::hasFinalInstance());
         BaseServ::destroyFinalInstance();
@@ -34,7 +34,7 @@ class ServicesTest extends TestCase {
 
         // 获取当前类的实例化
         $serv3     = BaseServ::getSelfInstance();
-        $servName3 = $serv3->getClassShortName();
+        $servName3 = $serv3::getShortName();
         $this->assertEquals($servName3, 'BaseServ');
         $this->assertTrue(BaseServ::hasSelfInstance());
         BaseServ::destroySelfInstance();

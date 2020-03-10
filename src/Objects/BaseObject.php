@@ -9,6 +9,7 @@
 
 namespace Kph\Objects;
 
+use Kph\Helpers\StringHelper;
 
 /**
  * Class BaseObject
@@ -40,12 +41,44 @@ class BaseObject {
 
 
     /**
-     * 获取类的短名(不包含命名空间)
+     * 解析命名空间路径
+     * @param mixed $var 对象或带命名空间的类名/函数名
+     * @return array
+     */
+    public static function parseNamespacePath($var = null): array {
+        if (is_object($var)) {
+            $cls = get_class($var);
+        } elseif ($var == '' || is_null($var)) {
+            $cls = static::class;
+        } else {
+            $cls = strval($var);
+        }
+
+        $res = StringHelper::multiExplode($cls, '\\', '/');
+        return array_filter($res);
+    }
+
+
+    /**
+     * 获取短名(不包含命名空间)
+     * @param mixed $var 对象或带命名空间的类名/函数名
      * @return string
      */
-    public function getClassShortName(): string {
-        $arr = explode('\\', get_class($this));
+    public static function getShortName($var = null): string {
+        $arr = self::parseNamespacePath($var);
         return end($arr);
+    }
+
+
+    /**
+     * 获取命名空间
+     * @param mixed $var 对象或带命名空间的类名/函数名
+     * @return string
+     */
+    public static function getNamespaceName($var = null): string {
+        $arr = self::parseNamespacePath($var);
+        array_pop($arr);
+        return implode('\\', $arr);
     }
 
 

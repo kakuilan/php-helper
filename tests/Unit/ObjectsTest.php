@@ -11,12 +11,14 @@ namespace Kph\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Kph\Objects\ArrayObject;
+use Kph\Objects\BaseObject;
 use Kph\Tests\Objects\BaseCls;
 use Kph\Tests\Objects\StrictCls;
 use ReflectionClass;
 use Error;
 use Exception;
 use ReflectionException;
+use Throwable;
 
 
 class ObjectsTest extends TestCase {
@@ -32,13 +34,38 @@ class ObjectsTest extends TestCase {
         $baseObj->gender = 0;
 
         $this->assertEquals(strval($baseObj), get_class($baseObj));
-        $this->assertEquals($baseObj->getClassShortName(), 'BaseCls');
+        $this->assertEquals($baseObj::getShortName(), 'BaseCls');
+
+        $arr1 = BaseCls::parseNamespacePath();
+        $arr2 = BaseObject::parseNamespacePath($baseObj);
+        $arr3 = BaseObject::parseNamespacePath("\Kph\Objects\BaseObject");
+
+        $cls1 = StrictCls::getShortName();
+        $cls2 = BaseObject::getShortName($baseObj);
+        $cls3 = BaseObject::getShortName("\PHPUnit\Framework\TestCase");
+
+        $nsp1 = StrictCls::getNamespaceName();
+        $nsp2 = BaseObject::getNamespaceName($baseObj);
+        $nsp3 = BaseObject::getNamespaceName("\PHPUnit\Framework\TestCase");
+
+        $this->assertEquals(4, count($arr1));
+        $this->assertEquals(4, count($arr2));
+        $this->assertEquals(3, count($arr3));
+
+        $this->assertEquals('StrictCls', $cls1);
+        $this->assertEquals('BaseCls', $cls2);
+        $this->assertEquals('TestCase', $cls3);
+
+        $this->assertEquals("Kph\Tests\Objects", $nsp1);
+        $this->assertEquals("Kph\Tests\Objects", $nsp2);
+        $this->assertEquals("PHPUnit\Framework", $nsp3);
     }
 
 
     /**
      * 严格对象测试
      * @throws ReflectionException
+     * @throws Throwable
      */
     public function testStrict() {
         $striObj = new StrictCls(['name' => 'zhang3']);
