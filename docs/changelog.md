@@ -1,6 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.0.6]- 2020-03-10
+#### Added
+- 方法`BaseObject::parseNamespacePath`
+- 方法`BaseObject::getShortName`
+- 方法`BaseObject::getNamespaceName`
+
+#### Fixed
+- none
+
+#### Changed
+- none
+
+#### Removed
+- 方法`BaseObject::getClassShortName`
+
 ## [v0.0.5]- 2020-03-10
 #### Added
 - 常量`Consts::DELIMITER`
