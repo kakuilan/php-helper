@@ -73,10 +73,17 @@ class RegularHelper {
 
 
     /**
-     * 正则模式-身份证号码
+     * 正则模式-中国大陆身份证号码
      * @var string
      */
-    public static $patternIdNo = "/^([\d]{17}[xX\d]|[\d]{15})$/";
+    public static $patternCnIdNo = "/^([\d]{17}[xX\d]|[\d]{15})$/";
+
+
+    /**
+     * 正则模式-QQ号码
+     * @var string
+     */
+    public static $patternQQNo = '/^[1-9][0-9]{5,16}$/';
 
 
     /**
