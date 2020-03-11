@@ -1029,4 +1029,103 @@ class StringHelper {
     }
 
 
+    /**
+     * 计算密码安全等级
+     * @param string $str 密码
+     * @return int 等级0~4
+     */
+    public static function passwdSafeGrade(string $str): int {
+        $special = '/[\W_]/'; //特殊字符
+        $partArr = [
+            '/[0-9]/',
+            '/[a-z]/',
+            '/[A-Z]/',
+            $special,
+        ];
+        $score   = 0;
+        $leng    = strlen($str);
+
+        //根据长度加分
+        if ($leng > 0) {
+            $score += ($leng >= 6) ? $leng : 1;
+            //根据类型加分
+            foreach ($partArr as $part) {
+                //某类型存在加分
+                if (preg_match($part, $str)) {
+                    $score += ($part == $special) ? 7 : 3;
+                }
+
+                $regexCount = preg_match_all($part, $str, $out);//某类型存在，并且存在个数大于2加2分，个数大于5加6分
+                if ($regexCount >= 5) {
+                    $score += 6;
+                } elseif ($regexCount >= 2) {
+                    $score += 2;
+                }
+            }
+        }
+
+        //重复检测
+        $repeatChar  = '';
+        $repeatCount = 0;
+        for ($i = 0; $i < $leng; $i++) {
+            if ($str[$i] == $repeatChar) {
+                $repeatCount++;
+            } else {
+                $repeatChar = $str[$i];
+            }
+        }
+        $score -= $repeatCount * 2;
+
+        //等级
+        if ($score <= 0) { //极弱
+            $level = 0;
+        } elseif ($score <= 20) { //弱
+            $level = 1;
+        } elseif ($score <= 30) { //一般
+            $level = 2;
+        } elseif ($score <= 40) { //很好
+            $level = 3;
+        } else { //极佳
+            $level = 4;
+        }
+
+        //如果是弱密码
+        $weakPwds = [
+            '00000000000',
+            '01234567890',
+            '09876543210',
+            '11111111111',
+            '123123123123',
+            '1q2w3e4r5t',
+            '22222222222',
+            '31415926',
+            '66666666666',
+            '77777777777',
+            '88888888888',
+            'a123456789a',
+            'aaaaaaaaaaa',
+            'abc12345689',
+            'abcd1234567',
+            'asdasdasdasd',
+            'asdfghjkl',
+            'iloveyou',
+            'password',
+            'q1w2e3r4t5y6',
+            'qazwsxedc',
+            'qq123456qq',
+            'qqqqqqqqqq',
+            'qwertyuiop',
+            'zxcvbnm',
+        ];
+        foreach ($weakPwds as $weakPwd) {
+            if ($str == $weakPwd || stripos($weakPwd, $str) !== false) {
+                $level = 1;
+                break;
+            }
+        }
+
+        return $level;
+    }
+
+
 }

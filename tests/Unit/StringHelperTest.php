@@ -569,4 +569,22 @@ EOF;
     }
 
 
+    public function testPasswdSafeGrade() {
+        $tests = [
+            ['', 0],
+            ['12abc', 1],
+            ['123456', 1],
+            ['1223456', 1],
+            ['abc123456', 1],
+            ['pwd@12345', 2],
+            ['pwd@123aPPT', 3],
+            ['bom7o++iQ,B)aWxD>a?MkmXR9', 4],
+        ];
+        foreach ($tests as $test) {
+            $expected = StringHelper::passwdSafeGrade($test[0]);
+            $this->assertEquals($test[1], $expected);
+        }
+    }
+
+
 }
