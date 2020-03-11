@@ -38,6 +38,16 @@ class ValidateHelper {
 
 
     /**
+     * 是否自然数
+     * @param mixed $val
+     * @return bool
+     */
+    public static function isNaturalNum($val): bool {
+        return is_numeric($val) && preg_match(RegularHelper::$patternNaturalNum, strval($val));
+    }
+
+
+    /**
      * 是否浮点数
      * @param mixed $val
      * @return bool

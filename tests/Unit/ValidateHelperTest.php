@@ -691,5 +691,21 @@ class ValidateHelperTest extends TestCase {
     }
 
 
+    public function testisNaturalNum() {
+        $tests = [
+            ['', false],
+            ['0hello', false],
+            ['01', false],
+            ['1', true],
+            ['123', true],
+            [56, true],
+            [-7, false],
+            [3.14, false],
+        ];
+        foreach ($tests as $test) {
+            $expected = ValidateHelper::isNaturalNum($test[0]);
+            $this->assertEquals($test[1], $expected);
+        }
+    }
 
 }

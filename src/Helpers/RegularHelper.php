@@ -24,6 +24,13 @@ class RegularHelper {
 
 
     /**
+     * 正则模式-自然数
+     * @var string
+     */
+    public static $patternNaturalNum = '/^[1-9][0-9]*$/';
+
+
+    /**
      * 正则模式-二进制
      * @var string
      */
