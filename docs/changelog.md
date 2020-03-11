@@ -1,6 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.0.7]- 2020-03-11
+#### Added
+- 方法`ValidateHelper::isQQ`
+- 方法`ValidateHelper::isNaturalNum`
+- 方法`StringHelper::passwdSafeGrade`
+
+#### Fixed
+- none
+
+#### Changed
+- none
+
+#### Removed
+- none
+
 ## [v0.0.6]- 2020-03-10
 #### Added
 - 方法`BaseObject::parseNamespacePath`
