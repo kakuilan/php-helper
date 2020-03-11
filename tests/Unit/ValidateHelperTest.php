@@ -676,4 +676,20 @@ class ValidateHelperTest extends TestCase {
     }
 
 
+    public function testIsQQ() {
+        $tests = [
+            ['', false],
+            ['12345', false],
+            ['123456', true],
+            ['012345', false],
+            ['23456789', true],
+        ];
+        foreach ($tests as $test) {
+            $expected = ValidateHelper::isQQ($test[0]);
+            $this->assertEquals($test[1], $expected);
+        }
+    }
+
+
+
 }
