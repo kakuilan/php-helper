@@ -415,7 +415,7 @@ class ArrayHelper {
             return [];
         }
 
-        if(!empty($sorts)) {
+        if (!empty($sorts)) {
             $sortConditions = [];
             foreach ($sorts as $sortInfo) {
                 //$sortInfo必须形如['field', SORT_ASC],或者['field']
@@ -459,6 +459,98 @@ class ArrayHelper {
             return true;
         }
         return false;
+    }
+
+
+    /**
+     * 设置数组带点的键值.
+     * 若键为空,则会替换原数组为[$value].
+     * @param array $arr 原数组
+     * @param mixed $key 键,可带点的多级,如row.usr.name
+     * @param mixed $value 值
+     */
+    public static function setDotKey(array &$arr, $key, $value): void {
+        if (is_null($key) || $key == '') {
+            $arr = (array)$value;
+            return;
+        }
+
+        $keyStr = strval($key);
+        if (ValidateHelper::isInteger($keyStr) || strpos($keyStr, '.') === false) {
+            $arr[$keyStr] = $value;
+            return;
+        }
+
+        $keys = explode('.', $keyStr);
+        while (count($keys) > 1) {
+            $key = array_shift($keys);
+            if (!array_key_exists($key, $arr)) {
+                $arr[$key] = [];
+            } elseif (!is_array($arr[$key])) {
+                $arr[$key] = (array)$arr[$key];
+            }
+            $arr = &$arr[$key];
+        }
+        $arr[array_shift($keys)] = $value;
+    }
+
+
+    /**
+     * 获取数组带点的键值.
+     * @param array $arr 数组
+     * @param mixed $key 键,可带点的多级,如row.usr.name
+     * @param mixed $default 默认值
+     * @return mixed|null
+     */
+    public static function getDotKey(array $arr, $key = null, $default = null) {
+        if (is_null($key) || $key == '') {
+            return $arr;
+        }
+
+        $keyStr = strval($key);
+        if (ValidateHelper::isInteger($keyStr) || strpos($keyStr, '.') === false) {
+            return $arr[$keyStr] ?? $default;
+        }
+
+        $keys = explode('.', $keyStr);
+        foreach ($keys as $key) {
+            if (is_array($arr) && array_key_exists($key, $arr)) {
+                $arr = $arr[$key];
+            } else {
+                return $default;
+            }
+        }
+
+        return $arr;
+    }
+
+
+    /**
+     * 数组是否存在带点的键
+     * @param array $arr
+     * @param mixed $key 键,可带点的多级,如row.usr.name
+     * @return bool
+     */
+    public static function hasDotKey(array $arr, $key = null): bool {
+        if (is_null($key) || $key == '') {
+            return false;
+        }
+
+        $keyStr = strval($key);
+        if (ValidateHelper::isInteger($keyStr) || strpos($keyStr, '.') === false) {
+            return array_key_exists($keyStr, $arr);
+        }
+
+        $keys = explode('.', $keyStr);
+        foreach ($keys as $key) {
+            if (is_null($key) || $key == '') {
+                return false;
+            } elseif (!is_array($arr) || !array_key_exists($key, $arr)) {
+                return false;
+            }
+            $arr = $arr[$key];
+        }
+        return true;
     }
 
 

@@ -443,4 +443,56 @@ class ArrayHelperTest extends TestCase {
     }
 
 
+    public function testArrDotKey() {
+        $arr1 = [1, 2, 3];
+        $arr2 = [];
+        $arr3 = [
+            'aa' => 1,
+            'bb' => [],
+            'cc' => 'test',
+        ];
+
+        //setDotKey
+        ArrayHelper::setDotKey($arr1, '', []);
+        $this->assertEmpty($arr1);
+
+        ArrayHelper::setDotKey($arr2, '2', 'hello');
+        ArrayHelper::setDotKey($arr2, 5, 'world');
+        $this->assertEquals(2, count($arr2));
+
+        $name = 'zhang3';
+        $age  = 22;
+        ArrayHelper::setDotKey($arr3, 'row.usr.name', $name);
+        ArrayHelper::setDotKey($arr3, 'row.usr.age', $age);
+        ArrayHelper::setDotKey($arr3, 'bb.k1', '33');
+        ArrayHelper::setDotKey($arr3, 'cc.k2', '44');
+
+        //getDotKey
+        $val1 = ArrayHelper::getDotKey($arr2);
+        $val2 = ArrayHelper::getDotKey($arr2, 5);
+        $val3 = ArrayHelper::getDotKey($arr3, 'row.usr.name');
+        $val4 = ArrayHelper::getDotKey($arr3, 'row.usr.age');
+        $val5 = ArrayHelper::getDotKey($arr3, 'row.usr.addr');
+        $this->assertEquals(2, count($val1));
+        $this->assertEquals('world', $val2);
+        $this->assertEquals($name, $val3);
+        $this->assertEquals($age, $val4);
+        $this->assertEmpty($val5);
+
+        //hasDotKey
+        $chk1 = ArrayHelper::hasDotKey($arr2);
+        $chk2 = ArrayHelper::hasDotKey($arr2, '2');
+        $chk3 = ArrayHelper::hasDotKey($arr3, 'row..usr');
+        $chk4 = ArrayHelper::hasDotKey($arr3, 'row.adm');
+        $chk5 = ArrayHelper::hasDotKey($arr3, 'row.usr.age');
+
+        $this->assertFalse($chk1);
+        $this->assertTrue($chk2);
+        $this->assertFalse($chk3);
+        $this->assertFalse($chk4);
+        $this->assertTrue($chk5);
+
+    }
+
+
 }
