@@ -1,6 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.0.8]- 2020-03-12
+#### Added
+- 方法`ArrayHelper::setDotKey`
+- 方法`ArrayHelper::getDotKey`
+- 方法`ArrayHelper::hasDotKey`
+
+#### Fixed
+- none
+
+#### Changed
+- none
+
+#### Removed
+- none
+
 ## [v0.0.7]- 2020-03-11
 #### Added
 - 方法`ValidateHelper::isQQ`
