@@ -244,11 +244,11 @@ class ArrayHelper {
                 }
 
                 /* 交换 $x 和 $z 元素的值 */
-                list($arr[$x], $arr[$z]) = [$arr[$z], $arr[$x]];
+                [$arr[$x], $arr[$z]] = [$arr[$z], $arr[$x]];
 
                 /* 将 $y 之后的元素全部逆向排列 */
                 for ($i = $last; $i > $y; $i--, $y++) {
-                    list($arr[$i], $arr[$y]) = [$arr[$y], $arr[$i]];
+                    [$arr[$i], $arr[$y]] = [$arr[$y], $arr[$i]];
                 }
 
                 array_push($res, implode($separator, $arr));
@@ -455,7 +455,7 @@ class ArrayHelper {
         $keya = strval($keya);
         $keyb = strval($keyb);
         if (isset($arr[$keya]) && isset($arr[$keyb])) {
-            list($arr[$keya], $arr[$keyb]) = [$arr[$keyb], $arr[$keya]];
+            [$arr[$keya], $arr[$keyb]] = [$arr[$keyb], $arr[$keya]];
             return true;
         }
         return false;
@@ -471,7 +471,7 @@ class ArrayHelper {
      */
     public static function setDotKey(array &$arr, $key, $value): void {
         if (is_null($key) || $key == '') {
-            $arr = (array)$value;
+            $arr = is_array($value) ? $value : (array)$value;
             return;
         }
 
