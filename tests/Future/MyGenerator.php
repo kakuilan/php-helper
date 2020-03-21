@@ -9,8 +9,8 @@
 
 namespace Kph\Tests\Future;
 
-use Faker\Factory;
 use Generator;
+use Kph\Helpers\StringHelper;
 
 class MyGenerator {
 
@@ -19,8 +19,8 @@ class MyGenerator {
      * @return Generator
      */
     public static function randName() {
-        $faker = Factory::create();
-        yield $faker->name;
+        $name = StringHelper::randSimple(6);
+        yield $name;
     }
 
 
@@ -29,8 +29,8 @@ class MyGenerator {
      * @return Generator
      */
     public static function randAddr() {
-        $faker = Factory::create();
-        yield $faker->address;
+        $addr = StringHelper::randString(16);
+        yield $addr;
     }
 
 

@@ -13,7 +13,6 @@ use Kph\Exceptions\BaseException;
 use PHPUnit\Framework\TestCase;
 use Error;
 use Exception;
-use Faker\Factory;
 use Generator;
 use Kph\Concurrent;
 use Kph\Exceptions\UncatchableException;
