@@ -61,8 +61,8 @@ class OsHelper {
      * 检查主机端口是否开放
      * @param string $host 主机/IP
      * @param int $port 端口
-     * @param int $timeout
-     * @return bool 超时,秒
+     * @param int $timeout 超时,秒
+     * @return bool
      */
     public static function isPortOpen(string $host = '127.0.0.1', int $port = 80, int $timeout = 5): bool {
         $res = false; //端口未绑定
