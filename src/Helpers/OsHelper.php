@@ -40,6 +40,15 @@ class OsHelper {
 
 
     /**
+     * 是否cli模式
+     * @return bool
+     */
+    public static function isCliMode(): bool {
+        return PHP_SAPI === 'cli';
+    }
+
+
+    /**
      * 获取PHP路径
      * @return string
      */
