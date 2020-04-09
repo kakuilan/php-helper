@@ -117,4 +117,17 @@ class NumberHelper {
     }
 
 
+    /**
+     * 数值格式化
+     * @param float|int $number 要格式化的数字
+     * @param int $decimals 小数位数
+     * @param string $decPoint 小数点
+     * @param string $thousandssep 千分位符号
+     * @return string
+     */
+    public static function numberFormat($number, int $decimals = 2, string $decPoint = '.', string $thousandssep = ''): string {
+        return number_format($number, $decimals, $decPoint, $thousandssep);
+    }
+
+
 }
