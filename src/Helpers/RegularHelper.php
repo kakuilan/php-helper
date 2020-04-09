@@ -31,6 +31,48 @@ class RegularHelper {
 
 
     /**
+     * 正则模式-字母
+     * @var string
+     */
+    public static $patternAlpha = '/^[A-Za-z]+$/';
+
+
+    /**
+     * 正则模式-字母或数字
+     * @var string
+     */
+    public static $patternAlphaNum = '/^[A-Za-z0-9]+$/';
+
+
+    /**
+     * 正则模式-字母或数字或下划线
+     * @var string
+     */
+    public static $patternAlphaNumDash = '/^[A-Za-z0-9\_]+$/';
+
+
+    /**
+     * 正则模式-字母或中文
+     * @var string
+     */
+    public static $patternAlphaChinese = '/^[\x{4e00}-\x{9fa5}a-zA-Z]+$/u';
+
+
+    /**
+     * 正则模式-字母或数字或中文
+     * @var string
+     */
+    public static $patternAlphaNumChinese = '/^[\x{4e00}-\x{9fa5}a-zA-Z0-9]+$/u';
+
+
+    /**
+     * 正则模式-字母或数字或下划线或中文
+     * @var string
+     */
+    public static $patternAlphaNumDashChinese = '/^[\x{4e00}-\x{9fa5}a-zA-Z0-9\_]+$/u';
+
+
+    /**
      * 正则模式-二进制
      * @var string
      */

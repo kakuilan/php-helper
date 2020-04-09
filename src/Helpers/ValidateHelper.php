@@ -261,6 +261,66 @@ class ValidateHelper {
     /**
      * 是否全是字母
      * @param string $val
+     * @return bool
+     */
+    public static function isAlpha(string $val): bool {
+        return !empty($val) && @preg_match(RegularHelper::$patternAlpha, $val);
+    }
+
+
+    /**
+     * 是否由(字母或数字)组成
+     * @param string $val
+     * @return bool
+     */
+    public static function isAlphaNum(string $val): bool {
+        return $val !== '' && @preg_match(RegularHelper::$patternAlphaNum, $val);
+    }
+
+
+    /**
+     * 是否由(字母或数字或下划线)组成
+     * @param string $val
+     * @return bool
+     */
+    public static function isAlphaNumDash(string $val): bool {
+        return $val !== '' && @preg_match(RegularHelper::$patternAlphaNumDash, $val);
+    }
+
+
+    /**
+     * 是否由(字母或中文)组成
+     * @param string $val
+     * @return bool
+     */
+    public static function isAlphaChinese(string $val): bool {
+        return !empty($val) && @preg_match(RegularHelper::$patternAlphaChinese, $val);
+    }
+
+
+    /**
+     * 是否由(字母或数字或中文)组成
+     * @param string $val
+     * @return bool
+     */
+    public static function isAlphaNumChinese(string $val): bool {
+        return $val !== '' && @preg_match(RegularHelper::$patternAlphaNumChinese, $val);
+    }
+
+
+    /**
+     * 是否由(字母或数字或下划线或中文)组成
+     * @param string $val
+     * @return bool
+     */
+    public static function isAlphaNumDashChinese(string $val): bool {
+        return $val !== '' && @preg_match(RegularHelper::$patternAlphaNumDashChinese, $val);
+    }
+
+
+    /**
+     * 是否全是字母
+     * @param string $val
      * @param int $case 是否检查大小写:0忽略大小写,1检查小写,2检查大写
      * @return bool
      */
