@@ -9,6 +9,7 @@
 
 namespace Kph\Helpers;
 
+use Exception;
 
 /**
  * Class StringHelper
@@ -1125,6 +1126,81 @@ class StringHelper {
         }
 
         return $level;
+    }
+
+
+    /**
+     * 截取指定定界符中间的内容
+     * @param string $str 要截取的字符串
+     * @param string|null $begin 开始定界符
+     * @param string|null $end 结束定界符
+     * @return string
+     */
+    public static function middle(string $str, string $begin = null, string $end = null): string {
+        $res = '';
+
+        // 如果提供了开始定界符
+        if (!is_null($begin)) {
+            // 计算开始定界符的出现位置
+            $beginPos = mb_stripos($str, $begin);
+
+            // 如果没找到开始定界符,失败
+            if ($beginPos === false) {
+                return $res;
+            }
+
+            // 去除开始定界符及以前的内容.
+            $str = mb_substr($str, $beginPos + strlen($begin));
+        }
+
+        // 如果未提供结束定界符,直接 返回了.
+        if (is_null($end)) {
+            return $str;
+        }
+
+        // 计算结束定界符的出现位置
+        $endPos = mb_stripos($str, $end);
+
+        // 如果没找到,失败
+        if ($endPos === false) {
+            return $res;
+        }
+
+        // 如果位置为0,返回空字符串
+        if ($endPos === 0) {
+            return $res;
+        }
+
+        // 返回 字符串直到定界符开始的地方
+        return mb_substr($str, 0, $endPos);
+    }
+
+
+    /**
+     * 获取UUID(Version4)
+     * @return string
+     * @throws Exception
+     */
+    public static function uuidV4(): string {
+        $data    = random_bytes(16);
+        $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
+        $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
+        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+    }
+
+
+    /**
+     * 字符串$str是否包含$sub
+     * @param string $str
+     * @param string $sub
+     * @return bool
+     */
+    public static function contains(string $str, string $sub): bool {
+        if (is_null($str) || $str === '') {
+            return false;
+        }
+
+        return strpos($str, $sub) !== false;
     }
 
 
