@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [v0.0.9]- 2020-04-09
+## [v0.1.0]- 2020-04-09
 #### Added
 - 方法`NumberHelper::numberForma`
 - 方法`OsHelper::isCliMode`
