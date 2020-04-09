@@ -1,6 +1,29 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.0.9]- 2020-04-09
+#### Added
+- 方法`NumberHelper::numberForma`
+- 方法`OsHelper::isCliMode`
+- 方法`StringHelper::contains`
+- 方法`StringHelper::middle`
+- 方法`StringHelper::uuidV4`
+- 方法`ValidateHelper::isAlpha`
+- 方法`ValidateHelper::isAlphaChinese`
+- 方法`ValidateHelper::isAlphaNum`
+- 方法`ValidateHelper::isAlphaNumChinese`
+- 方法`ValidateHelper::isAlphaNumDash`
+- 方法`ValidateHelper::isAlphaNumDashChinese`
+
+#### Fixed
+- none
+
+#### Changed
+- none
+
+#### Removed
+- none
+
 ## [v0.0.8]- 2020-03-12
 #### Added
 - 方法`ArrayHelper::setDotKey`
