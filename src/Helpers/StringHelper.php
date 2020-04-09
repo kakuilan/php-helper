@@ -1130,53 +1130,6 @@ class StringHelper {
 
 
     /**
-     * 截取指定定界符中间的内容
-     * @param string $str 要截取的字符串
-     * @param string|null $begin 开始定界符
-     * @param string|null $end 结束定界符
-     * @return string
-     */
-    public static function middle(string $str, string $begin = null, string $end = null): string {
-        $res = '';
-
-        // 如果提供了开始定界符
-        if (!is_null($begin)) {
-            // 计算开始定界符的出现位置
-            $beginPos = mb_stripos($str, $begin);
-
-            // 如果没找到开始定界符,失败
-            if ($beginPos === false) {
-                return $res;
-            }
-
-            // 去除开始定界符及以前的内容.
-            $str = mb_substr($str, $beginPos + strlen($begin));
-        }
-
-        // 如果未提供结束定界符,直接 返回了.
-        if (is_null($end)) {
-            return $str;
-        }
-
-        // 计算结束定界符的出现位置
-        $endPos = mb_stripos($str, $end);
-
-        // 如果没找到,失败
-        if ($endPos === false) {
-            return $res;
-        }
-
-        // 如果位置为0,返回空字符串
-        if ($endPos === 0) {
-            return $res;
-        }
-
-        // 返回 字符串直到定界符开始的地方
-        return mb_substr($str, 0, $endPos);
-    }
-
-
-    /**
      * 获取UUID(Version4)
      * @return string
      * @throws Exception
@@ -1193,14 +1146,65 @@ class StringHelper {
      * 字符串$str是否包含$sub
      * @param string $str
      * @param string $sub
+     * @param bool $ignoreCase 是否忽略大小写
      * @return bool
      */
-    public static function contains(string $str, string $sub): bool {
+    public static function contains(string $str, string $sub, bool $ignoreCase = false): bool {
         if (is_null($str) || $str === '') {
             return false;
         }
 
-        return strpos($str, $sub) !== false;
+        $res = $ignoreCase ? mb_stripos($str, $sub) : mb_strpos($str, $sub);
+        return $res !== false;
+    }
+
+
+    /**
+     * 截取指定定界符中间的内容
+     * @param string $str 要截取的字符串
+     * @param string|null $begin 开始定界符
+     * @param string|null $end 结束定界符
+     * @return string
+     */
+    public static function middle(string $str, string $begin = null, string $end = null): string {
+        if ($str === '') {
+            return '';
+        }
+
+        // 如果提供了开始定界符
+        if (!is_null($begin) && $begin!=='') {
+            // 计算开始定界符的出现位置
+            $beginPos = mb_stripos($str, $begin);
+
+            // 如果没找到开始定界符,失败
+            if ($beginPos === false) {
+                return '';
+            }
+
+            // 去除开始定界符及以前的内容.
+            $str = mb_substr($str, $beginPos + strlen($begin));
+        }
+
+        // 如果未提供结束定界符,直接 返回了.
+        if (is_null($end) || $end === '') {
+            return $str;
+        }
+
+        // 计算结束定界符的出现位置
+        $endPos = mb_stripos($str, $end);
+
+        // 如果没找到,失败
+        if ($endPos === false) {
+            return '';
+        }
+
+        // 如果位置为0,返回空字符串
+        if ($endPos === 0) {
+            return '';
+        }
+
+        // 返回 字符串直到定界符开始的地方
+        return mb_substr($str, 0, $endPos);
     }
 
 

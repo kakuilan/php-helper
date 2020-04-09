@@ -708,4 +708,118 @@ class ValidateHelperTest extends TestCase {
         }
     }
 
+
+    public function testIsAlpha() {
+        $tests = [
+            ['', false],
+            ['hello', true],
+            ['hello world', false],
+            ['hello123', false],
+            ['hello123_', false],
+            ['hello123_世界', false],
+            [567, false],
+            [89.123, false],
+        ];
+        foreach ($tests as $test) {
+            $expected = ValidateHelper::isAlpha($test[0]);
+            $this->assertEquals($test[1], $expected);
+        }
+    }
+
+
+    public function testIsAlphaNum() {
+        $tests = [
+            ['', false],
+            ['hello', true],
+            ['hello world', false],
+            ['hello123', true],
+            ['hello123_', false],
+            ['hello123_世界', false],
+            [567, true],
+            [89.123, false],
+        ];
+        foreach ($tests as $test) {
+            $expected = ValidateHelper::isAlphaNum($test[0]);
+            $this->assertEquals($test[1], $expected);
+        }
+    }
+
+
+    public function testIsAlphaNumDash() {
+        $tests = [
+            ['', false],
+            ['hello', true],
+            ['hello world', false],
+            ['hello123', true],
+            ['hello123_', true],
+            ['hello123_世界', false],
+            [567, true],
+            [89.123, false],
+        ];
+        foreach ($tests as $test) {
+            $expected = ValidateHelper::isAlphaNumDash($test[0]);
+            $this->assertEquals($test[1], $expected);
+        }
+    }
+
+
+    public function testIsAlphaChinese() {
+        $tests = [
+            ['', false],
+            ['hello', true],
+            ['hello世界', true],
+            ['hello world', false],
+            ['hello123', false],
+            ['hello123_', false],
+            ['hello123_世界', false],
+            [567, false],
+            [89.123, false],
+        ];
+        foreach ($tests as $test) {
+            $expected = ValidateHelper::isAlphaChinese($test[0]);
+            $this->assertEquals($test[1], $expected);
+        }
+    }
+
+
+    public function testIsAlphaNumChinese() {
+        $tests = [
+            ['', false],
+            ['hello', true],
+            ['hello世界', true],
+            ['hello world', false],
+            ['hello123', true],
+            ['hello123世界', true],
+            ['hello123_', false],
+            ['hello123_世界', false],
+            [567, true],
+            [89.123, false],
+        ];
+        foreach ($tests as $test) {
+            $expected = ValidateHelper::isAlphaNumChinese($test[0]);
+            $this->assertEquals($test[1], $expected);
+        }
+    }
+
+
+    public function testIsAlphaNumDashChinese() {
+        $tests = [
+            ['', false],
+            ['hello', true],
+            ['hello世界', true],
+            ['hello world', false],
+            ['hello123', true],
+            ['hello123世界', true],
+            ['hello123_', true],
+            ['hello123_世界', true],
+            [567, true],
+            [89.123, false],
+        ];
+        foreach ($tests as $test) {
+            $expected = ValidateHelper::isAlphaNumDashChinese($test[0]);
+            $this->assertEquals($test[1], $expected);
+        }
+    }
+
+
 }

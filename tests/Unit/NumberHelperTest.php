@@ -59,7 +59,6 @@ class NumberHelperTest extends TestCase {
     }
 
 
-
     public function testGeoDistance() {
         $lat1 = 30.0;
         $lng1 = 45.0;
@@ -80,6 +79,18 @@ class NumberHelperTest extends TestCase {
 
         $this->assertEquals('4199598.4916152', $res3);
         $this->assertEquals($res3, $res4);
+    }
+
+
+    public function testNumberFormat() {
+        $num1 = 123000;
+        $num2 = 1234.56789;
+
+        $res1 = NumberHelper::numberFormat($num1);
+        $res2 = NumberHelper::numberFormat($num2, 3);
+
+        $this->assertEquals('123000.00', $res1);
+        $this->assertEquals('1234.568', $res2);
     }
 
 

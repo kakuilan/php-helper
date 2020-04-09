@@ -239,4 +239,10 @@ class OsHelperTest extends TestCase {
     }
 
 
+    public function testIsCliMode() {
+        $chk = OsHelper::isCliMode();
+        $this->assertTrue($chk);
+    }
+
+
 }

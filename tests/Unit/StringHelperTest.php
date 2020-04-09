@@ -587,4 +587,49 @@ EOF;
     }
 
 
+    public function testUuidV4() {
+        $res = StringHelper::uuidV4();
+
+        $this->assertNotEmpty($res);
+        $this->assertEquals(36, strlen($res));
+    }
+
+
+    public function testContains() {
+        $str   = 'Hello world.世界，你好！';
+        $tests = [
+            ['', '', false, false],
+            [$str, 'world', false, true],
+            [$str, 'World', false, false],
+            [$str, 'World', true, true],
+            [$str, '哈罗', true, false],
+        ];
+
+        foreach ($tests as $test) {
+            $expected = StringHelper::contains($test[0], $test[1], $test[2]);
+            $this->assertEquals($test[3], $expected);
+        }
+    }
+
+
+    public function testMiddle() {
+        $str   = 'beg01 Hello world.世界，你好！结束';
+        $tests = [
+            ['', '', '', ''],
+            [$str, '', '', $str],
+            [$str, '合适', '', ''],
+            [$str, '', '已经', ''],
+            [$str, '', '结束', 'beg01 Hello world.世界，你好！'],
+            [$str, 'beg01', '', ' Hello world.世界，你好！结束'],
+            [$str, 'beg01', '已经', ''],
+            [$str, 'beg01', '结束', ' Hello world.世界，你好！'],
+            [$str, 'beg01', ' Hello', ''],
+        ];
+        foreach ($tests as $test) {
+            $expected = StringHelper::middle($test[0], $test[1], $test[2]);
+            $this->assertEquals($test[3], $expected);
+        }
+    }
+
+
 }
