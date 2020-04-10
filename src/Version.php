@@ -21,6 +21,6 @@ class Version {
     /**
      * 版本号
      */
-    const VERSION = '0.0.9';
+    const VERSION = '0.1.0';
 
 }
