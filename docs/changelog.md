@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.1.1]- 2020-04-28
+#### Added
+- none
+
+#### Fixed
+- 修复`ValidateHelper::isNaturalNum`为0时错误
+
+#### Changed
+- none
+
+#### Removed
+- none
+
 ## [v0.1.0]- 2020-04-09
 #### Added
 - 方法`NumberHelper::numberForma`
