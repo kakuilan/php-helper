@@ -551,7 +551,7 @@ class ValidateHelperTest extends TestCase {
             ['', false],
             ['data/php_elephant.png', false],
             [__FILE__, true],
-            ['src/test.py', true]
+            ['src/test.py', true],
         ];
         foreach ($tests as $test) {
             $expected = ValidateHelper::isExecuteFile($test[0]);
@@ -696,11 +696,14 @@ class ValidateHelperTest extends TestCase {
             ['', false],
             ['0hello', false],
             ['01', false],
+            ['0', true],
+            [0, true],
             ['1', true],
             ['123', true],
             [56, true],
             [-7, false],
             [3.14, false],
+            [true, false],
         ];
         foreach ($tests as $test) {
             $expected = ValidateHelper::isNaturalNum($test[0]);
