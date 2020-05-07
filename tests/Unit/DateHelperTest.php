@@ -87,7 +87,7 @@ class DateHelperTest extends TestCase {
 
 
     public function testGetXingZuo() {
-        $time = 1582368688;
+        $time  = 1582368688;
         $tests = [
             [123456, ''],
             [$time, '双鱼'],
@@ -126,7 +126,7 @@ class DateHelperTest extends TestCase {
 
 
     public function testGetShengXiao() {
-        $time = 1582368688;
+        $time  = 1582368688;
         $tests = [
             ['hello', ''],
             [$time, '鼠'],
@@ -154,7 +154,7 @@ class DateHelperTest extends TestCase {
 
 
     public function testGetLunarYear() {
-        $time = 1582368688;
+        $time  = 1582368688;
         $tests = [
             ['hello', ''],
             [$time, '庚子'],
@@ -168,6 +168,52 @@ class DateHelperTest extends TestCase {
         foreach ($tests as $test) {
             $expected = DateHelper::getLunarYear($test[0]);
             $this->assertEquals($test[1], $expected);
+        }
+    }
+
+
+    public function testStartOfDay() {
+        $tests = [
+            [-1, null],
+            [0, null],
+            [strtotime('2020-01-12 18:51:27'), '2020-01-12 00:00:00'],
+            [strtotime('2020-03-10 23:04:35'), '2020-03-10 00:00:00'],
+            [strtotime('2020-5-6 22:45:49'), '2020-05-06 00:00:00'],
+            [strtotime('2020-08-27 22:45:49'), '2020-08-27 00:00:00'],
+        ];
+
+        foreach ($tests as $test) {
+            $time     = $test[0];
+            $expected = DateHelper::startOfDay($time);
+            if ($time <= 0) {
+                $this->assertGreaterThan(0, $expected);
+                $this->assertEquals(date('Y-m-d 00:00:00'), date('Y-m-d H:i:s', $expected));
+            } else {
+                $this->assertEquals($test[1], date('Y-m-d H:i:s', $expected));
+            }
+        }
+    }
+
+
+    public function testEndOfDay() {
+        $tests = [
+            [-1, null],
+            [0, null],
+            [strtotime('2020-01-12 18:51:27'), '2020-01-12 23:59:59'],
+            [strtotime('2020-03-10 23:04:35'), '2020-03-10 23:59:59'],
+            [strtotime('2020-5-6 22:45:49'), '2020-05-06 23:59:59'],
+            [strtotime('2020-08-27 22:45:49'), '2020-08-27 23:59:59'],
+        ];
+
+        foreach ($tests as $test) {
+            $time     = $test[0];
+            $expected = DateHelper::endOfDay($time);
+            if ($time <= 0) {
+                $this->assertGreaterThan(0, $expected);
+                $this->assertEquals(date('Y-m-d 23:59:59'), date('Y-m-d H:i:s', $expected));
+            } else {
+                $this->assertEquals($test[1], date('Y-m-d H:i:s', $expected));
+            }
         }
     }
 
