@@ -344,4 +344,122 @@ class DateHelper {
         $res  = $sky[$diff % 10] . $earth[$diff % 12];
         return $res;
     }
+
+
+    /**
+     * 获取日期中当天的开始时间
+     * @param int $time 时间戳
+     * @return int
+     */
+    public static function startOfDay(int $time = 0): int {
+        if ($time <= 0) {
+            $time = time();
+        }
+
+        return strtotime(date("Y-m-d", $time));
+    }
+
+
+    /**
+     * 获取日期中当天的结束时间
+     * @param int $time 时间戳
+     * @return int
+     */
+    public static function endOfDay(int $time = 0): int {
+        if ($time <= 0) {
+            $time = time();
+        }
+
+        return strtotime(date("Y-m-d 23:59:59", $time));
+    }
+
+
+    /**
+     * 获取日期中当月的开始时间
+     * @param int $time 时间戳
+     * @return int
+     */
+    public static function startOfMonth(int $time = 0): int {
+        if ($time <= 0) {
+            $time = time();
+        }
+
+        return strtotime(date("Y-m-1", $time));
+    }
+
+
+    /**
+     * 获取日期中当月的结束时间
+     * @param int $time 时间戳
+     * @return int
+     */
+    public static function endOfMonth(int $time = 0): int {
+        if ($time <= 0) {
+            $time = time();
+        }
+
+        return strtotime(date("Y-m-t 23:59:59", $time));
+    }
+
+
+    /**
+     * 获取日期中当年的开始时间
+     * @param int $time 时间戳
+     * @return int
+     */
+    public static function startOfYear(int $time = 0): int {
+        if ($time <= 0) {
+            $time = time();
+        }
+
+        return strtotime(date("Y-1-1", $time));
+    }
+
+
+    /**
+     * 获取日期中当年的结束时间
+     * @param int $time 时间戳
+     * @return int
+     */
+    public static function endOfYear(int $time = 0): int {
+        if ($time <= 0) {
+            $time = time();
+        }
+
+        return strtotime(date("Y-12-31 23:59:59", $time));
+    }
+
+
+    /**
+     * 获取日期中当周的开始时间
+     * @param int $time 时间戳
+     * @param int $weekStartDay 周几作为周的第一天;从 1 （表示星期一）到 7 （表示星期日）
+     * @return int
+     */
+    public static function startOfWeek(int $time = 0, int $weekStartDay = 1): int {
+        if ($time <= 0) {
+            $time = time();
+        }
+
+        $day = date('d', $time) - date('N', $time) + $weekStartDay;
+        return mktime(0, 0, 0, date('m'), $day, date('Y'));
+    }
+
+
+    /**
+     * 获取日期中当周的结束时间
+     * @param int $time 时间戳
+     * @param int $weekStartDay 周几作为周的第一天;从 1 （表示星期一）到 7 （表示星期日）
+     * @return int
+     */
+    public static function endOfWeek(int $time = 0, int $weekStartDay = 1): int {
+        if ($time <= 0) {
+            $time = time();
+        }
+
+        $day = date('d', $time) - date('N', $time) + $weekStartDay + 6;
+        return mktime(23, 59, 59, date('m'), $day, date('Y'));
+    }
+
+
 }
