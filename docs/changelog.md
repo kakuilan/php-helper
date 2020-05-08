@@ -1,6 +1,26 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.1.2]- 2020-05-08
+#### Added
+- 方法`DateHelper::startOfDay`
+- 方法`DateHelper::endOfDay`
+- 方法`DateHelper::startOfMonth`
+- 方法`DateHelper::endOfMonth`
+- 方法`DateHelper::startOfYear`
+- 方法`DateHelper::endOfYear`
+- 方法`DateHelper::startOfWeek`
+- 方法`DateHelper::endOfWeek`
+
+#### Fixed
+- none
+
+#### Changed
+- none
+
+#### Removed
+- none
+
 ## [v0.1.1]- 2020-04-28
 #### Added
 - none
