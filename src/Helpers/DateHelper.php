@@ -437,12 +437,14 @@ class DateHelper {
      * @return int
      */
     public static function startOfWeek(int $time = 0, int $weekStartDay = 1): int {
-        if ($time <= 0) {
-            $time = time();
+        $base       = self::startOfDay($time);
+        $curWeekDay = date('w', $base);
+        $diff       = $curWeekDay - $weekStartDay;
+        if ($diff < 0) {
+            $diff += 7;
         }
 
-        $day = date('d', $time) - date('N', $time) + $weekStartDay;
-        return mktime(0, 0, 0, date('m'), $day, date('Y'));
+        return $base - 86400 * $diff;
     }
 
 
@@ -453,12 +455,8 @@ class DateHelper {
      * @return int
      */
     public static function endOfWeek(int $time = 0, int $weekStartDay = 1): int {
-        if ($time <= 0) {
-            $time = time();
-        }
-
-        $day = date('d', $time) - date('N', $time) + $weekStartDay + 6;
-        return mktime(23, 59, 59, date('m'), $day, date('Y'));
+        $start = self::startOfWeek($time, $weekStartDay);
+        return $start + 604799;
     }
 
 
