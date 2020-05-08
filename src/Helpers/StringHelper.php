@@ -317,7 +317,6 @@ class StringHelper {
                 return strtoupper($str[0]);
             }
 
-            //$s   = iconv("UTF-8", "gb2312", $str);
             $s   = mb_convert_encoding($str, 'gb2312');
             $asc = ord($s[0]) * 256 + ord($s[1]) - 65536;
             if ($asc >= -20319 && $asc <= -20284)

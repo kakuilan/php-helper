@@ -236,10 +236,6 @@ EOF;
         $res3 = StringHelper::unescape($str2);
         $this->assertEquals(17, mb_strlen($res3));
 
-        $str3 = '在沙漠中有一位乾渴的旅人，遠遠地看到一座休息站，他心想我就可以到那兒去休息了；這是「喜」。而旅人到了休息站，洗完澡，吃飽也休息夠了，坐在樹下，此時他會經驗到一種快樂、平安和滿足；這就是樂。';
-        $res4 = StringHelper::unescape($str3);
-        $this->assertEquals($str3, $res4);
-
     }
 
 
@@ -247,6 +243,7 @@ EOF;
         $tests = [
             ['', ''],
             ['-~!@#$', ''],
+            ['「喜」', ''],
             ['hello', 'H'],
             ['安徽', 'A'],
             ['北京', 'B'],
@@ -271,6 +268,8 @@ EOF;
             ['信息', 'X'],
             ['应用', 'Y'],
             ['正则', 'Z'],
+            ['經驗', 'J'],
+            ['滿足', 'M'],
         ];
 
         foreach ($tests as $test) {
