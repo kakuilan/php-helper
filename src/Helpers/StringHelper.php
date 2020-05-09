@@ -305,7 +305,7 @@ class StringHelper {
 
 
     /**
-     * 获取字符串的首字母
+     * 获取字符串的首字母(尚不支持繁体)
      * @param string $str
      * @return string
      */
