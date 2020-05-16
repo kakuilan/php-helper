@@ -720,6 +720,7 @@ class PromiseTest extends TestCase {
             $future->resolve(UncatchableFuture::class);
         } catch (UncatchableException $e) {
             $this->assertNotEmpty($e->getMessage());
+            $this->assertNotEmpty($e->getSummary());
         }
 
         // resolve-except
