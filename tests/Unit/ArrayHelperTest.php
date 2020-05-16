@@ -495,4 +495,90 @@ class ArrayHelperTest extends TestCase {
     }
 
 
+    public function testCompareSchema() {
+        $sub1 = [
+            'a' => '1',
+            'b' => '2',
+            'c' => '3',
+        ];
+        $sub2 = [
+            'b' => '6',
+            'a' => '5',
+            'c' => '7',
+        ];
+        $sub3 = [
+            'c' => '8',
+            'b' => '9',
+            'a' => '10',
+            'd' => '11',
+        ];
+        $sub4 = ['hh', 'ee', 'll'];
+        $arr1 = [
+            'aa'    => '11',
+            'bb'    => '12',
+            'cc'    => '13',
+            'sub'   => $sub1,
+            'child' => range(1, 9),
+        ];
+        $arr2 = [
+            'bb'    => '15',
+            'aa'    => '14',
+            'cc'    => '16',
+            'sub'   => $sub2,
+            'child' => $sub4,
+        ];
+        $arr3 = [
+            'bb'    => '15',
+            'aa'    => '14',
+            'cc'    => '16',
+            'sub'   => $sub3,
+            'child' => [],
+        ];
+        $arr4 = [
+            'bb'    => '15',
+            'aa'    => '14',
+            'cc'    => '16',
+            'sub'   => $sub3,
+            'dd'    => [],
+            'child' => null,
+        ];
+        $arr5 = [
+            'bb'    => '15',
+            'aa'    => '14',
+            'cc'    => '16',
+            'sub'   => $sub2,
+            'child' => $sub3,
+        ];
+        $arr6 = [
+            'bb'    => '15',
+            'aa'    => '14',
+            'cc'    => '16',
+            'sub'   => $sub2,
+            'child' => 'hello world',
+        ];
+
+        $tests = [
+            [$arr1, $arr2, false, true],
+            [$arr1, $arr2, true, true],
+
+            [$arr1, $arr3, false, true],
+            [$arr1, $arr3, true, false],
+
+            [$arr1, $arr4, false, false],
+            [$arr1, $arr4, true, false],
+
+            [$arr2, $arr5, false, true],
+            [$arr2, $arr5, true, false],
+
+            [$arr2, $arr6, false, true],
+            [$arr2, $arr6, true, false],
+        ];
+        foreach ($tests as $test) {
+            $expected = ArrayHelper::compareSchema($test[0], $test[1], $test[2]);
+            $this->assertEquals($test[3], $expected);
+        }
+
+    }
+
+
 }

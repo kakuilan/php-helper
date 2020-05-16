@@ -633,4 +633,37 @@ class ValidateHelper {
     }
 
 
+    /**
+     * 是否索引数组
+     * 注意:无法判断空数组是索引数组还是关联数组
+     * @param array $arr
+     * @return bool
+     */
+    public static function isIndexArray(array $arr): bool {
+        $res = false;
+        if (!empty($arr)) {
+            $str = implode('', array_keys($arr));
+            $res = boolval(preg_match(RegularHelper::$patternInteger, $str));
+        }
+
+        return $res;
+    }
+
+
+    /**
+     * 是否关联数组
+     * 注意:无法判断空数组是索引数组还是关联数组
+     * @param array $arr
+     * @return bool
+     */
+    public static function isAssocArray(array $arr): bool {
+        $res = false;
+        if (!empty($arr)) {
+            $res = count(array_filter(array_keys($arr), 'is_string')) > 0;
+        }
+
+        return $res;
+    }
+
+
 }

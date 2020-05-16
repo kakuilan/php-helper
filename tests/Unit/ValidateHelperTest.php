@@ -825,4 +825,46 @@ class ValidateHelperTest extends TestCase {
     }
 
 
+    public function testIsIndexArray() {
+        $arr1 = [];
+        $arr2 = ['a', 'b', 'c'];
+        $arr3 = range(1, 10);
+        $arr4 = ['2' => 'a', '1' => 'b', '3' => 'd', '0' => 'y'];
+        $arr5 = ['a' => 1, 'b' => 2, 'c' => 'hell', 'd' => 'world'];
+
+        $tests = [
+            [$arr1, false],
+            [$arr2, true],
+            [$arr3, true],
+            [$arr4, true],
+            [$arr5, false],
+        ];
+        foreach ($tests as $test) {
+            $expected = ValidateHelper::isIndexArray($test[0]);
+            $this->assertEquals($test[1], $expected);
+        }
+    }
+
+
+    public function testIsAssocArray() {
+        $arr1 = [];
+        $arr2 = ['a', 'b', 'c'];
+        $arr3 = range(1, 10);
+        $arr4 = ['2' => 'a', '1' => 'b', '3' => 'd', '0' => 'y'];
+        $arr5 = ['a' => 1, 'b' => 2, 'c' => 'hell', 'd' => 'world'];
+
+        $tests = [
+            [$arr1, false],
+            [$arr2, false],
+            [$arr3, false],
+            [$arr4, false],
+            [$arr5, true],
+        ];
+        foreach ($tests as $test) {
+            $expected = ValidateHelper::isAssocArray($test[0]);
+            $this->assertEquals($test[1], $expected);
+        }
+    }
+
+
 }

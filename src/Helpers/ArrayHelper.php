@@ -554,4 +554,41 @@ class ArrayHelper {
     }
 
 
+    /**
+     * 对比两个数组,看结构(键)是否相同
+     * @param array $arr1 数组一
+     * @param array $arr2 数组二
+     * @param bool $recursive 是否递归(比较多维数组)
+     * @return bool
+     */
+    public static function compareSchema(array $arr1, array $arr2, bool $recursive = false): bool {
+        $diff = (count($arr1) > count($arr2)) ? array_diff_key($arr1, $arr2) : array_diff_key($arr2, $arr1);
+        $res  = empty($diff);
+        if ($res && $recursive) {
+            foreach ($arr1 as $key => $item) {
+                $item2 = $arr2[$key];
+                if (is_array($item) && is_array($item2)) {
+                    if (ValidateHelper::isAssocArray($item) && ValidateHelper::isAssocArray($item2)) {//两个都是关联数组
+                        $check = self::compareSchema($item, $item2, $recursive);
+                        if (!$check) {
+                            $res = false;
+                            break;
+                        }
+                    } elseif ((ValidateHelper::isIndexArray($item) && ValidateHelper::isIndexArray($item2)) || (empty($item) && empty($item2))) {//两个都是索引数组或空数组
+                        continue;
+                    } else {
+                        $res = false;
+                        break;
+                    }
+                } elseif ((is_array($item) && !is_array($item2)) || (!is_array($item) && is_array($item2))) {
+                    $res = false;
+                    break;
+                }
+            }
+        }
+
+        return $res;
+    }
+
+
 }
