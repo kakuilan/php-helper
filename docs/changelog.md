@@ -1,6 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.1.3]- 2020-05-16
+#### Added
+- 方法`ValidateHelper::isAssocArray`
+- 方法`ValidateHelper::isIndexArray`
+- 方法`ArrayHelper::compareSchema`
+
+#### Fixed
+- none
+
+#### Changed
+- none
+
+#### Removed
+- none
+
 ## [v0.1.2]- 2020-05-08
 #### Added
 - 方法`DateHelper::startOfDay`
