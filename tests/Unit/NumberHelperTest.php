@@ -94,4 +94,18 @@ class NumberHelperTest extends TestCase {
     }
 
 
+    public function testRandFloat() {
+        $tests = [
+            [0, 1],
+            [1, 9],
+            [-5, 5],
+            [-1204, 6534],
+        ];
+        foreach ($tests as $test) {
+            $expected = NumberHelper::randFloat($test[0], $test[1]);
+            $chk = NumberHelper::inRange($expected, $test[0], $test[1]);
+            $this->assertTrue($chk);
+        }
+    }
+
 }

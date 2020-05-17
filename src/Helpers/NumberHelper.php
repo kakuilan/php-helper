@@ -130,4 +130,15 @@ class NumberHelper {
     }
 
 
+    /**
+     * 生成随机浮点数
+     * @param float $min 小值
+     * @param float $max 大值
+     * @return float
+     */
+    public static function randFloat(float $min = 0, float $max = 1): float {
+        return $min + mt_rand() / mt_getrandmax() * ($max - $min);
+    }
+
+
 }
