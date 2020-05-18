@@ -119,11 +119,11 @@ class BaseObject {
      * @return array
      * @throws ReflectionException
      */
-    public static function getClassMethods($var = null, $filter = null, bool $includeParent = true): array {
+    public static function getClassMethods($var = null, int $filter = null, bool $includeParent = true): array {
         $res     = [];
         $name    = self::getClass($var);
         $class   = new ReflectionClass($name);
-        $methods = $class->getMethods($filter);
+        $methods = is_null($filter) ? $class->getMethods() : $class->getMethods($filter);
         if (!empty($methods)) {
             foreach ($methods as $methodObj) {
                 array_push($res, $methodObj->name);
