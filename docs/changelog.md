@@ -1,6 +1,23 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.1.5]- 2020-05-18
+#### Added
+- 方法`ArrayHelper::regularSort`
+- 方法`BaseObject::formatNamespace`
+- 方法`BaseObject::getClass`
+- 方法`BaseObject::getClassMethods`
+- 方法`ValidateHelper::isEqualArray`
+
+#### Fixed
+- 修复`ValidateHelper::isIndexArray`存在负数索引时的问题
+
+#### Changed
+- none
+
+#### Removed
+- none
+
 ## [v0.1.4]- 2020-05-17
 #### Added
 - 方法`NumberHelper::randFloat`
