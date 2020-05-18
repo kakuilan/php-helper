@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.1.6]- 2020-05-18
+#### Added
+- none
+
+#### Fixed
+- 修复`BaseObject::getClassMethods`当$filter为null时,在php7.2下失败的问题
+
+#### Changed
+- none
+
+#### Removed
+- none
+
 ## [v0.1.5]- 2020-05-18
 #### Added
 - 方法`ArrayHelper::regularSort`
