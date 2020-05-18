@@ -298,20 +298,20 @@ class ObjectsTest extends TestCase {
     public function testGetClassMethods() {
         $res1 = BaseObject::getClassMethods(BaseCls::class);
         $res2 = BaseObject::getClassMethods(BaseCls::class, ReflectionMethod::IS_STATIC);
-        $res3 = BaseObject::getClassMethods(BaseCls::class, null, false);
+        $res3 = BaseObject::getClassMethods(BaseCls::class, ReflectionMethod::IS_PUBLIC, false);
         $dif1 = array_diff($res1, $res2);
 
         $chk1 = ValidateHelper::isEqualArray($res3, ['time', '__call']);
         $chk2 = ValidateHelper::isEqualArray($dif1, ['time', '__call', '__toString']);
-        var_dump('$res3', $res3);
+        var_dump('$res3----------', $res3, $dif1);
         $this->assertTrue($chk1);
         $this->assertTrue($chk2);
 
         $res4 = BaseObject::getClassMethods(StrictCls::class);
         $res5 = BaseObject::getClassMethods(StrictCls::class, ReflectionMethod::IS_PROTECTED);
-        $res6 = BaseObject::getClassMethods(StrictCls::class, ReflectionMethod::IS_PUBLIC && ReflectionMethod::IS_STATIC, false);
+        $res6 = BaseObject::getClassMethods(StrictCls::class, ReflectionMethod::IS_PUBLIC, false);
         $dif2 = array_diff($res4, $res5);
-        var_dump('$res6', $res6);
+        var_dump('$res6-----------', $res6);
         $chk3 = ValidateHelper::isEqualArray($res6, ['world']);
         $this->assertTrue($chk3);
         $this->assertNotEmpty($dif2);
