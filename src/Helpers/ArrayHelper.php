@@ -445,6 +445,29 @@ class ArrayHelper {
 
 
     /**
+     * 对(多维)数组进行正常排序,将会改变原数组.
+     * @param array $arr
+     * @return bool
+     */
+    public static function regularSort(array &$arr): bool {
+        $res = false;
+        foreach ($arr as $key => &$item) {
+            if (is_array($item)) {
+                self::regularSort($item);
+            }
+        }
+
+        if (ValidateHelper::isIndexArray($arr)) {
+            $res = sort($arr);
+        } elseif (ValidateHelper::isAssocArray($arr)) {
+            $res = ksort($arr);
+        }
+
+        return $res;
+    }
+
+
+    /**
      * 交换2个元素的值
      * @param array $arr
      * @param int|string $keya 键a

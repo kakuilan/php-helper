@@ -577,7 +577,56 @@ class ArrayHelperTest extends TestCase {
             $expected = ArrayHelper::compareSchema($test[0], $test[1], $test[2]);
             $this->assertEquals($test[3], $expected);
         }
+    }
 
+
+    public function testRegularSort() {
+        $arr0 = range(1, 9);
+        shuffle($arr0);
+        $sub0 = [
+            "name"         => "Sally",
+            "nick_name"    => "sal",
+            "availability" => 1,
+            "weight"       => 65.4,
+            "is_fav"       => false,
+            "addr"         => "home",
+        ];
+        $sub1 = [
+            '-1' => 23,
+            '8'  => 33,
+            '2'  => [],
+            '9'  => 'asdf',
+            '19' => 'wera',
+            '4'  => true,
+            '10' => false,
+            '0'  => 3.14,
+            '-8' => 3.14,
+            '5'  => 2.718,
+        ];
+        $arr1 = [5, 3, 7, 23, 6, 86];
+        $arr2 = [
+            'B'     => 'great', 'A' => 'good',
+            'b'     => 'great', 'a' => 'good',
+            'last'  => $arr0,
+            'sub'   => $sub0,
+            'child' => $sub1,
+        ];
+
+        ArrayHelper::regularSort($arr1);
+        ArrayHelper::regularSort($arr2);
+
+        $keys1 = implode('', array_keys($arr1));
+        $vals1 = implode('', array_values($arr1));
+        $this->assertEquals('012345', $keys1);
+        $this->assertEquals('35672386', $vals1);
+
+        $keys2 = implode('', array_keys($arr2['child']));
+        $vals2 = implode('', array_values($arr2['last']));
+        $this->assertEquals('0123456789', $keys2);
+        $this->assertEquals('123456789', $vals2);
+
+        $vals3 = implode('', array_values($arr2['sub']));
+        $this->assertEquals('home1Sallysal65.4', $vals3);
     }
 
 
