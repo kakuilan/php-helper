@@ -300,10 +300,11 @@ class ObjectsTest extends TestCase {
         $res2 = BaseObject::getClassMethods(BaseCls::class, ReflectionMethod::IS_STATIC);
         $res3 = BaseObject::getClassMethods(BaseCls::class, ReflectionMethod::IS_PUBLIC, false);
         $dif1 = array_diff($res1, $res2);
+        var_dump('$res1------:', $res1, $res2);
+        var_dump('$res3----------', $res3, $dif1);
 
         $chk1 = ValidateHelper::isEqualArray($res3, ['time', '__call']);
         $chk2 = ValidateHelper::isEqualArray($dif1, ['time', '__call', '__toString']);
-        var_dump('$res3----------', $res3, $dif1);
         $this->assertTrue($chk1);
         $this->assertTrue($chk2);
 
