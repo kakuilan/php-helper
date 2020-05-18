@@ -829,7 +829,7 @@ class ValidateHelperTest extends TestCase {
         $arr1 = [];
         $arr2 = ['a', 'b', 'c'];
         $arr3 = range(1, 10);
-        $arr4 = ['2' => 'a', '1' => 'b', '3' => 'd', '0' => 'y'];
+        $arr4 = ['2' => 'a', '1' => 'b', '3' => 'd', '0' => 'y', '-5' => true];
         $arr5 = ['a' => 1, 'b' => 2, 'c' => 'hell', 'd' => 'world'];
 
         $tests = [
@@ -863,6 +863,41 @@ class ValidateHelperTest extends TestCase {
         foreach ($tests as $test) {
             $expected = ValidateHelper::isAssocArray($test[0]);
             $this->assertEquals($test[1], $expected);
+        }
+    }
+
+
+    public function testIsEqualArray() {
+        $arr0 = range(1, 9);
+        shuffle($arr0);
+        $arr1 = [];
+        $arr2 = [];
+        $arr3 = [2, 2, 1];
+        $arr4 = [2, 1, 1];
+        $arr5 = ['a' => 'good', 'b' => 'great'];
+        $arr6 = ['B' => 'great', 'A' => 'good'];
+        $arr7 = ['b' => 'great', 'a' => 'good'];
+        $arr8 = [
+            'first'  => 'geeks',
+            'second' => 'for',
+            'last'   => $arr0,
+        ];
+        $arr9 = [
+            'second' => 'for',
+            'last'   => range(1, 9),
+            'first'  => 'geeks',
+        ];
+
+        $tests = [
+            [$arr1, $arr2, true],
+            [$arr3, $arr4, false],
+            [$arr5, $arr6, false],
+            [$arr5, $arr7, true],
+            [$arr8, $arr9, true],
+        ];
+        foreach ($tests as $test) {
+            $expected = ValidateHelper::isEqualArray($test[0], $test[1]);
+            $this->assertEquals($test[2], $expected);
         }
     }
 

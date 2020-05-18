@@ -643,6 +643,7 @@ class ValidateHelper {
         $res = false;
         if (!empty($arr)) {
             $str = implode('', array_keys($arr));
+            $str = str_replace('-', '', $str); //处理多个负数索引
             $res = boolval(preg_match(RegularHelper::$patternInteger, $str));
         }
 
@@ -660,6 +661,24 @@ class ValidateHelper {
         $res = false;
         if (!empty($arr)) {
             $res = count(array_filter(array_keys($arr), 'is_string')) > 0;
+        }
+
+        return $res;
+    }
+
+
+    /**
+     * 检查两个数组是否相等(索引顺序可以不同)
+     * @param array $arr1
+     * @param array $arr2
+     * @return bool
+     */
+    public static function isEqualArray(array $arr1, array $arr2): bool {
+        $res = false;
+        if (count($arr1) == count($arr2)) {
+            ArrayHelper::regularSort($arr1);
+            ArrayHelper::regularSort($arr2);
+            $res = serialize($arr1) === serialize($arr2);
         }
 
         return $res;
