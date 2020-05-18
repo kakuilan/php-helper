@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.1.7]- 2020-05-18
+#### Added
+- 方法`ValidateHelper::isOneDimensionalArray`
+
+#### Fixed
+- none
+
+#### Changed
+- none
+
+#### Removed
+- none
+
 ## [v0.1.6]- 2020-05-18
 #### Added
 - none
