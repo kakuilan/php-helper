@@ -9,15 +9,18 @@
 
 namespace Kph\Tests\Unit;
 
+use Kph\Helpers\ValidateHelper;
 use PHPUnit\Framework\TestCase;
+usE Kph\Helpers\ArrayHelper;
 use Kph\Objects\ArrayObject;
 use Kph\Objects\BaseObject;
 use Kph\Tests\Objects\BaseCls;
 use Kph\Tests\Objects\StrictCls;
 use ReflectionClass;
+use ReflectionException;
+use ReflectionMethod;
 use Error;
 use Exception;
-use ReflectionException;
 use Throwable;
 
 
@@ -288,6 +291,28 @@ class ObjectsTest extends TestCase {
         $arrObj->append(['name' => 'wang6', 'age' => '45',]);
         $names = $arrObj->column('name');
         $this->assertEquals($names->count(), 4);
+
+    }
+
+
+    public function testGetClassMethods() {
+        $res1 = BaseObject::getClassMethods(BaseCls::class);
+        $res2 = BaseObject::getClassMethods(BaseCls::class, ReflectionMethod::IS_STATIC);
+        $res3 = BaseObject::getClassMethods(BaseCls::class, null, false);
+        $dif1 = array_diff($res1, $res2);
+
+        $chk1 = ValidateHelper::isEqualArray($res3, ['time', '__call']);
+        $chk2 = ValidateHelper::isEqualArray($dif1, ['time', '__call', '__toString']);
+        $this->assertTrue($chk1);
+        $this->assertTrue($chk2);
+
+        $res4 = BaseObject::getClassMethods(StrictCls::class);
+        $res5 = BaseObject::getClassMethods(StrictCls::class, ReflectionMethod::IS_PROTECTED);
+        $res6 = BaseObject::getClassMethods(StrictCls::class, ReflectionMethod::IS_PUBLIC && ReflectionMethod::IS_STATIC, false);
+        $dif2 = array_diff($res4, $res5);
+        $chk3 = ValidateHelper::isEqualArray($res6, ['world']);
+        $this->assertTrue($chk3);
+        $this->assertNotEmpty($dif2);
 
     }
 

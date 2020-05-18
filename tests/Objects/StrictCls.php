@@ -52,4 +52,14 @@ class StrictCls extends StrictObject {
     }
 
 
+    protected static function hello() {
+        return 'hello';
+    }
+
+
+    public static function world() {
+        return 'world';
+    }
+
+
 }

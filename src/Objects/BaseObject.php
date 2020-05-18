@@ -9,7 +9,11 @@
 
 namespace Kph\Objects;
 
+use Kph\Helpers\DirectoryHelper;
 use Kph\Helpers\StringHelper;
+use ReflectionClass;
+use ReflectionMethod;
+use ReflectionException;
 
 /**
  * Class BaseObject
@@ -41,20 +45,45 @@ class BaseObject {
 
 
     /**
-     * 解析命名空间路径
-     * @param mixed $var 对象或带命名空间的类名/函数名
-     * @return array
+     * 格式化命名空间
+     * @param string $str
+     * @return string
      */
-    public static function parseNamespacePath($var = null): array {
+    public static function formatNamespace(string $str): string {
+        $str = DirectoryHelper::formatDir($str);
+        $str = str_replace('/', '\\', $str);
+        return substr($str, 0, -1);
+    }
+
+
+    /**
+     * 获取类名
+     * @param mixed $var 对象或带命名空间的类名
+     * @return string
+     */
+    public static function getClass($var = null): string {
         if (is_object($var)) {
             $cls = get_class($var);
         } elseif ($var == '' || is_null($var)) {
             $cls = static::class;
         } else {
             $cls = strval($var);
+            $cls = self::formatNamespace($cls);
         }
 
+        return $cls;
+    }
+
+
+    /**
+     * 解析命名空间路径
+     * @param mixed $var 对象或带命名空间的类名/函数名
+     * @return array
+     */
+    public static function parseNamespacePath($var = null): array {
+        $cls = self::getClass($var);
         $res = StringHelper::multiExplode($cls, '\\', '/');
+
         return array_filter($res);
     }
 
@@ -79,6 +108,37 @@ class BaseObject {
         $arr = self::parseNamespacePath($var);
         array_pop($arr);
         return implode('\\', $arr);
+    }
+
+
+    /**
+     * 获取类的方法列表
+     * @param mixed $var 对象或带命名空间的类名
+     * @param int|null $filter 过滤器,如 ReflectionMethod::IS_STATIC | ReflectionMethod::IS_FINAL
+     * @param bool $includeParent 是否包括父类的方法
+     * @return array
+     * @throws ReflectionException
+     */
+    public static function getClassMethods($var = null, int $filter = null, bool $includeParent = true): array {
+        $res     = [];
+        $name    = self::getClass($var);
+        $class   = new ReflectionClass($name);
+        $methods = $class->getMethods($filter);
+        if (!empty($methods)) {
+            foreach ($methods as $methodObj) {
+                array_push($res, $methodObj->name);
+            }
+
+            //不包括父类的方法
+            if (!$includeParent && $parentClass = get_parent_class($name)) {
+                $parentMethods = get_class_methods($parentClass);
+                if (!empty($parentMethods)) {
+                    $res = array_diff($res, $parentMethods);
+                }
+            }
+        }
+
+        return $res;
     }
 
 
