@@ -902,4 +902,28 @@ class ValidateHelperTest extends TestCase {
     }
 
 
+    public function testIsOneDimensionalArray() {
+        $arr1 = [];
+        $arr2 = [3, 6, 1, true, 'hello'];
+        $arr3 = [3, 6, 1, true, 'hello', []];
+        $arr4 = [3, 6, 1, true, 'hello', ['world', null]];
+        $arr5 = [
+            'second' => 'for',
+            'last'   => range(1, 9),
+            'first'  => 'geeks',
+        ];
+
+        $tests = [
+            [$arr1, true],
+            [$arr2, true],
+            [$arr3, true],
+            [$arr4, false],
+            [$arr5, false],
+        ];
+        foreach ($tests as $test) {
+            $expected = ValidateHelper::isOneDimensionalArray($test[0]);
+            $this->assertEquals($test[1], $expected);
+        }
+    }
+
 }

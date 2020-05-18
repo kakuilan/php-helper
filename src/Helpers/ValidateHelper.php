@@ -685,4 +685,22 @@ class ValidateHelper {
     }
 
 
+    /**
+     * 检查是否一维数组
+     * @param array $arr
+     * @return bool
+     */
+    public static function isOneDimensionalArray(array $arr): bool {
+        $res = true;
+        foreach ($arr as $item) {
+            if (is_array($item) && !empty($item)) {
+                $res = false;
+                break;
+            }
+        }
+
+        return $res;
+    }
+
+
 }

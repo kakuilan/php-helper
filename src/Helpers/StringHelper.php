@@ -190,6 +190,7 @@ class StringHelper {
             $html = mb_convert_encoding($html, 'html-entities', 'UTF-8');
         }
 
+        @libxml_use_internal_errors(true);
         @$doc->loadHTML($html);
         $res = $doc->saveHTML();
         if ($isMultibyte) {
@@ -1171,7 +1172,7 @@ class StringHelper {
         }
 
         // 如果提供了开始定界符
-        if (!is_null($begin) && $begin!=='') {
+        if (!is_null($begin) && $begin !== '') {
             // 计算开始定界符的出现位置
             $beginPos = mb_stripos($str, $begin);
 
