@@ -1,6 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.1.8]- 2020-05-19
+#### Added
+- none
+
+#### Fixed
+- none
+
+#### Changed
+- 方法`ValidateHelper::isIndexArray`参数不限制类型
+- 方法`ValidateHelper::isAssocArray`参数不限制类型
+- 方法`ValidateHelper::isOneDimensionalArray`参数不限制类型
+
+#### Removed
+- none
+
 ## [v0.1.7]- 2020-05-18
 #### Added
 - 方法`ValidateHelper::isOneDimensionalArray`
