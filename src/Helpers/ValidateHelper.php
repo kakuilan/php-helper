@@ -636,12 +636,12 @@ class ValidateHelper {
     /**
      * 是否索引数组
      * 注意:无法判断空数组是索引数组还是关联数组
-     * @param array $arr
+     * @param mixed|array $arr
      * @return bool
      */
-    public static function isIndexArray(array $arr): bool {
+    public static function isIndexArray($arr): bool {
         $res = false;
-        if (!empty($arr)) {
+        if (is_array($arr) && !empty($arr)) {
             $str = implode('', array_keys($arr));
             $str = str_replace('-', '', $str); //处理多个负数索引
             $res = boolval(preg_match(RegularHelper::$patternInteger, $str));
@@ -654,12 +654,12 @@ class ValidateHelper {
     /**
      * 是否关联数组
      * 注意:无法判断空数组是索引数组还是关联数组
-     * @param array $arr
+     * @param mixed|array $arr
      * @return bool
      */
-    public static function isAssocArray(array $arr): bool {
+    public static function isAssocArray($arr): bool {
         $res = false;
-        if (!empty($arr)) {
+        if (is_array($arr) && !empty($arr)) {
             $res = count(array_filter(array_keys($arr), 'is_string')) > 0;
         }
 
@@ -687,15 +687,17 @@ class ValidateHelper {
 
     /**
      * 检查是否一维数组
-     * @param array $arr
+     * @param mixed|array $arr
      * @return bool
      */
-    public static function isOneDimensionalArray(array $arr): bool {
-        $res = true;
-        foreach ($arr as $item) {
-            if (is_array($item) && !empty($item)) {
-                $res = false;
-                break;
+    public static function isOneDimensionalArray($arr): bool {
+        $res = is_array($arr);
+        if ($res) {
+            foreach ($arr as $item) {
+                if (is_array($item) && !empty($item)) {
+                    $res = false;
+                    break;
+                }
             }
         }
 

@@ -914,6 +914,7 @@ class ValidateHelperTest extends TestCase {
         ];
 
         $tests = [
+            ['hello', false],
             [$arr1, true],
             [$arr2, true],
             [$arr3, true],
