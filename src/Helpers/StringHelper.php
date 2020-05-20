@@ -924,6 +924,10 @@ class StringHelper {
 
             if (self::isCaseConnector($r1)) {
                 $r0 = strtoupper($r0);
+            } elseif (ValidateHelper::isLowerLetter($r1) && ValidateHelper::isUpperLetter($r0)) {
+                array_push($res, $r1);
+            } elseif (ValidateHelper::isUpperLetter($r1) && ValidateHelper::isLowerLetter($r0)) {
+                array_push($res, $r1);
             } else {
                 $r0 = strtolower($r0);
                 array_push($res, $r1);

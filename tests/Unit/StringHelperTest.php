@@ -472,6 +472,9 @@ EOF;
             ['no_https', 'NoHttps'],
             ['_complex__case_', '_Complex_Case_'],
             ['some words', 'SomeWords'],
+            ['sayHello', 'SayHello'],
+            ['SayHello', 'SayHello'],
+            ['SayHelloWorld', 'SayHelloWorld'],
         ];
         foreach ($tests as $test) {
             $expected = StringHelper::toCamelCase($test[0]);
