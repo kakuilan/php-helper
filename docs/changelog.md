@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.1.9]- 2020-05-20
+#### Added
+- none
+
+#### Fixed
+- 修复`StringHelper::toCamelCase`当输入首字母大写的驼峰字符串失败问题
+
+#### Changed
+- none
+
+#### Removed
+- none
+
 ## [v0.1.8]- 2020-05-19
 #### Added
 - none
