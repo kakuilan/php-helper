@@ -59,9 +59,9 @@ class EncryptHelper {
         //密钥
         $key = md5($key);
         // 密钥a会参与加解密
-        $keya = md5(substr($key, 0, 16));
+        $keya = substr($key, 0, 16);
         // 密钥b会用来做数据完整性验证
-        $keyb = md5(substr($key, 16, 16));
+        $keyb = substr($key, 16, 16);
         // 密钥c用于变化生成的密文
         $keyc      = $encode ? substr(md5(microtime()), -Consts::DYNAMIC_KEY_LEN) : substr($data, 0, Consts::DYNAMIC_KEY_LEN);
         $keyd      = md5($keya . $keyc);

@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.2.0]- 2020-06-20
+#### Added
+- none
+
+#### Fixed
+- none
+
+#### Changed
+- 优化`EncryptHelper::authcode`
+
+#### Removed
+- none
+
 ## [v0.1.9]- 2020-05-20
 #### Added
 - none
