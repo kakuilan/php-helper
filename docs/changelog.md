@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.2.1]- 2020-09-17
+#### Added
+- none
+
+#### Fixed
+- 修复`Kph\Concurrent\makeClosureFun`
+
+#### Changed
+- none
+
+#### Removed
+- none
+
 ## [v0.2.0]- 2020-06-20
 #### Added
 - none
