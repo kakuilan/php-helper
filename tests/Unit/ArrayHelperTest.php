@@ -258,7 +258,7 @@ class ArrayHelperTest extends TestCase {
 
 
     public function testCutItems() {
-        $arr = [
+        $arr  = [
             0   => 'aa',
             3   => 'ww',
             'a' => 4,
@@ -267,13 +267,16 @@ class ArrayHelperTest extends TestCase {
             '8' => 'hello',
             9   => false,
         ];
+        $arr2 = $arr;
 
-        [$res1, $res2, $res3, $res4] = ArrayHelper::cutItems($arr, 3, 'a', 'd', 'p');
+        [$res1, $res2, $res3, $res4] = ArrayHelper::cutItems($arr, false, 3, 'a', 'd', 'p');
+        $res5 = ArrayHelper::cutItems($arr2, true, 'a', 'd', 'p');
         $this->assertEquals('ww', $res1);
         $this->assertEquals(4, $res2);
         $this->assertEquals(56.78, $res3);
         $this->assertNull($res4);
         $this->assertEquals(4, count($arr));
+        $this->assertTrue(isset($res5['a']));;
     }
 
 

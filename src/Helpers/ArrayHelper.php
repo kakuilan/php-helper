@@ -138,17 +138,26 @@ class ArrayHelper {
     /**
      * 从数组中剪切元素,将改变原数组,并返回剪切的元素数组.
      * @param array $arr 原数组
+     * @param bool $keepKey 是否保留键值
      * @param mixed ...$keys 要剪切的元素键,一个或多个
      * @return array
      */
-    public static function cutItems(array &$arr, ...$keys): array {
+    public static function cutItems(array &$arr, bool $keepKey = false, ...$keys): array {
         $res = [];
-        foreach ($keys as $key) {
-            if (isset($arr[$key])) {
-                array_push($res, $arr[$key]);
+
+        if (!empty($keys)) {
+            foreach ($keys as $key) {
+                $key = strval(trim($key));
+                if ($key == '') {
+                    continue;
+                }
+
+                $res[$key] = $arr[$key] ?? null;
                 unset($arr[$key]);
-            } else {
-                array_push($res, null);
+            }
+
+            if (!empty($res) && !$keepKey) {
+                $res = array_values($res);
             }
         }
 
