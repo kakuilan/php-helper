@@ -42,7 +42,7 @@ class ArrayHelper {
     /**
      * 多维数组去重
      * @param array $arr
-     * @param bool $keepKey 是否保留键值
+     * @param bool $keepKey 是否保留键名
      * @return array
      */
     public static function multiArrayUnique(array $arr, bool $keepKey = false): array {
@@ -138,7 +138,7 @@ class ArrayHelper {
     /**
      * 从数组中剪切元素,将改变原数组,并返回剪切的元素数组.
      * @param array $arr 原数组
-     * @param bool $keepKey 是否保留键值
+     * @param bool $keepKey 是否保留键名
      * @param mixed ...$keys 要剪切的元素键,一个或多个
      * @return array
      */
@@ -381,7 +381,7 @@ class ArrayHelper {
      * @param array $arr
      * @param string $key 排序的键
      * @param string $sort 排序方式:desc/asc
-     * @param bool $keepKey 是否保留外层键值
+     * @param bool $keepKey 是否保留外层键名
      * @return array
      */
     public static function sortByField(array $arr, string $key, string $sort = 'desc', bool $keepKey = false): array {
