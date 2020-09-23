@@ -49,7 +49,7 @@ class DirectoryHelper {
         $path = rtrim($path, DIRECTORY_SEPARATOR);
         $tree = [];
         // '{.,*}*' 相当于 '.*'(搜索.开头的隐藏文件)和'*'(搜索正常文件)
-        foreach (glob($path . '/{.,*}*', GLOB_BRACE) as $single) {
+        foreach (glob($path . '/{.,*}*', (defined(GLOB_BRACE) ? GLOB_BRACE : 1024)) as $single) {
             if (is_dir($single)) {
                 $file = str_replace($path . '/', '', $single);
                 if ($file == '.' || $file == '..') {
@@ -240,7 +240,7 @@ class DirectoryHelper {
             '%',
             '&',
             ';',
-            '|'
+            '|',
         ];
         $replace = [
             '/',

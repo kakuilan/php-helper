@@ -211,7 +211,7 @@ class ArrayHelper {
         if ($len >= 2) {
             foreach ($arr as $k => $item) {
                 $newArr = $arr;
-                self::cutItems($newArr, $k);
+                self::cutItems($newArr, false, $k);
                 $newRes = self::_combinationPosition($newArr, $separator);
                 if (!empty($newRes)) {
                     $res = array_merge($res, $newRes);
