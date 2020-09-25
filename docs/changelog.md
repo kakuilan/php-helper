@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.2.4]- 2020-09-25
+#### Added
+- none
+
+#### Fixed
+- none
+
+#### Changed
+- 修改`ArrayHelper::regularSort`,增加参数`$recursive`是否递归
+
+#### Removed
+- none
+
 ## [v0.2.2]- 2020-09-22
 #### Added
 - none

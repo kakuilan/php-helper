@@ -616,7 +616,7 @@ class ArrayHelperTest extends TestCase {
         ];
 
         ArrayHelper::regularSort($arr1);
-        ArrayHelper::regularSort($arr2);
+        ArrayHelper::regularSort($arr2, true);
 
         $keys1 = implode('', array_keys($arr1));
         $vals1 = implode('', array_values($arr1));

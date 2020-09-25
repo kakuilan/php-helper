@@ -456,13 +456,17 @@ class ArrayHelper {
     /**
      * 对(多维)数组进行正常排序,将会改变原数组.
      * @param array $arr
+     * @param bool $recursive 是否递归
      * @return bool
      */
-    public static function regularSort(array &$arr): bool {
+    public static function regularSort(array &$arr, bool $recursive = false): bool {
         $res = false;
-        foreach ($arr as $key => &$item) {
-            if (is_array($item)) {
-                self::regularSort($item);
+
+        if ($recursive) {
+            foreach ($arr as $key => &$item) {
+                if (is_array($item)) {
+                    self::regularSort($item, true);
+                }
             }
         }
 

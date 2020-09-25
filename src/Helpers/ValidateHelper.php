@@ -676,8 +676,8 @@ class ValidateHelper {
     public static function isEqualArray(array $arr1, array $arr2): bool {
         $res = false;
         if (count($arr1) == count($arr2)) {
-            ArrayHelper::regularSort($arr1);
-            ArrayHelper::regularSort($arr2);
+            ArrayHelper::regularSort($arr1, true);
+            ArrayHelper::regularSort($arr2, true);
             $res = serialize($arr1) === serialize($arr2);
         }
 
