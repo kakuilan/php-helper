@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.2.5]- 2020-10-15
+#### Added
+- none
+
+#### Fixed
+- none
+
+#### Changed
+- 修改`DirectoryHelper::getFileTree`,弃用`glob`函数
+
+#### Removed
+- none
+
 ## [v0.2.4]- 2020-09-25
 #### Added
 - none
