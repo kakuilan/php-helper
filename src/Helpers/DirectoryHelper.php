@@ -46,26 +46,30 @@ class DirectoryHelper {
      * @return array
      */
     public static function getFileTree(string $path, string $type = 'all', bool $recursive = true): array {
-        $path = rtrim($path, DIRECTORY_SEPARATOR);
-        $tree = [];
-        // '{.,*}*' 相当于 '.*'(搜索.开头的隐藏文件)和'*'(搜索正常文件)
-        foreach (glob($path . '/{.,*}*', (defined(GLOB_BRACE) ? GLOB_BRACE : 1024)) as $single) {
-            if (is_dir($single)) {
-                $file = str_replace($path . '/', '', $single);
-                if ($file == '.' || $file == '..') {
-                    continue;
-                }
+        $typeArr = ['all', 'dir', 'file'];
+        $path    = rtrim($path, DIRECTORY_SEPARATOR);
+        $tree    = [];
 
-                if ($type != 'file') {
-                    array_push($tree, $single);
-                }
+        if (!in_array($type, $typeArr)) {
+            $type = 'all';
+        }
 
-                if ($recursive) {
-                    $tree = array_merge($tree, self::getFileTree($single, $type, $recursive));
+        if (is_dir($path)) {
+            $dir      = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
+            $iterator = new RecursiveIteratorIterator($dir, RecursiveIteratorIterator::SELF_FIRST);
+
+            foreach ($iterator as $single => $file) {
+                $fpath = $file->getRealPath();
+                if ($file->isDir()) {
+                    if ($type != 'file') {
+                        array_push($tree, $fpath);
+                    }
+                } elseif ($type != 'dir') {
+                    array_push($tree, $fpath);
                 }
-            } elseif ($type != 'dir') {
-                array_push($tree, $single);
             }
+        } elseif (is_file($path) && $type != 'dir') {
+            array_push($tree, $path);
         }
 
         return $tree;
@@ -215,7 +219,7 @@ class DirectoryHelper {
             @rmdir($dir);
         }
 
-        unset($objects, $object, $dirs);
+        unset($dir, $iterator, $dirs);
         return true;
     }
 
