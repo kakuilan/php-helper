@@ -94,6 +94,18 @@ class NumberHelperTest extends TestCase {
     }
 
 
+    public function testNumberSub() {
+        $num1 = '123000';
+        $num2 = 1234.56789;
+
+        $res1 = NumberHelper::numberSub($num1, 0);
+        $res2 = NumberHelper::numberSub($num2, 3);
+
+        $this->assertEquals('123000', $res1);
+        $this->assertEquals('1234.567', $res2);
+    }
+
+
     public function testRandFloat() {
         $tests = [
             [0, 1],

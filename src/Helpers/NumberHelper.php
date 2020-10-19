@@ -118,15 +118,28 @@ class NumberHelper {
 
 
     /**
-     * 数值格式化
-     * @param float|int $number 要格式化的数字
+     * 数值格式化(会四舍五入)
+     * @param float|int|string $number 要格式化的数字
      * @param int $decimals 小数位数
-     * @param string $decPoint 小数点
-     * @param string $thousandssep 千分位符号
      * @return string
      */
-    public static function numberFormat($number, int $decimals = 2, string $decPoint = '.', string $thousandssep = ''): string {
-        return number_format($number, $decimals, $decPoint, $thousandssep);
+    public static function numberFormat($number, int $decimals = 2): string {
+        return number_format(floatval($number), $decimals, '.', '');
+    }
+
+
+    /**
+     * 数值截取(不会四舍五入)
+     * @param float|int|string $number 要格式化的数字
+     * @param int $decimals 小数位数
+     * @return float
+     */
+    public static function numberSub($number, int $decimals = 2): float {
+        if ($decimals == 0 && ValidateHelper::isInteger($number)) {
+            return floatval($number);
+        }
+
+        return intval(floatval($number) * pow(10, $decimals)) / pow(10, $decimals);
     }
 
 
