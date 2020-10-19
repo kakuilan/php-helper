@@ -55,5 +55,3 @@ https://docs.aws.amazon.com/zh_cn/sdk-for-php/v3/developer-guide/guide_promises.
 ```sh
 phpstan analyze src
 ```
-
-numberSub

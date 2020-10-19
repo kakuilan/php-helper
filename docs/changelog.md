@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.2.6]- 2020-10-19
+#### Added
+- 新增`NumberHelper::numberSub`数值截取方法
+
+#### Fixed
+- none
+
+#### Changed
+- 修改`NumberHelper::numberFormat`,去掉参数`$decPoint`和`$thousandssep`
+
+#### Removed
+- none
+
 ## [v0.2.5]- 2020-10-15
 #### Added
 - none
