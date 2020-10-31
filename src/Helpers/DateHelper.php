@@ -347,6 +347,34 @@ class DateHelper {
 
 
     /**
+     * 获取日期中当时的开始时间
+     * @param int $time
+     * @return int
+     */
+    public static function startOfHour(int $time = 0):int{
+        if ($time <= 0) {
+            $time = time();
+        }
+
+        return strtotime(date("Y-m-d H:00:00", $time));
+    }
+
+
+    /**
+     * 获取日期中当时的结束时间
+     * @param int $time 时间戳
+     * @return int
+     */
+    public static function endOfHour(int $time = 0): int {
+        if ($time <= 0) {
+            $time = time();
+        }
+
+        return strtotime(date("Y-m-d H:59:59", $time));
+    }
+
+
+    /**
      * 获取日期中当天的开始时间
      * @param int $time 时间戳
      * @return int

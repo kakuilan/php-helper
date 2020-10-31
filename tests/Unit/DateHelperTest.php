@@ -172,6 +172,52 @@ class DateHelperTest extends TestCase {
     }
 
 
+    public function testStartOfHour() {
+        $tests = [
+            [-1, null],
+            [0, null],
+            [strtotime('2020-01-12 18:51:27'), '2020-01-12 18:00:00'],
+            [strtotime('2020-03-10 23:04:35'), '2020-03-10 23:00:00'],
+            [strtotime('2020-5-6 22:45:49'), '2020-05-06 22:00:00'],
+            [strtotime('2020-08-27 22:45:49'), '2020-08-27 22:00:00'],
+        ];
+
+        foreach ($tests as $test) {
+            $time     = $test[0];
+            $expected = DateHelper::startOfHour($time);
+            if ($time <= 0) {
+                $this->assertGreaterThan(0, $expected);
+                $this->assertEquals(date('Y-m-d H:00:00'), date('Y-m-d H:i:s', $expected));
+            } else {
+                $this->assertEquals($test[1], date('Y-m-d H:i:s', $expected));
+            }
+        }
+    }
+
+
+    public function testEndOfHour() {
+        $tests = [
+            [-1, null],
+            [0, null],
+            [strtotime('2020-01-12 18:51:27'), '2020-01-12 18:59:59'],
+            [strtotime('2020-03-10 23:04:35'), '2020-03-10 23:59:59'],
+            [strtotime('2020-5-6 22:45:49'), '2020-05-06 22:59:59'],
+            [strtotime('2020-08-27 22:45:49'), '2020-08-27 22:59:59'],
+        ];
+
+        foreach ($tests as $test) {
+            $time     = $test[0];
+            $expected = DateHelper::endOfHour($time);
+            if ($time <= 0) {
+                $this->assertGreaterThan(0, $expected);
+                $this->assertEquals(date('Y-m-d H:59:59'), date('Y-m-d H:i:s', $expected));
+            } else {
+                $this->assertEquals($test[1], date('Y-m-d H:i:s', $expected));
+            }
+        }
+    }
+
+
     public function testStartOfDay() {
         $tests = [
             [-1, null],
