@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.2.7]- 2020-10-31
+#### Added
+- none
+
+#### Fixed
+- 修复`ArrayHelper::object2Array`当对象内嵌对象时不转换问题
+
+#### Changed
+- none
+
+#### Removed
+- none
+
 ## [v0.2.6]- 2020-10-19
 #### Added
 - 新增`NumberHelper::numberSub`数值截取方法
