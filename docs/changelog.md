@@ -1,6 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.2.8]- 2020-10-31
+#### Added
+- 方法`DateHelper::startOfHour`
+- 方法`DateHelper::endOfHour`
+
+#### Fixed
+- none
+
+#### Changed
+- none
+
+#### Removed
+- none
+
 ## [v0.2.7]- 2020-10-31
 #### Added
 - none
