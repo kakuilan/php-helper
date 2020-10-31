@@ -109,6 +109,8 @@ class ArrayHelper {
             foreach ($arr as $k => $item) {
                 if (is_array($item) && !empty($item)) {
                     $arr[$k] = array_map(__METHOD__, $item);
+                } elseif (is_object($item)) {
+                    $arr[$k] = self::object2Array($item);
                 }
             }
         } else {
