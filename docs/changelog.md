@@ -1,6 +1,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.2.9]- 2020-11-16
+#### Added
+- 方法`FileHelper::formatPath`
+- 方法`FileHelper::getAbsPath`
+- 方法`FileHelper::getRelativePath`
+- 方法`ValidateHelper::isNaturalRange`
+
+#### Fixed
+- none
+
+#### Changed
+- 修改`DirectoryHelper::formatDir`,允许特殊字符
+
+#### Removed
+- none
+
 ## [v0.2.8]- 2020-10-31
 #### Added
 - 方法`DateHelper::startOfHour`
