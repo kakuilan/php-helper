@@ -471,4 +471,33 @@ class FileHelper {
     }
 
 
+    /**
+     * 获取$dest 相对于 $rela 的路径,即在$rela引用$dest的相对路径
+     * @param string $dest
+     * @param string $rela
+     * @return string
+     */
+    public static function getRelativePath(string $dest, string $rela): string {
+        $dest = self::formatPath($dest);
+        if ($rela == '') {
+            return $dest;
+        }
+
+        $rela = self::formatPath($rela);
+        $arrD = explode('/', $dest);
+        $arrR = explode('/', $rela);
+
+        // 获取相同路径的部分
+        $inter = array_intersect_assoc($arrD, $arrR);
+        $num   = count($inter);
+        if ($num <= 1 || !ValidateHelper::isNaturalRange(array_keys($inter))) {
+            return $dest;
+        }
+
+        // 将$rela的/ 转为 ../, $dest获取后面的部分,然后合拼
+        $tmp = array_merge(array_fill(0, count($arrR) - $num, '..'), array_slice($arrD, $num));
+        return implode('/', $tmp);
+    }
+
+
 }

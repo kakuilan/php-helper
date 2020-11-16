@@ -146,4 +146,25 @@ class FileHelperTest extends TestCase {
     }
 
 
+    public function testGetRelativePath() {
+        $f1 = '/var/www/php/ci/a.php';
+        $f2 = '/usr/local/php/log/test.log';
+        $f3 = '/var/www/php/zf/b.php';
+        $f4 = '/var/www/img/a.php';
+        $f5 = '/var/www/api/img/b.php';
+
+        $res1 = FileHelper::getRelativePath($f1, '');
+        $res2 = FileHelper::getRelativePath($f1, $f2);
+        $res3 = FileHelper::getRelativePath($f1, $f3);
+        $res4 = FileHelper::getRelativePath($f4, $f5);
+        $res5 = FileHelper::getRelativePath($f5, $f4);
+
+        $this->assertEquals($res1, $f1);
+        $this->assertEquals($res2, $f1);
+        $this->assertEquals($res3, '../../ci/a.php');
+        $this->assertEquals($res4, '../../../img/a.php');
+        $this->assertEquals($res5, '../../api/img/b.php');
+    }
+
+
 }
