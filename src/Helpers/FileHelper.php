@@ -413,4 +413,45 @@ class FileHelper {
     }
 
 
+    /**
+     * 格式化路径
+     * @param string $path
+     * @return string
+     */
+    public static function formatPath(string $path): string {
+        if ($path == '') {
+            return '';
+        }
+
+        $path = str_replace("\\", "/", $path);
+        $arr  = pathinfo($path);
+        $dir  = DirectoryHelper::formatDir($arr['dirname']);
+
+        return $dir . $arr['basename'];
+    }
+
+
+    /**
+     * 获取绝对路径
+     * @param string $path 文件路径
+     * @param string $curDir 当前目录
+     * @return string
+     */
+    public static function getAbsPath(string $path, string $curDir = ''): string {
+        $path = self::formatPath($path);
+        if ($path == '') {
+            return '';
+        } elseif (ValidateHelper::startsWith($path, '/')) {
+            return $path;
+        }
+
+        if ($curDir == '') {
+            $curDir = getcwd();
+        }
+        $curDir = DirectoryHelper::formatDir($curDir);
+
+        return $curDir . StringHelper::removeBefore($path, './', true);
+    }
+
+
 }

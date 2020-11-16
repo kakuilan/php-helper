@@ -53,7 +53,7 @@ class FileHelperTest extends TestCase {
             TESTDIR . '../vendor',
         ];
         $dest  = TESTDIR . 'tmp/test.zip';
-        $dest2  = TESTDIR . 'tmp/hello/test.zip';
+        $dest2 = TESTDIR . 'tmp/hello/test.zip';
 
         $res1 = FileHelper::createZip($files, $dest, true);
         $res2 = FileHelper::createZip($files, $dest, false);
@@ -112,8 +112,17 @@ class FileHelperTest extends TestCase {
         $arr  = FileHelper::readInArray($file);
         $this->assertGreaterThan(1, count($arr));
 
-        $arr  = FileHelper::readInArray('/tmp/hello/1234');
+        $arr = FileHelper::readInArray('/tmp/hello/1234');
         $this->assertEmpty($arr);
+    }
+
+
+    public function testFormatPath() {
+        $res1 = FileHelper::formatPath('');
+        $res2 = FileHelper::formatPath('/usr|///tmp:\\\123/\abc<|\hello>\/%world?\\how$\\are\@#test.png');
+
+        $this->assertEmpty($res1);
+        $this->assertEquals('/usr/tmp/123/abc/hello/%world/how$/are/@#test.png', $res2);
     }
 
 
