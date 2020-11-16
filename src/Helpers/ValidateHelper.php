@@ -705,4 +705,22 @@ class ValidateHelper {
     }
 
 
+    /**
+     * 是否自然数数组[0,1,2,3...]
+     * @param array $arr 数组
+     * @param bool $strict 严格排序
+     * @return bool
+     */
+    public static function isNaturalRange(array $arr, bool $strict = false): bool {
+        if (empty($arr)) {
+            return false;
+        }
+
+        $new  = range(0, count($arr) - 1);
+        $diff = $strict ? array_diff_assoc($new, $arr) : array_diff($new, $arr);
+
+        return empty($diff);
+    }
+
+
 }

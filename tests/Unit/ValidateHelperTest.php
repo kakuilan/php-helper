@@ -927,4 +927,23 @@ class ValidateHelperTest extends TestCase {
         }
     }
 
+
+    public function testIsNaturalRange() {
+        $arr1 = [1, 2, 3];
+        $arr2 = [0, 3, 1, 2];
+        $arr3 = [0, 1, 2, 3];
+
+        $res1 = ValidateHelper::isNaturalRange($arr1);
+        $res2 = ValidateHelper::isNaturalRange($arr2, false);
+        $res3 = ValidateHelper::isNaturalRange($arr2, true);
+        $res4 = ValidateHelper::isNaturalRange($arr3, false);
+        $res5 = ValidateHelper::isNaturalRange($arr3, true);
+
+        $this->assertFalse($res1);
+        $this->assertTrue($res2);
+        $this->assertFalse($res3);
+        $this->assertTrue($res4);
+        $this->assertTrue($res5);
+    }
+
 }
