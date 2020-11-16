@@ -126,4 +126,24 @@ class FileHelperTest extends TestCase {
     }
 
 
+    public function testGetAbsPath() {
+        $path1 = 'ArrayHelperTest.php';
+        $path2 = './Unit/DateHelperTest.php';
+        $path3 = '../../docs/changelog.md';
+        $path4 = '../../../.gitignore';
+
+        $res0 = FileHelper::getAbsPath('');
+        $res1 = FileHelper::getAbsPath($path1, __DIR__);
+        $res2 = FileHelper::getAbsPath($path2, TESTDIR);
+        $res3 = FileHelper::getAbsPath($path3, __DIR__);
+        $res4 = FileHelper::getAbsPath($path4);
+
+        $this->assertEmpty($res0);
+        $this->assertTrue(file_exists($res1));
+        $this->assertTrue(file_exists($res2));
+        $this->assertTrue(file_exists($res3));
+        $this->assertFalse(file_exists($res4));
+    }
+
+
 }

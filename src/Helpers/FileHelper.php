@@ -443,14 +443,31 @@ class FileHelper {
             return '';
         } elseif (ValidateHelper::startsWith($path, '/')) {
             return $path;
+        } elseif (ValidateHelper::startsWith($path, './')) {
+            $path = StringHelper::removeBefore($path, './', true);
         }
 
         if ($curDir == '') {
             $curDir = getcwd();
         }
         $curDir = DirectoryHelper::formatDir($curDir);
+        $curArr = explode('/', $curDir);
+        array_pop($curArr);
 
-        return $curDir . StringHelper::removeBefore($path, './', true);
+        while (ValidateHelper::startsWith($path, '../')) {
+            if (count($curArr) == 1) {
+                break;
+            }
+
+            $path = StringHelper::removeBefore($path, '../', true);
+            array_pop($curArr);
+        }
+
+        $curDir = implode('/', $curArr);
+        if ($curDir == '') {
+            $curDir = '/';
+        }
+        return DirectoryHelper::formatDir($curDir) . $path;
     }
 
 
