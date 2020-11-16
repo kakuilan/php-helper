@@ -99,10 +99,10 @@ class DirectoryHelperTest extends TestCase {
 
     public function testFormatDir() {
         $res1 = DirectoryHelper::formatDir('');
-        $res2 = DirectoryHelper::formatDir('/usr///tmp\\\123/\abc\hello\/world\\%how$');
+        $res2 = DirectoryHelper::formatDir('/usr|///tmp:\\\123/\abc<|\hello>\/%world?\\how$\\are');
 
         $this->assertEmpty($res1);
-        $this->assertEquals('/usr/tmp/123/abc/hello/world/how/', $res2);
+        $this->assertEquals('/usr/tmp/123/abc/hello/%world/how$/are/', $res2);
     }
 
 
