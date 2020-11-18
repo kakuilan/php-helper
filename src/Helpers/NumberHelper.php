@@ -11,6 +11,7 @@
 namespace Kph\Helpers;
 
 use Kph\Consts;
+use Kph\Exceptions\BaseException;
 
 /**
  * Class ValidateHelper
@@ -151,6 +152,29 @@ class NumberHelper {
      */
     public static function randFloat(float $min = 0, float $max = 1): float {
         return $min + mt_rand() / mt_getrandmax() * ($max - $min);
+    }
+
+
+    /**
+     * 将金额转为大写人民币
+     * @param float $num 金额,元(1元 = 1000厘,最大支持千亿)
+     * @param int $decimals 精确小数位数(最大支持为3,即厘)
+     * @return string
+     * @throws BaseException
+     */
+    public static function money2Yuan(float $num, int $decimals = 0): string {
+        //TODO
+        $int = intval($num);
+        if (strlen($int) > 12) {
+            throw new BaseException('The maximum value supports 12 bits!');
+        }
+
+        if ($decimals > 0) {
+            $decimals = min($decimals, 3);
+            $num      = $num * pow(10, $decimals);
+        }
+
+        return "";
     }
 
 
