@@ -157,24 +157,80 @@ class NumberHelper {
 
     /**
      * 将金额转为大写人民币
-     * @param float $num 金额,元(1元 = 1000厘,最大支持千亿)
+     * @param float $num 金额,元(最大支持千亿)
      * @param int $decimals 精确小数位数(最大支持为3,即厘)
      * @return string
      * @throws BaseException
      */
     public static function money2Yuan(float $num, int $decimals = 0): string {
-        //TODO
         $int = intval($num);
         if (strlen($int) > 12) {
             throw new BaseException('The maximum value supports 12 bits!');
         }
 
+        $uppers = '零壹贰叁肆伍陆柒捌玖';
+        $units  = '元拾佰仟万拾佰仟亿拾佰仟';
+
         if ($decimals > 0) {
             $decimals = min($decimals, 3);
+            $adds     = ['角', '分', '厘'];
             $num      = $num * pow(10, $decimals);
+
+            for ($i = 0; $i < $decimals; $i++) {
+                $units = $adds[$i] . $units;
+            }
         }
 
-        return "";
+        $res = '';
+        $i   = 0;
+        while (true) {
+            if ($i == 0) {
+                $n = substr($num, strlen($num) - 1, 1);
+            } else {
+                $n = $num % 10;
+            }
+            $p1 = substr($uppers, 3 * $n, 3);
+            $p2 = substr($units, 3 * $i, 3);
+
+            if ($n != '0' || ($n == '0' && ($p2 == '亿' || $p2 == '万' || $p2 == '元'))) {
+                $res = $p1 . $p2 . $res;
+            } else {
+                $res = $p1 . $res;
+            }
+
+            $i   = $i + 1;
+            $num = $num / 10;
+            $num = (int)$num;
+            if ($num == 0) {
+                break;
+            }
+        }
+
+        $j   = 0;
+        $len = strlen($res);
+        while ($j < $len) {
+            $m = substr($res, $j, 6);
+            if ($m == '零元' || $m == '零万' || $m == '零亿' || $m == '零零') {
+                $left  = substr($res, 0, $j);
+                $right = substr($res, $j + 3);
+                $res   = $left . $right;
+                $j     = $j - 3;
+                $len   = $len - 3;
+            }
+            $j = $j + 3;
+        }
+
+        if (substr($res, strlen($res) - 3, 3) == '零') {
+            $res = substr($res, 0, strlen($res) - 3);
+        }
+
+        if (empty($res)) {
+            return "零元整";
+        } elseif ($decimals == 0) {
+            $res .= "整";
+        }
+
+        return $res;
     }
 
 

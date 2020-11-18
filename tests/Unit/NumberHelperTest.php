@@ -10,9 +10,12 @@
 namespace Kph\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use Kph\Helpers\NumberHelper;
+use Kph\Helpers\ValidateHelper;
+use Kph\Exceptions\BaseException;
 use Error;
 use Exception;
-use Kph\Helpers\NumberHelper;
+use Throwable;
 
 
 class NumberHelperTest extends TestCase {
@@ -115,9 +118,38 @@ class NumberHelperTest extends TestCase {
         ];
         foreach ($tests as $test) {
             $expected = NumberHelper::randFloat($test[0], $test[1]);
-            $chk = NumberHelper::inRange($expected, $test[0], $test[1]);
+            $chk      = NumberHelper::inRange($expected, $test[0], $test[1]);
             $this->assertTrue($chk);
         }
     }
+
+
+    public function testMoney2Yuan() {
+        $num0 = 123456789087654;
+        $num1 = 123456789876;
+        $num2 = 12345678908.7;
+        $num3 = 12345678908.76;
+        $num4 = 12345678908.765;
+        $num5 = 12345678908.7654;
+
+        try {
+            NumberHelper::money2Yuan($num0);
+        } catch (Throwable $e) {
+            $this->assertTrue($e instanceof BaseException);
+        }
+
+        $res1 = NumberHelper::money2Yuan($num1);
+        $res2 = NumberHelper::money2Yuan($num2, 1);
+        $res3 = NumberHelper::money2Yuan($num3, 2);
+        $res4 = NumberHelper::money2Yuan($num4, 3);
+        $res5 = NumberHelper::money2Yuan($num5, 5);
+
+        $this->assertEquals($res1, '壹仟贰佰叁拾肆亿伍仟陆佰柒拾捌万玖仟捌佰柒拾陆元整');
+        $this->assertEquals($res2, '壹佰贰拾叁亿肆仟伍佰陆拾柒万捌仟玖佰零捌元柒角');
+        $this->assertEquals($res3, '壹佰贰拾叁亿肆仟伍佰陆拾柒万捌仟玖佰零捌元柒角陆分');
+        $this->assertEquals($res4, '壹佰贰拾叁亿肆仟伍佰陆拾柒万捌仟玖佰零捌元柒角陆分伍厘');
+        $this->assertEquals($res4, $res5);
+    }
+
 
 }
