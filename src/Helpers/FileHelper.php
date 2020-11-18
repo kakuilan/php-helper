@@ -9,12 +9,40 @@
 
 namespace Kph\Helpers;
 
+use Kph\Consts;
+
 
 /**
  * Class FileHelper
  * @package Kph\Helpers
  */
 class FileHelper {
+
+
+    /**
+     * 图片类型
+     * @var array
+     */
+    public static $imgTypes = [
+        1  => 'GIF',
+        2  => 'JPEG',
+        3  => 'PNG',
+        4  => 'SWF',
+        5  => 'PSD',
+        6  => 'BMP',
+        7  => 'TIFF_II',
+        8  => 'TIFF_MM',
+        9  => 'JPC',
+        10 => 'JP2',
+        11 => 'JPX',
+        12 => 'JB2',
+        13 => 'SWC',
+        14 => 'IFF',
+        15 => 'WBMP',
+        16 => 'XBM',
+        17 => 'ICO',
+        18 => 'WEBP',
+    ];
 
 
     /**
@@ -134,26 +162,12 @@ class FileHelper {
         }
 
         $imgInfo = getimagesize($file); //取得图片的大小，类型等
-        $fp      = fopen($file, 'r');
+        $fp      = @fopen($file, 'r');
         if ($fp) {
             $fileContent = chunk_split(base64_encode(fread($fp, filesize($file))));//base64编码
-            $imgType     = 'jpg';
-            $typeNum     = $imgInfo[2] ?? '';
-            switch ($typeNum) {
-                case 1 :
-                    $imgType = 'gif';
-                    break;
-                case 2 :
-                    $imgType = 'jpg';
-                    break;
-                case 3 :
-                    $imgType = 'png';
-                    break;
-                case 18 :
-                    $imgType = 'webp';
-                    break;
-            }
-            $res = 'data:image/' . $imgType . ';base64,' . $fileContent;//合成图片的base64编码
+            $typeNum     = $imgInfo[2] ?? 0;
+            $imgType     = self::$imgTypes[$typeNum] ?? Consts::UNKNOWN;
+            $res         = 'data:image/' . strtolower($imgType) . ';base64,' . $fileContent;//合成图片的base64编码
             @fclose($fp);
         }
 
