@@ -66,14 +66,14 @@ class BaseService extends StrictObject {
      * @return string
      */
     public function getError(): string {
-        return $this->error;
+        return strval($this->error);
     }
 
 
     /**
      * 设置服务错误信息
      * @param string $error 错误信息
-     * @param string|number $errno 错误代码
+     * @param int|mixed $errno 错误代码
      */
     public function setErrorInfo(string $error = '', $errno = null) {
         $this->error = $error;
