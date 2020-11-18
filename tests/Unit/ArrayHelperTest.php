@@ -209,6 +209,7 @@ class ArrayHelperTest extends TestCase {
         $par->type   = 'parent';
         $par->name   = 'hello';
         $par->childs = $childs;
+        $par->one    = current($childs);
 
         $res1 = ArrayHelper::object2Array(new \stdClass());
         $this->assertEmpty($res1);
@@ -222,9 +223,9 @@ class ArrayHelperTest extends TestCase {
         $res4 = ArrayHelper::object2Array(1);
         $this->assertEquals(1, count($res4));
 
-        $obj = new \stdClass();
+        $obj         = new \stdClass();
         $obj->childs = array_fill(0, 5, $par);
-        $res5 = ArrayHelper::object2Array($obj);
+        $res5        = ArrayHelper::object2Array($obj);
         $this->assertTrue(is_array($res5['childs'][0]));
     }
 
