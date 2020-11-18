@@ -35,8 +35,10 @@ class DirectoryHelperTest extends TestCase {
 
     public function testGetFileTree() {
         $all   = DirectoryHelper::getFileTree(TESTDIR);
+        $oth   = DirectoryHelper::getFileTree(TESTDIR, 'unknow');
         $dirs  = DirectoryHelper::getFileTree(TESTDIR, 'dir');
         $files = DirectoryHelper::getFileTree(TESTDIR, 'file');
+        $this->assertEquals(count($all), count($oth));
         $this->assertEquals(count($all), count($dirs) + count($files));
 
         DirectoryHelper::getFileTree(TESTDIR, 'file', true);
@@ -90,10 +92,10 @@ class DirectoryHelperTest extends TestCase {
         $this->assertFalse(is_dir($backupDir2));
 
         DirectoryHelper::copyDir($fromDir, '/root/tmp');
-//        $files1 = DirectoryHelper::getFileTree($backupDir1);
-//        $files2 = DirectoryHelper::getFileTree($backupDir2);
-//        $this->assertEquals(0, count($files1));
-//        $this->assertEquals(0, count($files2));
+        //        $files1 = DirectoryHelper::getFileTree($backupDir1);
+        //        $files2 = DirectoryHelper::getFileTree($backupDir2);
+        //        $this->assertEquals(0, count($files1));
+        //        $this->assertEquals(0, count($files2));
     }
 
 
