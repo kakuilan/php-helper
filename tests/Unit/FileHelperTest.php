@@ -83,7 +83,7 @@ class FileHelperTest extends TestCase {
 
         $img = TESTDIR . 'data/green.jpg';
         $str = FileHelper::img2Base64($img);
-        $this->assertGreaterThan(1, strpos($str, 'jpg'));
+        $this->assertGreaterThan(1, strpos($str, 'jpeg'));
 
         $str = FileHelper::img2Base64('');
         $this->assertEmpty($str);

@@ -49,6 +49,12 @@ class OsHelperTest extends TestCase {
     ];
 
 
+    public function testGetOS() {
+        $res = OsHelper::getOS();
+        $this->assertNotEmpty($res);
+    }
+
+
     public function testIsWindowsLinux() {
         $res1 = OsHelper::isWindows();
         $res2 = OsHelper::isLinux();

@@ -22,6 +22,15 @@ class OsHelper {
 
 
     /**
+     * 获取操作系统名称
+     * @return string
+     */
+    public static function getOS(): string {
+        return PHP_OS;
+    }
+
+
+    /**
      * 是否window系统
      * @return bool
      */
