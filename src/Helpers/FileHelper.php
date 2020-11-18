@@ -454,11 +454,7 @@ class FileHelper {
         $curArr = explode('/', $curDir);
         array_pop($curArr);
 
-        while (ValidateHelper::startsWith($path, '../')) {
-            if (count($curArr) == 1) {
-                break;
-            }
-
+        while (ValidateHelper::startsWith($path, '../', true)) {
             $path = StringHelper::removeBefore($path, '../', true);
             array_pop($curArr);
         }

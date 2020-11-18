@@ -131,18 +131,21 @@ class FileHelperTest extends TestCase {
         $path2 = './Unit/DateHelperTest.php';
         $path3 = '../../docs/changelog.md';
         $path4 = '../../../.gitignore';
+        $path5 = '/var/www/site';
 
         $res0 = FileHelper::getAbsPath('');
         $res1 = FileHelper::getAbsPath($path1, __DIR__);
         $res2 = FileHelper::getAbsPath($path2, TESTDIR);
         $res3 = FileHelper::getAbsPath($path3, __DIR__);
         $res4 = FileHelper::getAbsPath($path4);
+        $res5 = FileHelper::getAbsPath($path5);
 
         $this->assertEmpty($res0);
         $this->assertTrue(file_exists($res1));
         $this->assertTrue(file_exists($res2));
         $this->assertTrue(file_exists($res3));
         $this->assertFalse(file_exists($res4));
+        $this->assertEquals($path5, $res5);
     }
 
 
