@@ -276,7 +276,7 @@ class ArrayHelperTest extends TestCase {
         $arr2 = $arr;
 
         [$res1, $res2, $res3, $res4] = ArrayHelper::cutItems($arr, false, 3, 'a', 'd', 'p');
-        $res5 = ArrayHelper::cutItems($arr2, true, 'a', 'd', 'p');
+        $res5 = ArrayHelper::cutItems($arr2, true, 'a', 'd', 'p', '');
         $this->assertEquals('ww', $res1);
         $this->assertEquals(4, $res2);
         $this->assertEquals(56.78, $res3);

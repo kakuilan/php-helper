@@ -149,7 +149,7 @@ class ArrayHelper {
 
         if (!empty($keys)) {
             foreach ($keys as $key) {
-                $key = strval(trim($key));
+                $key = trim(strval($key));
                 if ($key == '') {
                     continue;
                 }
