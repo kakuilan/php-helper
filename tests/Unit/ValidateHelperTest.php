@@ -940,6 +940,7 @@ class ValidateHelperTest extends TestCase {
         $res4 = ValidateHelper::isNaturalRange($arr3, false);
         $res5 = ValidateHelper::isNaturalRange($arr3, true);
         $res6 = ValidateHelper::isNaturalRange($arr4, true);
+        $res7 = ValidateHelper::isNaturalRange([]);
 
         $this->assertFalse($res1);
         $this->assertTrue($res2);
@@ -947,6 +948,7 @@ class ValidateHelperTest extends TestCase {
         $this->assertTrue($res4);
         $this->assertTrue($res5);
         $this->assertFalse($res6);
+        $this->assertFalse($res7);
     }
 
 }
