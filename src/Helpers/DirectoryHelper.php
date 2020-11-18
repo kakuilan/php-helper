@@ -195,7 +195,7 @@ class DirectoryHelper {
      * @return bool
      */
     public static function clearDir(string $path): bool {
-        if (empty($path) || !is_dir($path)) {
+        if ($path == '' || !is_dir($path)) {
             return false;
         }
 

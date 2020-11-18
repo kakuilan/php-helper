@@ -58,8 +58,9 @@ class DirectoryHelperTest extends TestCase {
 
 
     public function testCopyDirclearDirDelDir() {
-        $backupDir1 = TESTDIR . 'tmp/backup/1';
-        $backupDir2 = TESTDIR . 'tmp/backup/2';
+        $baseDir    = TESTDIR . 'tmp/backup/ab';
+        $backupDir1 = $baseDir . '/1';
+        $backupDir2 = $baseDir . '/2';
         DirectoryHelper::chmodBatch($backupDir1, 766, 766);
         DirectoryHelper::chmodBatch($backupDir2, 766, 766);
 
