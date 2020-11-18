@@ -527,6 +527,18 @@ EOF;
     }
 
 
+    public function testToArray() {
+        $str1 = 'hello, world';
+        $str2 = 'hello你好，世界world！';
+
+        $res1 = StringHelper::toArray($str1);
+        $res2 = StringHelper::toArray($str2);
+
+        $this->assertEquals(12, count($res1));
+        $this->assertEquals(16, count($res2));
+    }
+
+
     public function testDstrpos() {
         $str = 'hello world. 你好，世界！';
         $arr = ['php', 'Hello', 'today'];

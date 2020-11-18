@@ -960,6 +960,23 @@ class StringHelper {
 
 
     /**
+     * 字符串转数组
+     * @param string $str
+     * @param string $encoding
+     * @return array
+     */
+    public static function toArray(string $str, $encoding = 'UTF-8'): array {
+        $res = [];
+        while ($len = mb_strlen($str, $encoding)) {
+            array_push($res, mb_substr($str, 0, 1, $encoding));
+            $str = mb_substr($str, 1, $len, $encoding);
+        }
+
+        return $res;
+    }
+
+
+    /**
      * 检查字符串 $str 是否包含数组$arr的元素之一
      * @param string $str
      * @param array $arr 字符串数组
