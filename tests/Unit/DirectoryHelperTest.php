@@ -38,8 +38,11 @@ class DirectoryHelperTest extends TestCase {
         $oth   = DirectoryHelper::getFileTree(TESTDIR, 'unknow');
         $dirs  = DirectoryHelper::getFileTree(TESTDIR, 'dir');
         $files = DirectoryHelper::getFileTree(TESTDIR, 'file');
+        $one   = DirectoryHelper::getFileTree(__FILE__);
+
         $this->assertEquals(count($all), count($oth));
         $this->assertEquals(count($all), count($dirs) + count($files));
+        $this->assertEquals(1, count($one));
 
         DirectoryHelper::getFileTree(TESTDIR, 'file', true);
     }
