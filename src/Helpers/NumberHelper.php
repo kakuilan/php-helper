@@ -263,7 +263,6 @@ class NumberHelper {
      * @throws BaseException
      */
     public static function splitNaturalNum(int $num, int $base): array {
-        //将整数按底数拆解
         if (!ValidateHelper::isNaturalNum($num)) {
             throw new BaseException('The $num must be a natural number!');
         } elseif ($base <= 0) {

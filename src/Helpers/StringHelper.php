@@ -10,6 +10,7 @@
 namespace Kph\Helpers;
 
 use Exception;
+use Throwable;
 
 /**
  * Class StringHelper
@@ -1226,6 +1227,38 @@ class StringHelper {
 
         // 返回 字符串直到定界符开始的地方
         return mb_substr($str, 0, $endPos);
+    }
+
+
+    /**
+     * 移除括号和括号中的内容
+     * @param string $str 字符串
+     * @param int $type 要处理的括号类型: "()"为1,"（）"为2,"[]"为4,"<>"为8;多个括号,取它们的累加值;0为全部
+     * @param bool $isLimit 是否限制处理次数
+     * @return string
+     */
+    public static function stripBrackets(string $str, int $type = 0, bool $isLimit = false): string {
+        $limit = $isLimit ? 1 : -1;
+        try {
+            $types = NumberHelper::splitNaturalNum($type, 2);
+        } catch (Throwable $e) {
+            $types = [];
+        }
+
+        if ($type == 0 || in_array(1, $types)) {
+            $str = preg_replace("/\(.*\)/is", "", $str, $limit);
+        }
+        if ($type == 0 || in_array(2, $types)) {
+            $str = preg_replace("/（.*）/is", "", $str, $limit);
+        }
+        if ($type == 0 || in_array(4, $types)) {
+            $str = preg_replace("/\[.*\]/is", "", $str, $limit);
+        }
+        if ($type == 0 || in_array(8, $types)) {
+            $str = preg_replace("/\<.*\>/is", "", $str, $limit);
+        }
+
+        return $str;
     }
 
 
