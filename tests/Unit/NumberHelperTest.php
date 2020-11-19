@@ -165,18 +165,47 @@ class NumberHelperTest extends TestCase {
         $res6 = NumberHelper::nearLogarithm(14, 2, true);
         $res7 = NumberHelper::nearLogarithm(14, 2, false);
 
-        try {
-            NumberHelper::nearLogarithm(-14, 2, false);
-        } catch (Throwable $e) {
-            $this->assertTrue($e instanceof BaseException);
-        }
-
         $this->assertEquals($res1, 3);
         $this->assertEquals($res2, 3);
         $this->assertEquals($res3, 4);
         $this->assertEquals($res4, $res5);
         $this->assertEquals($res6, 3);
         $this->assertEquals($res7, 4);
+
+        try {
+            NumberHelper::nearLogarithm(-14, 2, false);
+        } catch (Throwable $e) {
+            $this->assertTrue($e instanceof BaseException);
+        }
+        try {
+            NumberHelper::nearLogarithm(19, -2, false);
+        } catch (Throwable $e) {
+            $this->assertTrue($e instanceof BaseException);
+        }
+    }
+
+
+    public function testSplitNaturalNum() {
+        $res1 = NumberHelper::splitNaturalNum(15, 2);
+        $res2 = NumberHelper::splitNaturalNum(36, 2);
+        $res3 = NumberHelper::splitNaturalNum(37, 2);
+        $res4 = NumberHelper::splitNaturalNum(4, 2);
+
+        $this->assertEquals(4, count($res1));
+        $this->assertEquals(2, count($res2));
+        $this->assertEquals(3, count($res3));
+        $this->assertEquals(4, current($res4));
+
+        try {
+            NumberHelper::splitNaturalNum(-14, 2, false);
+        } catch (Throwable $e) {
+            $this->assertTrue($e instanceof BaseException);
+        }
+        try {
+            NumberHelper::splitNaturalNum(19, -2, false);
+        } catch (Throwable $e) {
+            $this->assertTrue($e instanceof BaseException);
+        }
     }
 
 

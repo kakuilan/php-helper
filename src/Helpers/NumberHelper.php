@@ -244,12 +244,45 @@ class NumberHelper {
      */
     public static function nearLogarithm($num, int $base = 2, bool $left = true): int {
         if (!is_numeric($num) || $num < 0) {
-            throw new BaseException('The num must be non-negative!');
+            throw new BaseException('The $num must be non-negative!');
+        } elseif ($base <= 0) {
+            throw new BaseException('The $base must be a positive integer!');
         }
 
         $log = log($num, $base);
 
         return $left ? intval($log) : intval(ceil($log));
+    }
+
+
+    /**
+     * 将自然数按底数进行拆解
+     * @param int $num 自然数
+     * @param int $base 底数
+     * @return array
+     * @throws BaseException
+     */
+    public static function splitNaturalNum(int $num, int $base): array {
+        //将整数按底数拆解
+        if (!ValidateHelper::isNaturalNum($num)) {
+            throw new BaseException('The $num must be a natural number!');
+        } elseif ($base <= 0) {
+            throw new BaseException('The $base must be a positive integer!');
+        }
+
+        $res = [];
+        while ($num > $base) {
+            $n     = self::nearLogarithm($num, $base, true);
+            $child = pow($base, $n);
+            $num   -= $child;
+            array_push($res, $child);
+        }
+
+        if ($num > 0 || ($num == 0 && empty($res))) {
+            array_push($res, $num);
+        }
+
+        return $res;
     }
 
 
