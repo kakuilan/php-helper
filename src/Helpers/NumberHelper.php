@@ -234,4 +234,23 @@ class NumberHelper {
     }
 
 
+    /**
+     * 求以 $base 为底 $num 的对数临近值
+     * @param mixed $num 非负数
+     * @param int $base 底数
+     * @param bool $left 是否向左取整
+     * @return int
+     * @throws BaseException
+     */
+    public static function nearLogarithm($num, int $base = 2, bool $left = true): int {
+        if (!is_numeric($num) || $num < 0) {
+            throw new BaseException('The num must be non-negative!');
+        }
+
+        $log = log($num, $base);
+
+        return $left ? intval($log) : intval(ceil($log));
+    }
+
+
 }

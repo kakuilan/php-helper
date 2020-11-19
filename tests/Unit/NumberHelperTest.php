@@ -154,4 +154,30 @@ class NumberHelperTest extends TestCase {
     }
 
 
+    public function testNearLogarithm() {
+        $res1 = NumberHelper::nearLogarithm(1000, 10);
+        $res2 = NumberHelper::nearLogarithm(1005, 10, true);
+        $res3 = NumberHelper::nearLogarithm(1005, 10, false);
+
+        $res4 = NumberHelper::nearLogarithm(8, 2, true);
+        $res5 = NumberHelper::nearLogarithm(8, 2, false);
+
+        $res6 = NumberHelper::nearLogarithm(14, 2, true);
+        $res7 = NumberHelper::nearLogarithm(14, 2, false);
+
+        try {
+            NumberHelper::nearLogarithm(-14, 2, false);
+        } catch (Throwable $e) {
+            $this->assertTrue($e instanceof BaseException);
+        }
+
+        $this->assertEquals($res1, 3);
+        $this->assertEquals($res2, 3);
+        $this->assertEquals($res3, 4);
+        $this->assertEquals($res4, $res5);
+        $this->assertEquals($res6, 3);
+        $this->assertEquals($res7, 4);
+    }
+
+
 }
