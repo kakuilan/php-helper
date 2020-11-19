@@ -143,12 +143,14 @@ class NumberHelperTest extends TestCase {
         $res3 = NumberHelper::money2Yuan($num3, 2);
         $res4 = NumberHelper::money2Yuan($num4, 3);
         $res5 = NumberHelper::money2Yuan($num5, 5);
+        $res6 = NumberHelper::money2Yuan(0.0, 5);
 
         $this->assertEquals($res1, '壹仟贰佰叁拾肆亿伍仟陆佰柒拾捌万玖仟捌佰柒拾陆元整');
-        $this->assertEquals($res2, '壹佰贰拾叁亿肆仟伍佰陆拾柒万捌仟玖佰零捌元柒角');
-        $this->assertEquals($res3, '壹佰贰拾叁亿肆仟伍佰陆拾柒万捌仟玖佰零捌元柒角陆分');
-        $this->assertEquals($res4, '壹佰贰拾叁亿肆仟伍佰陆拾柒万捌仟玖佰零捌元柒角陆分伍厘');
+        $this->assertEquals($res2, '壹佰贰拾叁亿肆仟伍佰陆拾柒万捌仟玖佰零捌元柒角整');
+        $this->assertEquals($res3, '壹佰贰拾叁亿肆仟伍佰陆拾柒万捌仟玖佰零捌元柒角陆分整');
+        $this->assertEquals($res4, '壹佰贰拾叁亿肆仟伍佰陆拾柒万捌仟玖佰零捌元柒角陆分伍厘整');
         $this->assertEquals($res4, $res5);
+        $this->assertEquals($res6, '零元整');
     }
 
 

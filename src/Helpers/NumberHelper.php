@@ -226,7 +226,7 @@ class NumberHelper {
 
         if (empty($res)) {
             return "零元整";
-        } elseif ($decimals == 0) {
+        } else {
             $res .= "整";
         }
 
