@@ -49,6 +49,15 @@ class OsHelper {
 
 
     /**
+     * 是否MAC系统
+     * @return bool
+     */
+    public static function isMac(): bool {
+        return stripos(PHP_OS, 'Darwin') !== false;
+    }
+
+
+    /**
      * 是否cli模式
      * @return bool
      */

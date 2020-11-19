@@ -55,12 +55,14 @@ class OsHelperTest extends TestCase {
     }
 
 
-    public function testIsWindowsLinux() {
+    public function testIsWindowsLinuxMac() {
         $res1 = OsHelper::isWindows();
         $res2 = OsHelper::isLinux();
+        $res3 = OsHelper::isMac();
 
         $this->assertFalse($res1);
         $this->assertTrue($res2);
+        $this->assertFalse($res3);
     }
 
 
