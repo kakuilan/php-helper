@@ -679,4 +679,14 @@ EOF;
     }
 
 
+    public function testGrapBrackets() {
+        $str = "你好(hello (are(:) )you ok?)，世界（world （呵呵）哒）！InfluxDB 公司引用了 (IDC, 2020) 的报告，边缘功能 (Edge functionality) –将电池寿命延长 1.25 小时（根据内部基准测试）。增加了一个名为 <Chrome <start>Actions>的功能。网站管理员可以通过[IntensiveWakeUpThrottling [end[tag] ] Enabled] 策略来控制此限制。<Daniel> 发现自己的推特帐号被强制退出会话（他在手机和 Linux 电脑使用了 TweetDeck 客户端）。实验性 API：BrowserView.{destroy, fromId, fromWebContents, getAllViews}，添加webContents.forcefullyCrashRenderer()以强制终止{渲染器}进程！《VUE》新语法糖魔改《JavaScript》引争议。";
+
+        $res0 = StringHelper::grabBrackets($str, -9);
+        $res1 = StringHelper::grabBrackets($str, 0, true);
+
+        $this->assertEquals(count($res0), count($res1));
+    }
+
+
 }

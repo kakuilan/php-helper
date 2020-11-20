@@ -1237,24 +1237,19 @@ class StringHelper {
      * @return string
      */
     public static function stripBrackets(string $str, int $type = 0, bool $isLimit = false): string {
-        $limit    = $isLimit ? 1 : -1;
-        $patterns = [
-            '1'  => '/\(([^\(]*?)\)/is',
-            '2'  => '/\[([^\[]*?)\]/is',
-            '4'  => '/\{([^\{]*?)\}/is',
-            '8'  => '/\<([^\<]*?)\>/is',
-            '16' => '/（([^（]*?)）/u',
-            '32' => '/【([^【]*?)】/u',
-            '64' => '/《([^《]*?)》/u',
-        ];
+        $limit = $isLimit ? 1 : -1;
+
         try {
             $types = NumberHelper::splitNaturalNum($type, 2);
         } catch (Throwable $e) {
-            $types = array_keys($patterns);
+        }
+
+        if ($type == 0 || empty($types)) {
+            $types = array_keys(RegularHelper::$patternBrackets);
         }
 
         foreach ($types as $v) {
-            $pattern = $patterns[$v];
+            $pattern = RegularHelper::$patternBrackets[$v];
             while (preg_match($pattern, $str)) {
                 $str = preg_replace($pattern, "", $str, $limit);
                 if ($isLimit) {
@@ -1264,6 +1259,35 @@ class StringHelper {
         }
 
         return $str;
+    }
+
+
+    /**
+     * 获取括号和括号中的内容(注意:若是嵌套括号,只取最里层)
+     * @param string $str 字符串
+     * @param int $type 要处理的括号类型: "()"为1,"[]"为2,"{}"为4,"<>"为8,"（）"为16,"【】"为32,"《》"为64;多个括号,取它们的累加值;0为全部
+     * @param bool $includeBracket 是否包括括号本身
+     * @return array
+     */
+    public static function grabBrackets(string $str, int $type = 0, bool $includeBracket = false): array {
+        $res = [];
+
+        try {
+            $types = NumberHelper::splitNaturalNum($type, 2);
+        } catch (Throwable $e) {
+        }
+
+        if ($type == 0 || empty($types)) {
+            $types = array_keys(RegularHelper::$patternBrackets);
+        }
+
+        foreach ($types as $v) {
+            $pattern = RegularHelper::$patternBrackets[$v];
+            preg_match_all($pattern, $str, $match);
+            $res = array_merge($res, $includeBracket ? $match[0] : $match[1]);
+        }
+
+        return $res;
     }
 
 

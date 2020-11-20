@@ -253,4 +253,20 @@ class RegularHelper {
      */
     public static $patternWhitespaceDuplicate = '/[(\xc2\xa0)|\s]{2,}/u';
 
+
+    /**
+     * 正则模式-括号及括号内容
+     * @var array
+     */
+    public static $patternBrackets = [
+        '1'  => '/\(([^\(]*?)\)/is',
+        '2'  => '/\[([^\[]*?)\]/is',
+        '4'  => '/\{([^\{]*?)\}/is',
+        '8'  => '/\<([^\<]*?)\>/is',
+        '16' => '/（([^（]*?)）/u',
+        '32' => '/【([^【]*?)】/u',
+        '64' => '/《([^《]*?)》/u',
+    ];
+
+
 }
