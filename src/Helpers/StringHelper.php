@@ -1229,7 +1229,42 @@ class StringHelper {
     }
 
 
-    
+    /**
+     * 移除括号和括号中的内容
+     * @param string $str 字符串
+     * @param int $type 要处理的括号类型: "()"为1,"[]"为2,"{}"为4,"<>"为8,"（）"为16,"【】"为32,"《》"为64;多个括号,取它们的累加值;0为全部
+     * @param bool $isLimit 是否限制处理次数
+     * @return string
+     */
+    public static function stripBrackets(string $str, int $type = 0, bool $isLimit = false): string {
+        $limit    = $isLimit ? 1 : -1;
+        $patterns = [
+            '1'  => '/\(([^\(]*?)\)/is',
+            '2'  => '/\[([^\[]*?)\]/is',
+            '4'  => '/\{([^\{]*?)\}/is',
+            '8'  => '/\<([^\<]*?)\>/is',
+            '16' => '/（([^（]*?)）/u',
+            '32' => '/【([^【]*?)】/u',
+            '64' => '/《([^《]*?)》/u',
+        ];
+        try {
+            $types = NumberHelper::splitNaturalNum($type, 2);
+        } catch (Throwable $e) {
+            $types = array_keys($patterns);
+        }
+
+        foreach ($types as $v) {
+            $pattern = $patterns[$v];
+            while (preg_match($pattern, $str)) {
+                $str = preg_replace($pattern, "", $str, $limit);
+                if ($isLimit) {
+                    break;
+                }
+            }
+        }
+
+        return $str;
+    }
 
 
 }
