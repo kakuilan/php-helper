@@ -1,6 +1,27 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.3.0]- 2020-11-21
+#### Added
+- 方法`NumberHelper::money2Yuan`
+- 方法`NumberHelper::nearLogarithm`
+- 方法`NumberHelper::splitNaturalNum`
+- 方法`OsHelper::getOS`
+- 方法`OsHelper::isMac`
+- 方法`StringHelper::grabBrackets`
+- 方法`StringHelper::stripBrackets`
+- 方法`StringHelper::toArray`
+
+#### Fixed
+- 修改`BaseService::getError`为null时类型错误
+
+#### Changed
+- 修改`FileHelper::img2Base64`,增加图片类型
+- 修改`StringHelper::dstrpos`,使用mb_strpos
+
+#### Removed
+- none
+
 ## [v0.2.9]- 2020-11-16
 #### Added
 - 方法`FileHelper::formatPath`
