@@ -96,4 +96,17 @@ class ConvertHelperTest extends TestCase {
     }
 
 
+    public function testByte2hex() {
+        $str1 = 'hello';
+        $res1 = ConvertHelper::byte2hex($str1);
+
+        $str2 = "1+2=3\r";
+        $res2 = ConvertHelper::byte2hex($str2);
+
+        $this->assertEquals('68656c6c6f', $res1);
+        $this->assertEquals('312b323d330d', $res2);
+    }
+
+
+
 }

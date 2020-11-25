@@ -77,4 +77,23 @@ class ConvertHelper {
     }
 
 
+    /**
+     * 字符串转十六进制
+     * @param string $str
+     * @return string
+     */
+    public static function byte2hex(string $str): string {
+        $res = '';
+        for ($i = 0; $i < strlen($str); $i++) {
+            $val = dechex(ord($str[$i]));
+            if (strlen($val) < 2) {
+                $val = "0" . $val;
+            }
+            $res .= $val;
+        }
+
+        return $res;
+    }
+
+
 }
