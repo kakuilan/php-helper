@@ -14,6 +14,10 @@ use Error;
 use Exception;
 use Throwable;
 
+/**
+ * Class ConvertHelper
+ * @package Kph\Helpers
+ */
 class ConvertHelper {
 
     /**
@@ -52,6 +56,24 @@ class ConvertHelper {
         }
 
         return (object)$arr;
+    }
+
+
+    /**
+     * 十六进制转字符串
+     * @param string $str
+     * @return string
+     */
+    public static function hex2Byte(string $str): string {
+        $res = '';
+        for ($i = 0; $i < strlen($str); $i += 2) {
+            $item = substr($str, $i, 2);
+            $item = hexdec($item);
+            $val  = chr($item);
+            $res  .= $val;
+        }
+
+        return $res;
     }
 
 

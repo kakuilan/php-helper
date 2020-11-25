@@ -89,4 +89,11 @@ class ConvertHelperTest extends TestCase {
     }
 
 
+    public function testHex2Byte() {
+        $str = '68656c6c6f';
+        $res = ConvertHelper::hex2Byte($str);
+        $this->assertEquals('hello', $res);
+    }
+
+
 }
