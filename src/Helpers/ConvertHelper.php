@@ -83,7 +83,7 @@ class ConvertHelper {
      * @param string $str
      * @return string
      */
-    public static function hex2Byte(string $str): string {
+    public static function hex2Str(string $str): string {
         $res = '';
         for ($i = 0; $i < strlen($str); $i += 2) {
             $item = substr($str, $i, 2);
