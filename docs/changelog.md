@@ -1,6 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.3.1]- 2020-11-25
+#### Added
+- 方法`ConvertHelper::hex2Str`
+- 方法`ConvertHelper::str2hex`
+
+#### Fixed
+- none
+
+#### Changed
+- move `ArrayHelper::array2Object` to `ConvertHelper::array2Object`
+- move `ArrayHelper::object2Array` to `ConvertHelper::object2Array`
+
+#### Removed
+- none
+
 ## [v0.3.0]- 2020-11-21
 #### Added
 - 方法`NumberHelper::money2Yuan`
