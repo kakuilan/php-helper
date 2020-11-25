@@ -255,7 +255,8 @@ class OsHelper {
         $ip = '';
         if (!empty($server)) {
             //获取代理ip
-            if (isset($server["HTTP_X_FORWARDED_FOR"]) && preg_match_all('#(\d+\.){3}\d+#', $server['HTTP_X_FORWARDED_FOR'], $matches)) {
+            $proxy = $server["HTTP_X_FORWARDED_FOR"] ?? ($server["http_x_forwarded_for"] ?? '');
+            if (!empty($proxy) && preg_match_all('#(\d+\.){3}\d+#', $proxy, $matches)) {
                 foreach ($matches[0] as $xip) {
                     $ip = $xip;
                     if (!preg_match('/^(10|172\.16|192\.168)\./', $xip)) {
@@ -263,7 +264,7 @@ class OsHelper {
                     }
                 }
             } else {
-                $ip = $server["HTTP_CLIENT_IP"] ?? ($server["REMOTE_ADDR"] ?? '');
+                $ip = $server["HTTP_CLIENT_IP"] ?? ($server["http_client_ip"] ?? ($server["REMOTE_ADDR"] ?? ($server["remote_addr"] ?? '')));
             }
         }
 
