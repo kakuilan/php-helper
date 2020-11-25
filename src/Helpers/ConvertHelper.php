@@ -85,6 +85,7 @@ class ConvertHelper {
      */
     public static function hex2Str(string $str): string {
         $res = '';
+        $str = strtolower($str);
         for ($i = 0; $i < strlen($str); $i += 2) {
             $item = substr($str, $i, 2);
             $item = hexdec($item);
@@ -94,8 +95,6 @@ class ConvertHelper {
 
         return $res;
     }
-
-
 
 
 }
