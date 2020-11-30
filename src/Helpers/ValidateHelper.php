@@ -706,7 +706,7 @@ class ValidateHelper {
 
 
     /**
-     * 是否自然数数组[0,1,2,3...]
+     * 是否连续的自然数数组[0,1,2,3...]
      * @param array $arr 数组
      * @param bool $strict 严格排序
      * @return bool
