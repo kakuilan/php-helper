@@ -1,6 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.3.2]- 2020-12-2
+#### Added
+- 方法`EncryptHelper::opensslEncrypt`
+- 方法`EncryptHelper::opensslDecrypt`
+
+#### Fixed
+- none
+
+#### Changed
+- none
+
+#### Removed
+- none
+
 ## [v0.3.1]- 2020-11-25
 #### Added
 - 方法`ConvertHelper::hex2Str`
