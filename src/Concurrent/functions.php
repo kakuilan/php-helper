@@ -26,13 +26,13 @@ use RangeException;
 
 /**
  * 生成匿名函数执行体,主要是自适应处理不定个数的参数.
- * @param callable $callback 回调函数
+ * @param mixed $callback 回调函数
  * @param mixed ...$params 参数
  * @return callable
  * @throws ReflectionException
  * @throws Throwable
  */
-function makeClosureFun(callable $callback, ...$params): callable {
+function makeClosureFun($callback, ...$params): callable {
     if (is_array($callback) && count($callback) == 2) {
         $f = new ReflectionMethod($callback[0], $callback[1]);
     } elseif (is_callable($callback)) {

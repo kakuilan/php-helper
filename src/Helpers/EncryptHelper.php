@@ -10,6 +10,7 @@
 namespace Kph\Helpers;
 
 use Kph\Consts;
+use Exception;
 
 
 /**
@@ -238,6 +239,67 @@ class EncryptHelper {
         }
 
         return $h1;
+    }
+
+
+    /**
+     * openssl加密
+     * @param string $str 明文
+     * @param string $key 密钥
+     * @param string $iv 初始化向量
+     * @param string $method 密码学方式
+     * @return string
+     * @throws Exception
+     */
+    public static function opensslEncrypt(string $str, string $key, string $iv = '', string $method = 'AES-128-CBC'): string {
+        if (!extension_loaded('openssl')) {
+            throw new Exception("You need to install OpenSSL module.");
+        }
+
+        if ($str == '') {
+            return '';
+        }
+        if ($key == '') {
+            $key = md5($key);
+        }
+
+        $hx    = hash('sha256', $iv);
+        $ivLen = openssl_cipher_iv_length($method);
+        $ivStr = substr($hx, 0, $ivLen);
+        $res   = openssl_encrypt($str, $method, $key, 0, $ivStr);
+
+        return $res ? base64_encode($res) : '';
+    }
+
+
+    /**
+     * openssl解密
+     * @param string $str 密文
+     * @param string $key 密钥
+     * @param string $iv 初始化向量
+     * @param string $method 密码学方式
+     * @return string
+     * @throws Exception
+     */
+    public static function opensslDecrypt(string $str, string $key, string $iv = '', string $method = 'AES-128-CBC'): string {
+        if (!extension_loaded('openssl')) {
+            throw new Exception("You need to install OpenSSL module.");
+        }
+
+        if ($str == '') {
+            return '';
+        }
+        if ($key == '') {
+            $key = md5($key);
+        }
+
+        $str   = base64_decode($str);
+        $hx    = hash('sha256', $iv);
+        $ivLen = openssl_cipher_iv_length($method);
+        $ivStr = substr($hx, 0, $ivLen);
+        $res   = openssl_decrypt($str, $method, $key, 0, $ivStr);
+
+        return $res ? $res : '';
     }
 
 

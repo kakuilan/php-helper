@@ -21,7 +21,7 @@ class EncryptHelperTest extends TestCase {
 
     public function testAuthcode() {
         $origin = 'hello world!';
-        $key = '123456';
+        $key    = '123456';
 
         $enres = EncryptHelper::authcode($origin, $key, true, 3600);
         $deres = EncryptHelper::authcode($enres[0], $key, false);
@@ -43,7 +43,7 @@ class EncryptHelperTest extends TestCase {
 
     public function testEasyEncryptDecrypt() {
         $origin = 'hello world!你好，世界！';
-        $key = '123456';
+        $key    = '123456';
 
         $enres = EncryptHelper::easyEncrypt($origin, $key);
         $deres = EncryptHelper::easyDecrypt($enres, $key);
@@ -61,7 +61,7 @@ class EncryptHelperTest extends TestCase {
         $res4 = EncryptHelper::easyDecrypt('e10adc39   ', $key);
         $this->assertEquals('', $res4);
 
-        $str = implode('', range(0, 99));
+        $str  = implode('', range(0, 99));
         $res5 = EncryptHelper::easyEncrypt($str, $key);
         $res6 = EncryptHelper::easyDecrypt($res5, $key);
         $this->assertEquals($str, $res6);
@@ -70,15 +70,43 @@ class EncryptHelperTest extends TestCase {
 
     public function testMurmurhash3Int() {
         $origin = 'hello';
-        $res1 = EncryptHelper::murmurhash3Int($origin);
-        $res2 = EncryptHelper::murmurhash3Int($origin, 3, false);
+        $res1   = EncryptHelper::murmurhash3Int($origin);
+        $res2   = EncryptHelper::murmurhash3Int($origin, 3, false);
         $this->assertEquals(11, strlen($res1));
         $this->assertEquals(10, strlen($res2));
 
         $origin .= '2';
-        $res3 = EncryptHelper::murmurhash3Int($origin);
+        $res3   = EncryptHelper::murmurhash3Int($origin);
         $origin .= '3';
-        $res4 = EncryptHelper::murmurhash3Int($origin);
+        $res4   = EncryptHelper::murmurhash3Int($origin);
+    }
+
+
+    public function testOpensslEncryptDecrypt() {
+        $str = 'hello world.';
+        $key = 'Ti*1@^LSxg1E#^Gc';
+        $iv  = '37nCVPl5HtTKYBqW';
+
+        $res0 = EncryptHelper::opensslEncrypt('', '');
+        $res1 = EncryptHelper::opensslDecrypt('', '');
+        $this->assertEmpty($res0);
+        $this->assertEmpty($res1);
+
+        $cipherText1 = EncryptHelper::opensslEncrypt($str, $key);
+        $cipherText2 = EncryptHelper::opensslEncrypt($str, $key, $iv);
+        $cipherText3 = EncryptHelper::opensslEncrypt($str, $key, $iv, 'aes-256-cbc');
+        $cipherText4 = EncryptHelper::opensslEncrypt($str, $key, $iv, 'des-ede3-cbc');
+
+        $clearText1 = EncryptHelper::opensslDecrypt($cipherText1, $key);
+        $clearText2 = EncryptHelper::opensslDecrypt($cipherText2, $key, $iv);
+        $clearText3 = EncryptHelper::opensslDecrypt($cipherText3, $key, $iv, 'aes-256-cbc');
+        $clearText4 = EncryptHelper::opensslDecrypt($cipherText4, $key, $iv, 'des-ede3-cbc');
+
+        $this->assertEquals($str, $clearText1);
+        $this->assertEquals($str, $clearText2);
+        $this->assertEquals($str, $clearText3);
+        $this->assertEquals($str, $clearText4);
+
     }
 
 
