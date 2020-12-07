@@ -9,6 +9,7 @@
 
 namespace Kph\Services;
 
+use Kph\Consts;
 use Kph\Objects\StrictObject;
 use Exception;
 use Throwable;
@@ -54,10 +55,10 @@ class BaseService extends StrictObject {
 
     /**
      * 获取错误代码
-     * @return mixed
+     * @return int
      */
     public function getErrno() {
-        return $this->errno;
+        return intval($this->errno);
     }
 
 
@@ -66,7 +67,12 @@ class BaseService extends StrictObject {
      * @return string
      */
     public function getError(): string {
-        return strval($this->error);
+        $res = strval($this->error);
+        if ($this->errno && empty($res)) {
+            $res = Consts::UNKNOWN;
+        }
+
+        return $res;
     }
 
 
@@ -76,8 +82,13 @@ class BaseService extends StrictObject {
      * @param int|mixed $errno 错误代码
      */
     public function setErrorInfo(string $error = '', $errno = null) {
-        $this->error = $error;
-        $this->errno = $errno;
+        if ($error) {
+            $this->error = $error;
+        }
+
+        if ($errno) {
+            $this->errno = intval($errno);
+        }
     }
 
 
@@ -86,7 +97,10 @@ class BaseService extends StrictObject {
      * @return array
      */
     public function getErrorInfo(): array {
-        return ['errno' => $this->errno, 'error' => $this->error,];
+        return [
+            'errno' => $this->getErrno(),
+            'error' => $this->getError(),
+        ];
     }
 
 
