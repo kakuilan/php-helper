@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.3.3]- 2020-12-8
+#### Added
+- none
+
+#### Fixed
+- none
+
+#### Changed
+- 规范BaseService错误信息类型
+
+#### Removed
+- none
+
 ## [v0.3.2]- 2020-12-2
 #### Added
 - 方法`EncryptHelper::opensslEncrypt`
