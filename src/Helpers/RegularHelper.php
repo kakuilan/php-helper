@@ -255,6 +255,13 @@ class RegularHelper {
 
 
     /**
+     * 正则模式-物理地址
+     * @var string
+     */
+    public static $patternMacAddress = '/([0-9A-F]{2}[:-]){5}([0-9A-F]{2})/i';
+
+
+    /**
      * 正则模式-括号及括号内容
      * @var array
      */

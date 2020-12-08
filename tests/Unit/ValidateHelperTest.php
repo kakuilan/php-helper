@@ -951,4 +951,20 @@ class ValidateHelperTest extends TestCase {
         $this->assertFalse($res7);
     }
 
+
+    public function testIsMacAddress() {
+        $str1 = '48-4D-7E-9F-08-41';
+        $str2 = 'hello world';
+        $str3 = '00-B0-D0-86-BB-F7';
+
+        $res1 = ValidateHelper::isMacAddress($str1);
+        $res2 = ValidateHelper::isMacAddress($str2);
+        $res3 = ValidateHelper::isMacAddress($str3);
+
+        $this->assertTrue($res1);
+        $this->assertFalse($res2);
+        $this->assertTrue($res3);
+    }
+
+
 }

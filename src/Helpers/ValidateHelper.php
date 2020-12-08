@@ -723,4 +723,14 @@ class ValidateHelper {
     }
 
 
+    /**
+     * 是否物理地址
+     * @param string $val
+     * @return bool
+     */
+    public static function isMacAddress(string $val): bool {
+        return !empty($val) && preg_match(RegularHelper::$patternMacAddress, $val);
+    }
+
+
 }
