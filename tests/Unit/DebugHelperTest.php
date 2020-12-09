@@ -33,7 +33,8 @@ class DebugHelperTest extends TestCase {
         DebugHelper::errorLogHandler();
         error_clear_last();
 
-        $logFile = '/tmp/phperr_' . date('Ymd') . '.log';
+        $tmpDir = sys_get_temp_dir();
+        $logFile = $tmpDir. '/phperr_' . date('Ymd') . '.log';
         $cont    = file_get_contents($logFile);
         $this->assertNotEmpty($cont);
     }
