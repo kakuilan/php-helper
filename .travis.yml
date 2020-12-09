@@ -5,6 +5,10 @@ php:
   - 7.3
   - 7.4
 
+os:
+  - linux
+  - windows
+
 before_script:
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction --prefer-source --dev
