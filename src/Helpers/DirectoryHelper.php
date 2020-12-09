@@ -234,10 +234,9 @@ class DirectoryHelper {
             return '';
         }
 
-        $order   = [
+        $old     = [
             '\\',
             '|',
-            ':',
             '<',
             '>',
             '?',
@@ -248,11 +247,27 @@ class DirectoryHelper {
             '',
             '',
             '',
-            '',
         ];
 
-        $dir = str_replace($order, $replace, $dir);
-        return rtrim(preg_replace(RegularHelper::$patternDoubleSlash, '/', $dir), ' /　') . '/';
+        $dir = str_replace($old, $replace, $dir);
+        $dir = preg_replace(RegularHelper::$patternDoubleSlash, '/', $dir);
+
+        //是否有":"
+        if (StringHelper::contains($dir, ':')) {
+            $arr = explode('/', $dir);
+            $first = array_shift($arr);
+
+            //win下的路径,如C:\Users\Administrator
+            if (!ValidateHelper::endsWith($first, ':')) {
+                $first = str_replace(':', '', $first);
+            }
+
+            $last = implode('/', $arr);
+            $last = str_replace(':', '', $last);
+            $dir  = "{$first}/{$last}";
+        }
+
+        return rtrim($dir, ' /　') . '/';
     }
 
 
