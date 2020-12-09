@@ -85,6 +85,28 @@ class OsHelper {
 
 
     /**
+     * 执行命令(需要启用shell_exec或exec)
+     * @param string $command 命令
+     * @return array 结果输出
+     */
+    public static function runCommand(string $command): array {
+        $res = [];
+        if (!empty($command)) {
+            if (self::isLinux() && function_exists('shell_exec')) {
+                $str = @shell_exec(escapeshellcmd($command));
+                if (!empty($str)) {
+                    $res = explode("\r\n", $str);
+                }
+            } elseif (function_exists('exec')) {
+                @exec($command, $res);
+            }
+        }
+
+        return $res;
+    }
+
+
+    /**
      * 检查主机端口是否开放
      * @param string $host 主机/IP
      * @param int $port 端口

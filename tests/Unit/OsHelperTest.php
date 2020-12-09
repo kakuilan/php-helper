@@ -253,4 +253,21 @@ class OsHelperTest extends TestCase {
     }
 
 
+    public function testRunCommand() {
+        $dir = TESTDIR;
+        if (OsHelper::isWindows()) {
+            $command = "dir {$dir}";
+        } else {
+            $command = "ls -l {$dir}";
+        }
+
+        $res0 = OsHelper::runCommand("");
+        $res1 = OsHelper::runCommand($command);
+
+        $this->assertEmpty($res0);
+        var_dump($res1);
+
+    }
+
+
 }
