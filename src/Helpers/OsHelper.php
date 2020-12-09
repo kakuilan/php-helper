@@ -72,9 +72,11 @@ class OsHelper {
      */
     public static function getPhpPath(): string {
         $res   = '';
+        $exe   = self::isWindows() ? 'php.exe' : 'php';
         $paths = explode(PATH_SEPARATOR, getenv('PATH'));
+
         foreach ($paths as $path) {
-            $file = $path . DIRECTORY_SEPARATOR . 'php';
+            $file = $path . DIRECTORY_SEPARATOR . $exe;
             if (file_exists($file) && is_executable($file)) {
                 $res = $file;
                 break;
