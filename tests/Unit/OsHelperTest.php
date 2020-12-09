@@ -60,8 +60,7 @@ class OsHelperTest extends TestCase {
         $res2 = OsHelper::isLinux();
         $res3 = OsHelper::isMac();
 
-        $this->assertFalse($res1);
-        $this->assertTrue($res2);
+        $this->assertTrue($res1 || $res2);
         $this->assertFalse($res3);
     }
 
@@ -73,7 +72,7 @@ class OsHelperTest extends TestCase {
 
 
     public function testIsPortOpen() {
-        $res1 = OsHelper::isPortOpen('localhost', 80);
+        $res1 = OsHelper::isPortOpen('localhost', 8899);
         $res2 = OsHelper::isPortOpen('baidu.com', 80);
 
         $this->assertFalse($res1);
