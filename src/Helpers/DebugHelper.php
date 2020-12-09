@@ -42,7 +42,8 @@ class DebugHelper {
      */
     public static function errorLogHandler(string $logFile = ''): void {
         if (empty($logFile)) {
-            $logFile = '/tmp/phperr_' . date('Ymd') . '.log';
+            $tmpDir  = sys_get_temp_dir();
+            $logFile = $tmpDir . '/phperr_' . date('Ymd') . '.log';
         }
 
         ini_set('log_errors', 1); //设置错误信息输出到文件
