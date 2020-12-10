@@ -97,7 +97,7 @@ class OsHelper {
             if (self::isLinux() && function_exists('shell_exec')) {
                 $str = @shell_exec(escapeshellcmd($command));
                 if (!empty($str)) {
-                    $res = explode("\r\n", $str);
+                    $res = StringHelper::multiExplode($str, "\n", "\r", "\n\r");
                 }
             } elseif (function_exists('exec')) {
                 @exec($command, $res);
