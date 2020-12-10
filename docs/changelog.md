@@ -1,6 +1,23 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.3.4]- 2020-12-10
+#### Added
+- 添加`OsHelper::runCommand`
+- 添加`ValidateHelper::isMacAddress`
+- 添加`Kph\Util\MacAddress`
+
+#### Fixed
+- none
+
+#### Changed
+- 修改`DebugHelper::errorLogHandler`临时目录
+- 修改`DirectoryHelper::formatDir`,兼容windows路径
+- 修改`OsHelper::getPhpPath`,兼容windows
+
+#### Removed
+- none
+
 ## [v0.3.3]- 2020-12-8
 #### Added
 - none
