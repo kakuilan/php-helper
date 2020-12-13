@@ -28,13 +28,14 @@ use Kph\Tests\Future\MyGenerator;
 use Kph\Tests\Future\SuccessFuture;
 use Kph\Tests\Future\UncatchableFuture;
 use RuntimeException;
+use ReflectionException;
 use Throwable;
 
 class PromiseTest extends TestCase {
 
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testIsGenerator() {
         $chk = Concurrent\isGenerator('time');
