@@ -284,7 +284,9 @@ class ArrayHelper {
             foreach ($conditions as $k => $v) {
                 if (is_bool($v) && $v) {
                     $chk++;
-                } elseif (isset($item[$k]) && $item[$k] == $v) {
+                } elseif (is_array($item) && isset($item[$k]) && $item[$k] == $v) {
+                    $chk++;
+                } elseif (is_object($item) && isset($item->$k) && $item->$k == $v) {
                     $chk++;
                 }
             }
@@ -321,7 +323,9 @@ class ArrayHelper {
             foreach ($conditions as $k => $v) {
                 if (is_bool($v) && $v) {
                     $chk++;
-                } elseif (isset($item[$k]) && $item[$k] == $v) {
+                } elseif (is_array($item) && isset($item[$k]) && $item[$k] == $v) {
+                    $chk++;
+                } elseif (is_object($item) && isset($item->$k) && $item->$k == $v) {
                     $chk++;
                 }
             }

@@ -236,7 +236,7 @@ class ArrayHelperTest extends TestCase {
 
 
     public function testSearchItemSearchMutil() {
-        $arr = [
+        $arr  = [
             [
                 'id'     => 9,
                 'gender' => 1,
@@ -273,6 +273,43 @@ class ArrayHelperTest extends TestCase {
                 'nick'   => '权威认证',
             ],
         ];
+        $arr2 = [
+            (object)[
+                'id'     => 9,
+                'gender' => 1,
+                'age'    => 19,
+                'name'   => 'hehe',
+                'nick'   => '阿斯蒂芬',
+            ],
+            (object)[
+                'id'     => 2,
+                'gender' => 0,
+                'age'    => 31,
+                'name'   => 'lizz',
+                'nick'   => '去玩儿',
+            ],
+            (object)[
+                'id'     => 87,
+                'gender' => 1,
+                'age'    => 19,
+                'name'   => 'zhang3',
+                'nick'   => '谱曲说',
+            ],
+            (object)[
+                'id'     => 25,
+                'gender' => 0,
+                'age'    => 43,
+                'name'   => 'wang5',
+                'nick'   => '阿斯蒂芬',
+            ],
+            (object)[
+                'id'     => 24,
+                'gender' => 1,
+                'age'    => 63,
+                'name'   => 'zhao4',
+                'nick'   => '权威认证',
+            ],
+        ];
 
         $tmp = [];
         $res = ArrayHelper::searchItem($tmp, ['id' => 99]);
@@ -297,6 +334,15 @@ class ArrayHelperTest extends TestCase {
         $len    = count($newArr);
         $res4   = ArrayHelper::searchMutil($newArr, ['gender' => 1, 'age' => 19, 'name' => true], true);
         $this->assertEquals($len, count($res4) + count($newArr));
+
+        $newArr = $arr2;
+        $res5   = ArrayHelper::searchItem($newArr, ['gender' => 1, 'age' => 19]);
+        $this->assertNotEmpty($res5);
+
+        $newArr = $arr2;
+        $res6   = ArrayHelper::searchMutil($newArr, ['age' => 19]);
+        $this->assertEquals(2, count($res6));
+
     }
 
 
