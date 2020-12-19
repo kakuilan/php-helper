@@ -1,6 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.3.6]- 2020-12-19
+#### Added
+- none
+
+#### Fixed
+- none
+
+#### Changed
+- 修改`ArrayHelper::searchItem`支持可迭代的对象
+- 修改`ArrayHelper::searchMutil`支持可迭代的对象
+
+#### Removed
+- none
+
 ## [v0.3.5]- 2020-12-18
 #### Added
 - none
