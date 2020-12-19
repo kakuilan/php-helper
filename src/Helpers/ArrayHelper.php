@@ -10,6 +10,8 @@
 
 namespace Kph\Helpers;
 
+use ArrayIterator;
+use IteratorAggregate;
 
 /**
  * Class ArrayHelper
@@ -268,13 +270,15 @@ class ArrayHelper {
 
     /**
      * 从数组中搜索对应元素(单个).若匹配,返回该元素;否则返回false.
-     * @param array $arr 要搜索的数据数组
+     * @param array|ArrayIterator|IteratorAggregate $arr 要搜索的数据数组
      * @param array $conditions 条件数组
      * @param bool $delSource 若匹配,是否删除原数组的该元素
      * @return bool|mixed
      */
-    public static function searchItem(array &$arr, array $conditions, bool $delSource = false) {
-        if (empty($arr) || empty($conditions)) {
+    public static function searchItem(&$arr, array $conditions, bool $delSource = false) {
+        if (!is_array($arr) && !($arr instanceof ArrayIterator) && !($arr instanceof IteratorAggregate)) {
+            return false;
+        } elseif (empty($arr) || empty($conditions)) {
             return false;
         }
 
@@ -306,14 +310,16 @@ class ArrayHelper {
 
     /**
      * 从数组中搜索对应元素(多个).若匹配,返回新数组,包含一个以上元素;否则返回空数组.
-     * @param array $arr 要搜索的数据数组
+     * @param array|ArrayIterator|IteratorAggregate $arr 要搜索的数据数组
      * @param array $conditions 条件数组
      * @param bool $delSource 若匹配,是否删除原数组的该元素
      * @return array
      */
-    public static function searchMutil(array &$arr, array $conditions, bool $delSource = false): array {
+    public static function searchMutil(&$arr, array $conditions, bool $delSource = false): array {
         $res = [];
-        if (empty($arr) || empty($conditions)) {
+        if (!is_array($arr) && !($arr instanceof ArrayIterator) && !($arr instanceof IteratorAggregate)) {
+            return $res;
+        } elseif (empty($arr) || empty($conditions)) {
             return $res;
         }
 
