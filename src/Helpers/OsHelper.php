@@ -580,4 +580,30 @@ class OsHelper {
     }
 
 
+    /**
+     * 是否Ajax请求
+     * @param array $params $_SERVER或header信息数组
+     * @return bool
+     */
+    public static function isAjax(array $params = []): bool {
+        if (empty($params)) {
+            $params = $_SERVER;
+        }
+
+        $res  = false;
+        $key1 = 'HTTP_X_REQUESTED_WITH';
+        $key2 = 'X-Requested-With';
+        $keys = [$key1, strtolower($key1), $key2, strtolower($key2)];
+        foreach ($keys as $key) {
+            $field = $params[$key] ?? '';
+            if ($field && stripos($field, 'XMLHttpRequest') !== false) {
+                $res = true;
+                break;
+            }
+        }
+
+        return $res;
+    }
+
+
 }
