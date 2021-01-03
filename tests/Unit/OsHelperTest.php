@@ -269,4 +269,8 @@ class OsHelperTest extends TestCase {
     }
 
 
+    public function testIsAjax() {
+
+    }
+
 }
