@@ -270,7 +270,22 @@ class OsHelperTest extends TestCase {
 
 
     public function testIsAjax() {
+        $header1 = [
+            'User-Agent'       => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
+            'X-Requested-With' => 'XMLHttpRequest',
+        ];
+        $header2 = [
+            'Accept-Language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+            'Connection'      => 'keep-alive',
+        ];
 
+        $res1 = OsHelper::isAjax();
+        $res2 = OsHelper::isAjax($header1);
+        $res3 = OsHelper::isAjax($header2);
+
+        $this->assertFalse($res1);
+        $this->assertTrue($res2);
+        $this->assertFalse($res3);
     }
 
 }
