@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.3.7]- 2021-01-05
+#### Added
+- 增加`OsHelper::isAjax`
+
+#### Fixed
+- none
+
+#### Changed
+- none
+
+#### Removed
+- none
+
 ## [v0.3.6]- 2020-12-19
 #### Added
 - none
