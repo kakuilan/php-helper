@@ -27,19 +27,19 @@ class Consts {
 
     //有效期时间
     const TTL_LONG       = 0; //永久
-    const TTL_DEFAULT    = 1800; //默认缓存时间30分钟
-    const TTL_ONE_MONTH  = 2592000; //缓存时间1月
-    const TTL_HALF_MONTH = 1296000; //缓存时间0.5月
-    const TTL_ONE_WEEK   = 604800; //缓存时间1周
-    const TTL_ONE_DAY    = 86400; //缓存时间1天
-    const TTL_HALF_DAY   = 43200; //缓存时间0.5天
-    const TTL_ONE_HOUR   = 3600; //缓存时间1小时
-    const TTL_HALF_HOUR  = 1800; //缓存时间半小时
-    const TTL_FIF_MINUTE = 900; //缓存时间15分钟
-    const TTL_TEN_MINUTE = 600; //缓存时间10分钟
-    const TTL_FIV_MINUTE = 300; //缓存时间5分钟
-    const TTL_TWO_MINUTE = 120; //缓存时间2分钟
-    const TTL_ONE_MINUTE = 60; //缓存时间1分钟
+    const TTL_DEFAULT    = 1800; //默认时间30分钟
+    const TTL_ONE_MONTH  = 2592000; //时间1月
+    const TTL_HALF_MONTH = 1296000; //时间0.5月
+    const TTL_ONE_WEEK   = 604800; //时间1周
+    const TTL_ONE_DAY    = 86400; //时间1天
+    const TTL_HALF_DAY   = 43200; //时间0.5天
+    const TTL_ONE_HOUR   = 3600; //时间1小时
+    const TTL_HALF_HOUR  = 1800; //时间半小时
+    const TTL_FIF_MINUTE = 900; //时间15分钟
+    const TTL_TEN_MINUTE = 600; //时间10分钟
+    const TTL_FIV_MINUTE = 300; //时间5分钟
+    const TTL_TWO_MINUTE = 120; //时间2分钟
+    const TTL_ONE_MINUTE = 60; //时间1分钟
 
 
     const UNKNOWN              = 'Unknown'; //未知字符串
