@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright (c) 2020 kakuilan@163.com All rights reserved
- * User: kakuilan@163.com
+ * Copyright (c) 2020 LKK All rights reserved
+ * User: kakuilan
  * Date: 2019/5/10
  * Time: 16:18
  * Desc: 数组可迭代对象

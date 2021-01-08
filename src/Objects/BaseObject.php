@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright (c) 2019 LKK/lanq.net All rights reserved
- * User: kakuilan@163.com
+ * Copyright (c) 2019 LKK All rights reserved
+ * User: kakuilan
  * Date: 2019/4/3
  * Time: 17:03
  * Desc: 基本对象

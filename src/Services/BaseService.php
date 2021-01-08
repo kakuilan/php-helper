@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright (c) 2020 kakuilan@163.com All rights reserved
- * User: kakuilan@163.com
+ * Copyright (c) 2020 LKK All rights reserved
+ * User: kakuilan
  * Date: 2019/6/8
  * Time: 21:32
  * Desc: 基础服务类

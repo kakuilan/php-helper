@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright (c) 2020 LKK/lanq.net All rights reserved
- * User: kakuilan@163.com
+ * Copyright (c) 2020 LKK All rights reserved
+ * User: kakuilan
  * Date: 2020/2/19
  * Time: 10:30
  * Desc: 验证助手类

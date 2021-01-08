@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright (c) 2020 kakuilan@163.com All rights reserved
- * User: kakuilan@163.com
+ * Copyright (c) 2020 LKK All rights reserved
+ * User: kakuilan
  * Date: 2020/3/8
  * Time: 13:53
  * Desc: 不可捕获异常

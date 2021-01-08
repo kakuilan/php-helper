@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: kakuilan@163.com
+ * User: kakuilan
  * Date: 2020/11/23
  * Time: 10:15
  * Desc: 类型转换助手类
