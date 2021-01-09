@@ -80,6 +80,13 @@ class RegularHelper {
 
 
     /**
+     * 正则模式-十六进制
+     * @var string
+     */
+    public static $patternHex = "/^0x[0-9a-f]+$/i";
+
+
+    /**
      * 正则模式-邮箱
      * @var string
      */
