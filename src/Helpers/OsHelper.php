@@ -606,4 +606,26 @@ class OsHelper {
     }
 
 
+    /**
+     * 是否SSL协议
+     * @param array $params $_SERVER信息数组
+     * @return bool
+     */
+    public static function isSsl(array $params = []): bool {
+        if (empty($params)) {
+            $params = $_SERVER;
+        }
+
+        $res   = false;
+        $https = $params['HTTPS'] ?? ($params['https'] ?? '');
+        $port  = $params['SERVER_PORT'] ?? ($params['server_port'] ?? '');
+
+        if ($https == '1' || strtolower($https) == 'on' || $port == '443') {
+            $res = true;
+        }
+
+        return $res;
+    }
+
+
 }
