@@ -288,4 +288,32 @@ class OsHelperTest extends TestCase {
         $this->assertFalse($res3);
     }
 
+
+    public function testIsSsl() {
+        $server1 = [
+            'HTTP_HOST'       => 'test.loc',
+            'SERVER_NAME'     => 'test.loc',
+            'SERVER_PORT'     => '80',
+            'SERVER_ADDR'     => '127.0.0.1',
+            'REQUEST_SCHEME'  => 'http',
+            'SERVER_PROTOCOL' => 'HTTP/1.1',
+        ];
+        $server2 = [
+            'HTTP_HOST'       => 'test.com',
+            'SERVER_NAME'     => 'test.com',
+            'SERVER_PORT'     => '443',
+            'SERVER_ADDR'     => '127.0.0.1',
+            'HTTPS'           => 'on',
+            'REQUEST_SCHEME'  => 'https',
+            'SERVER_PROTOCOL' => 'HTTP/2.0',
+        ];
+
+        $res1 = OsHelper::isSsl($server1);
+        $res2 = OsHelper::isSsl($server2);
+
+        $this->assertFalse($res1);
+        $this->assertTrue($res2);
+    }
+
+
 }
