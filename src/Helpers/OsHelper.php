@@ -628,4 +628,43 @@ class OsHelper {
     }
 
 
+    /**
+     * 检查远程文件是否存在
+     * @param string $url
+     * @param array $param 其他参数:timeout,connect_timeout
+     * @return bool
+     */
+    public static function remoteFileExists(string $url, array $param = []): bool {
+        $found       = false;
+        $timeout     = intval($param['timeout'] ?? 5);
+        $conntimeout = intval($param['connect_timeout'] ?? 1);
+
+        if (!ValidateHelper::isUrl($url)) {
+            return $found;
+        }
+
+        $ch = curl_init($url);
+
+        curl_setopt($ch, CURLOPT_NOBODY, true); //不取回数据
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $conntimeout);
+
+        $result = curl_exec($ch);
+        // 如果请求没有发送失败
+        if ($result !== false) {
+            // 再检查http响应码是否为200
+            $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            if ($statusCode == 200) {
+                $found = true;
+            }
+        }
+        @curl_close($ch);
+
+        return $found;
+    }
+
+
 }
