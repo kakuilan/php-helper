@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.3.9]- 2021-02-23
+#### Added
+- 增加`OsHelper::remoteFileExists`
+
 ## [v0.3.8]- 2021-01-11
 #### Added
 - 增加`OsHelper::isSsl`
