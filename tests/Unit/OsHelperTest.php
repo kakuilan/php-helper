@@ -316,4 +316,16 @@ class OsHelperTest extends TestCase {
     }
 
 
+    public function testRemoteFileExists() {
+        $url1 = 'https://www.baidu.com';
+        $url2 = 'https://www.baidu.com/img/no.gif';
+
+        $res1 = OsHelper::remoteFileExists($url1);
+        $res2 = OsHelper::remoteFileExists($url2, ['timeout' => 10, 'connect_timeout' => 2]);
+
+        $this->assertTrue($res1);
+        $this->assertFalse($res2);
+    }
+
+
 }
