@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 #### Added
 - 增加`OsHelper::remoteFileExists`
 
+#### Fixed
+- none
+
+#### Changed
+- none
+
+#### Removed
+- none
+
 ## [v0.3.8]- 2021-01-11
 #### Added
 - 增加`OsHelper::isSsl`
