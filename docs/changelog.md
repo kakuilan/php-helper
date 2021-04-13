@@ -1,6 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.4.0]- 2021-04-13
+#### Added
+- 增加`ValidateHelper::startsWiths`
+- 增加`ValidateHelper::endsWiths`
+
+#### Fixed
+- none
+
+#### Changed
+- none
+
+#### Removed
+- none
+
 ## [v0.3.9]- 2021-02-23
 #### Added
 - 增加`OsHelper::remoteFileExists`
