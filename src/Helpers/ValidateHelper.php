@@ -466,6 +466,25 @@ class ValidateHelper {
 
 
     /**
+     * 字符串$val是否以$subs数组其中之一为开头
+     * @param string $val
+     * @param array $subs
+     * @param bool $ignoreCase 是否忽略大小写
+     * @return bool
+     */
+    public static function startsWiths(string $val, array $subs, bool $ignoreCase = false): bool {
+        foreach ($subs as $sub) {
+            $chk = self::startsWith($val, strval($sub), $ignoreCase);
+            if ($chk) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
      * 字符串$val是否以$sub为结尾
      * @param string $val
      * @param string $sub
@@ -476,6 +495,25 @@ class ValidateHelper {
         if ($val != '' && $sub != '') {
             $pos = $ignoreCase ? mb_strripos($val, $sub) : mb_strrpos($val, $sub);
             return (mb_strlen($val) - mb_strlen($sub)) === $pos;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * 字符串$val是否以$subs数组其中之一为结尾
+     * @param string $val
+     * @param array $subs
+     * @param bool $ignoreCase 是否忽略大小写
+     * @return bool
+     */
+    public static function endsWiths(string $val, array $subs, bool $ignoreCase = false): bool {
+        foreach ($subs as $sub) {
+            $chk = self::endsWith($val, strval($sub), $ignoreCase);
+            if ($chk) {
+                return true;
+            }
         }
 
         return false;

@@ -427,7 +427,22 @@ class ValidateHelperTest extends TestCase {
         ];
         foreach ($tests as $test) {
             $expected = ValidateHelper::startsWith($test[0], $test[1], $test[2]);
+            $this->assertEquals($test[3], $expected);
+        }
+    }
 
+
+    public function testStartsWiths() {
+        $tests = [
+            ['', [''], false, false],
+            ['hello世 world.界，你好yeh', ['hello', '世界'], false, true],
+            ['hello世 world.界，你好yeh', ['hello世', '世界'], false, true],
+            ['hello世 world.界，你好yeh', ['Hello世', '世界'], false, false],
+            ['hello世 world.界，你好yeh', ['Hello世', '世界'], true, true],
+            ['hello世 world.界，你好yeh', ['world', '世界'], false, false],
+        ];
+        foreach ($tests as $test) {
+            $expected = ValidateHelper::startsWiths($test[0], $test[1], $test[2]);
             $this->assertEquals($test[3], $expected);
         }
     }
@@ -444,6 +459,22 @@ class ValidateHelperTest extends TestCase {
         ];
         foreach ($tests as $test) {
             $expected = ValidateHelper::endsWith($test[0], $test[1], $test[2]);
+            $this->assertEquals($test[3], $expected);
+        }
+    }
+
+
+    public function testEndsWiths() {
+        $tests = [
+            ['', [''], false, false],
+            ['hello世 world.界，你好yeh', ['yeh'], false, true],
+            ['hello世 world.界，你好yeh', ['好yeh'], false, true],
+            ['hello世 world.界，你好yeh', ['好Yeh'], false, false],
+            ['hello世 world.界，你好yeh', ['好Yeh'], true, true],
+            ['hello世 world.界，你好yeh', ['world'], false, false],
+        ];
+        foreach ($tests as $test) {
+            $expected = ValidateHelper::endsWiths($test[0], $test[1], $test[2]);
             $this->assertEquals($test[3], $expected);
         }
     }
