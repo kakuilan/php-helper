@@ -18,6 +18,16 @@ use Kph\Helpers\StringHelper;
 
 class EncryptHelperTest extends TestCase {
 
+    public function testBase64UrlEncodeDecode() {
+        $str  = "https://tool.google.com.net/encrypt?type=4Hello World! 你好！";
+        $res1 = EncryptHelper::base64UrlEncode($str);
+
+        $this->assertEquals($res1, 'aHR0cHM6Ly90b29sLmdvb2dsZS5jb20ubmV0L2VuY3J5cHQ_dHlwZT00SGVsbG8gV29ybGQhIOS9oOWlve-8gQ');
+
+        $res2 = EncryptHelper::base64UrlDecode($res1);
+        $this->assertEquals($res2, $str);
+    }
+
 
     public function testAuthcode() {
         $origin = 'hello world!';
