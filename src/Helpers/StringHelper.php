@@ -978,6 +978,22 @@ class StringHelper {
 
 
     /**
+     * 字符串转字节数组
+     * @param string $str
+     * @return array
+     */
+    public static function toBytes(string $str): array {
+        $res = [];
+        for ($pos = 0; $pos < strlen($str); $pos++) {
+            $byte = substr($str, $pos);
+            array_push($res, ord($byte));
+        }
+
+        return $res;
+    }
+
+
+    /**
      * 检查字符串 $str 是否包含数组$arr的元素之一
      * @param string $str
      * @param array $arr 字符串数组
