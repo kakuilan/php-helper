@@ -36,7 +36,11 @@ class EncryptHelper {
      * @return string
      */
     public static function base64UrlDecode(string $data): string {
-        return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
+        $str = strtr($data, '-_', '+/');
+        $len = strlen($str);
+        $mis = (4 - $len % 4) % 4;
+        $res = str_pad($str, $len + $mis, '=', STR_PAD_RIGHT);
+        return base64_decode($res);
     }
 
 
