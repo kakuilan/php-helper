@@ -689,4 +689,15 @@ EOF;
     }
 
 
+    public function testToBytes() {
+        $str = "Hello World! 你好，世界！Olá🐍 With Emojis 🐳📜";
+
+        $res1 = StringHelper::toBytes($str);
+        $res2 = StringHelper::bytes2Str($res1);
+
+        $this->assertEquals(count($res1), strlen($str));
+        $this->assertEquals($str, $res2);
+    }
+
+
 }

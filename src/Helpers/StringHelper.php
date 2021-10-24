@@ -994,6 +994,23 @@ class StringHelper {
 
 
     /**
+     * 字节数组转字符串
+     * @param array $arr
+     * @return string
+     */
+    public static function bytes2Str(array $arr): string {
+        $res = '';
+        $len = count($arr);
+        for ($i = 0; $i < $len; $i++) {
+            $cod = intval($arr[$i]);
+            $res .= chr($cod);
+        }
+
+        return $res;
+    }
+
+
+    /**
      * 检查字符串 $str 是否包含数组$arr的元素之一
      * @param string $str
      * @param array $arr 字符串数组
