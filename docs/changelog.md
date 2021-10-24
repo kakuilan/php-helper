@@ -1,6 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.4.1]- 2021-10-24
+#### Added
+- 增加`StringHelper::toBytes`
+- 增加`StringHelper::bytes2Str`
+
+#### Fixed
+- none
+
+#### Changed
+- none
+
+#### Removed
+- none
+
 ## [v0.4.0]- 2021-04-13
 #### Added
 - 增加`ValidateHelper::startsWiths`
