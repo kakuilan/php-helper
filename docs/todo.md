@@ -42,6 +42,11 @@ https://github.com/yunkaiyueming/php_lib_code_center
 https://github.com/zhosoft/tools
 https://github.com/voku/portable-utf8
 https://github.com/mtibben/html2text
+https://gitee.com/jingyiGit/php-utils
+https://gitee.com/ping_yuan/php-utils
+https://gitee.com/vipkwd/phputils
+https://gitee.com/myadder/utils-php
+https://gitee.com/aguage/php-utils
 
 
 promise
