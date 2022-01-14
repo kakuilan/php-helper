@@ -182,7 +182,6 @@ class UrlHelper {
     }
 
 
-
     /**
      * 获取域名
      * @param string $url
@@ -256,5 +255,38 @@ class UrlHelper {
         return $uri;
     }
 
+
+    /**
+     * 获取站点URL
+     * @param string $url 网址
+     * @param array $server server信息
+     * @return string
+     */
+    public static function getSiteUrl(string $url, array $server = []): string {
+        if (empty($url)) {
+            $url = self::getUrl($server);
+        }
+
+        if (!stripos($url, '://')) {
+            $url = 'http://' . $url;
+        }
+
+        if (!ValidateHelper::isUrl($url)) {
+            return '';
+        }
+
+        $arr    = parse_url($url);
+        $port   = $arr['port'] ?? null;
+        $scheme = $arr['scheme'] ?? null;
+        if (!empty($port) && !in_array($port, [80, 443])) {
+            $url = "{$scheme}://{$arr['host']}:{$port}/";
+        } else {
+            $url = "{$scheme}://{$arr['host']}/";
+        }
+
+        $url = strtolower($url);
+
+        return self::formatUrl($url);
+    }
 
 }

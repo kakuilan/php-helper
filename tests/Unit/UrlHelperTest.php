@@ -24,7 +24,7 @@ class UrlHelperTest extends TestCase {
         $res1 = UrlHelper::cnUrlencode($url);
         $res2 = UrlHelper::cnUrldecode($res1);
 
-        $str = '©℗';
+        $str  = '©℗';
         $str2 = StringHelper::escape($str);
         $res3 = UrlHelper::cnUrldecode($str2);
 
@@ -118,5 +118,26 @@ class UrlHelperTest extends TestCase {
         $res9 = UrlHelper::getDomain('');
         $this->assertEmpty($res9);
     }
+
+
+    public function testGetSiteUrl() {
+        $server = OsHelperTest::$server;
+        $str    = 'hello world!';
+        $url1   = 'http://www.test.loc/index.php?name=hello&age=20&from=world';
+        $url2   = 'rpc.test.com:8899/hello';
+
+        $res1 = UrlHelper::getSiteUrl($str);
+        $this->assertEmpty($res1);
+
+        $res2 = UrlHelper::getSiteUrl('', $server);
+        $this->assertNotEmpty($res2);
+
+        $res3 = UrlHelper::getSiteUrl($url1);
+        $this->assertNotEmpty($res3);
+
+        $res4 = UrlHelper::getSiteUrl($url2);
+        $this->assertNotEmpty($res4);
+    }
+
 
 }
