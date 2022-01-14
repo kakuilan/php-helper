@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.4.4]- 2022-01-14
+
+#### Added
+
+- 新增`UrlHelper::getSiteUrl`,根据网址获取站点URL
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- 将`OsHelper::getDomain`移动到`UrlHelper::getDomain`
+- 将`OsHelper::getUrl`移动到`UrlHelper::getUrl`
+- 将`OsHelper::getUri`移动到`UrlHelper::getUri`
+
+#### Removed
+
+- none
+
+## [v0.4.3]- 2022-01-13
+
+#### Added
+
+- none
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- 兼容php 8.0
+
+#### Removed
+
+- none
+
 ## [v0.4.2]- 2021-12-09
 
 #### Added
