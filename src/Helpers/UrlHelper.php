@@ -182,4 +182,79 @@ class UrlHelper {
     }
 
 
+
+    /**
+     * 获取域名
+     * @param string $url
+     * @param bool $firstLevel 是否获取一级域名,如:abc.test.com取test.com
+     * @param array $server server信息
+     * @return string
+     */
+    public static function getDomain(string $url, bool $firstLevel = false, array $server = []): string {
+        if (empty($server)) {
+            $server = $_SERVER;
+        }
+        if (empty($url)) {
+            $url = $server['HTTP_HOST'] ?? '';
+        }
+
+        if (!stripos($url, '://')) {
+            $url = 'http://' . $url;
+        }
+
+        $parse  = parse_url(strtolower($url));
+        $domain = '';
+        if (isset($parse['host'])) {
+            $domain = $parse['host'];
+        }
+
+        if ($firstLevel) {
+            $arr  = explode('.', $domain);
+            $size = count($arr);
+            if ($size >= 2) {
+                $domain = $arr[$size - 2] . '.' . end($arr);
+            }
+        }
+
+        return $domain;
+    }
+
+
+    /**
+     * 获取当前页面完整URL地址
+     * @param array $server server信息
+     * @return string
+     */
+    public static function getUrl(array $server = []): string {
+        if (empty($server)) {
+            $server = $_SERVER;
+        }
+
+        $protocal  = ($server['SERVER_PORT'] ?? '') == '443' ? 'https://' : 'http://';
+        $phpSelf   = $server['PHP_SELF'] ?? $server['SCRIPT_NAME'];
+        $pathInfo  = $server['PATH_INFO'] ?? '';
+        $relateUrl = $server['REQUEST_URI'] ?? ltrim($phpSelf, '/') . (isset($server['QUERY_STRING']) ? '?' . $server['QUERY_STRING'] : $pathInfo);
+        return $protocal . ($server['HTTP_HOST'] ?? '') . $relateUrl;
+    }
+
+
+    /**
+     * 获取URI
+     * @param array $server
+     * @return string
+     */
+    public static function getUri(array $server = []): string {
+        if (empty($server)) {
+            $server = $_SERVER;
+        }
+
+        if (isset($server['REQUEST_URI'])) {
+            return $server['REQUEST_URI'];
+        }
+
+        $uri = ($server['PHP_SELF'] ?? '') . "?" . ($server['QUERY_STRING'] ?? ($server['argv'][0] ?? ''));
+        return $uri;
+    }
+
+
 }

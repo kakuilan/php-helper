@@ -9,12 +9,12 @@
 
 namespace Kph\Tests\Unit;
 
-use Kph\Helpers\ValidateHelper;
-use PHPUnit\Framework\TestCase;
 use Error;
 use Exception;
 use Kph\Consts;
 use Kph\Helpers\OsHelper;
+use Kph\Helpers\ValidateHelper;
+use PHPUnit\Framework\TestCase;
 
 
 class OsHelperTest extends TestCase {
@@ -153,37 +153,6 @@ class OsHelperTest extends TestCase {
         putenv("SERVER_ADDR='192.168.1.1'");
         $res = OsHelper::getServerIP([]);
         $this->assertNotEquals('192.168.1.1', $res);
-    }
-
-
-    public function testGetDomainUrlUri() {
-        $server = self::$server;
-        $url    = 'http://www.test.loc/index.php?name=hello&age=20&from=world';
-        $res1   = OsHelper::getDomain($url, false, $server);
-        $res2   = OsHelper::getDomain($url, true, $server);
-
-        $this->assertEquals('www.test.loc', $res1);
-        $this->assertEquals('test.loc', $res2);
-
-        $res3 = OsHelper::getUrl($server);
-        $this->assertEquals($url, $res3);
-
-        $res4 = OsHelper::getUri($server);
-        unset($server['REQUEST_URI']);
-        $res5 = OsHelper::getUri($server);
-        $this->assertEquals($res4, $res5);
-
-        $res6 = OsHelper::getDomain('', true, $server);
-        $this->assertEquals('test.loc', $res6);
-
-        $res7 = OsHelper::getUrl();
-        $this->assertFalse(ValidateHelper::isUrl($res7));
-
-        $res8 = OsHelper::getUri();
-        $this->assertNotEmpty($res8);
-
-        $res9 = OsHelper::getDomain('');
-        $this->assertEmpty($res9);
     }
 
 

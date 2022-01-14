@@ -9,11 +9,12 @@
 
 namespace Kph\Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
 use Error;
 use Exception;
 use Kph\Helpers\StringHelper;
 use Kph\Helpers\UrlHelper;
+use Kph\Helpers\ValidateHelper;
+use PHPUnit\Framework\TestCase;
 
 
 class UrlHelperTest extends TestCase {
@@ -87,5 +88,35 @@ class UrlHelperTest extends TestCase {
         $this->assertTrue(stripos($res4, 'href') !== false);
     }
 
+
+    public function testGetDomainUrlUri() {
+        $server = OsHelperTest::$server;
+        $url    = 'http://www.test.loc/index.php?name=hello&age=20&from=world';
+        $res1   = UrlHelper::getDomain($url, false, $server);
+        $res2   = UrlHelper::getDomain($url, true, $server);
+
+        $this->assertEquals('www.test.loc', $res1);
+        $this->assertEquals('test.loc', $res2);
+
+        $res3 = UrlHelper::getUrl($server);
+        $this->assertEquals($url, $res3);
+
+        $res4 = UrlHelper::getUri($server);
+        unset($server['REQUEST_URI']);
+        $res5 = UrlHelper::getUri($server);
+        $this->assertEquals($res4, $res5);
+
+        $res6 = UrlHelper::getDomain('', true, $server);
+        $this->assertEquals('test.loc', $res6);
+
+        $res7 = UrlHelper::getUrl();
+        $this->assertFalse(ValidateHelper::isUrl($res7));
+
+        $res8 = UrlHelper::getUri();
+        $this->assertNotEmpty($res8);
+
+        $res9 = UrlHelper::getDomain('');
+        $this->assertEmpty($res9);
+    }
 
 }
