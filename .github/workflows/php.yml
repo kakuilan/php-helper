@@ -42,7 +42,7 @@ jobs:
         tools: composer
 
     - name: Update dependencies with composer
-      run: php ./tools/composer update --no-ansi --no-interaction --no-progress
+      run: composer update --no-ansi --no-interaction --no-progress
 
     - name: Run tests with phpunit
       run: vendor/bin/phpunit --coverage-clover=coverage.xml
