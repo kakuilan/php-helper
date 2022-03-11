@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       TEST_NAME: Scarlett
-      PHP_EXTENSIONS: curl, dom, json, mbstring
+      PHP_EXTENSIONS: curl, dom, json, libxml, mbstring, xml, xmlwriter
       PHP_INI_VALUES: memory_limit=-1, error_reporting=-1, log_errors_max_len=0, display_errors=On
 
     strategy:
