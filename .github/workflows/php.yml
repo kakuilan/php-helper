@@ -45,7 +45,7 @@ jobs:
       run: composer update --no-ansi --no-interaction --no-progress
 
     - name: Run tests with phpunit
-      run: vendor/bin/phpunit --bootstrap=tests/bootstrap.php --coverage-clover=coverage.xml ./
+      run: vendor/bin/phpunit --bootstrap=tests/bootstrap.php --coverage-clover=coverage.xml ./tests/
 
     - name: Send code coverage report to Codecov.io
       uses: codecov/codecov-action@v2
