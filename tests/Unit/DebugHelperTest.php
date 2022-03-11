@@ -24,7 +24,7 @@ class DebugHelperTest extends TestCase {
         try {
             $str = 'hello';
             $a   = $str{9};
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             DebugHelper::errorLogHandler();
             error_clear_last();
         }
