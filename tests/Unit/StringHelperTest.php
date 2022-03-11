@@ -599,7 +599,7 @@ EOF;
         ];
         foreach ($tests as $test) {
             $expected = StringHelper::passwdSafeGrade($test[0]);
-            $this->assertEquals($test[1], $expected);
+            $this->assertEquals($expected, $test[1]);
         }
     }
 
