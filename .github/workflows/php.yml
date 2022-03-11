@@ -48,7 +48,7 @@ jobs:
       run: vendor/bin/phpunit --bootstrap=tests/bootstrap.php --coverage-clover=coverage.xml ./tests/
 
     - name: Show info
-      run: ls -a -h ./tests
+      run: ls -a -h ./ && ls -a -h ./tests
 
     - name: Send code coverage report to Codecov.io
       uses: codecov/codecov-action@v2
