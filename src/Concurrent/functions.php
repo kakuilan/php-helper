@@ -73,7 +73,11 @@ function makeClosureFun($callback, ...$params): callable {
 function isGenerator($var): bool {
     if (is_callable($var) && !is_object($var)) {
         try {
-            $var = call_user_func($var);
+            if (is_array($var)) {
+                $var = call_user_func_array($var);
+            } else {
+                $var = call_user_func($var);
+            }
         } catch (Throwable $e) {
         }
     }
