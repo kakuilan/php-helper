@@ -35,6 +35,7 @@
     ]
   },
   "scripts": {
-    "test": "phpunit --bootstrap=tests/bootstrap.php ./tests/"
+    "test": "phpunit --bootstrap=tests/bootstrap.php ./tests/",
+    "cover": "phpunit --bootstrap=tests/bootstrap.php --coverage-clover=coverage.xml ./tests/"
   }
 }

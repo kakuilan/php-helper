@@ -36,7 +36,7 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php-version }}
-        coverage: none
+        coverage: xdebug2
         extensions: ${{ env.PHP_EXTENSIONS }}
         ini-values: ${{ env.PHP_INI_VALUES }}
         tools: composer
@@ -47,7 +47,7 @@ jobs:
     - name: Run tests with phpunit
       run: vendor/bin/phpunit --bootstrap=tests/bootstrap.php --coverage-clover=coverage.xml ./tests/
 
-    - name: show info
+    - name: Show info
       run: ls -a -h ./tests
 
     - name: Send code coverage report to Codecov.io

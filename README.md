@@ -22,6 +22,7 @@ composer require kakuilan/php-helper
 ```sh
 phpunit --bootstrap=tests/bootstrap.php ./tests/
 composer run-script test
+composer run-script cover
 # 或者
 cd tests
 phpunit
