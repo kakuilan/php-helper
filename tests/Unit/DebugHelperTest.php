@@ -23,7 +23,7 @@ class DebugHelperTest extends TestCase {
     public function testErrorHandler() {
         try {
             $str = 'hello';
-            $a   = $str{9};
+            $a   = $str+8;
         } catch (Throwable $e) {
             DebugHelper::errorLogHandler();
             error_clear_last();
