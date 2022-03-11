@@ -45,7 +45,7 @@ jobs:
       run: composer update --no-ansi --no-interaction --no-progress
 
     - name: Run tests with phpunit
-      run: vendor/bin/phpunit --bootstrap=tests/bootstrap.php --coverage-clover=coverage.xml ./tests/
+      run: vendor/bin/phpunit -c=tests/phpunit.xml --coverage-clover=coverage.xml ./tests/
 
     - name: Show info
       run: ls -a -h ./ && ls -a -h ./tests
