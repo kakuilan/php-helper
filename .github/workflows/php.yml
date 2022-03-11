@@ -1,4 +1,4 @@
-name: PHP Composer
+name: helper-test
 
 on:
   push:
@@ -7,30 +7,44 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  build-test:
+    runs-on: ${{ matrix.os }}
+    env:
+      TEST_NAME: Scarlett
+      PHP_EXTENSIONS: curl, dom, json, mbstring
+      PHP_INI_VALUES: memory_limit=-1, error_reporting=-1, log_errors_max_len=0, display_errors=On
 
-    runs-on: ubuntu-latest
+    strategy:
+      # 策略组中，如果有一个失败了，则快速停止继续运行
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+
+        php-version:
+          - "7.2"
+          - "7.3"
+          - "7.4"
+          - "8.0"
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v3
 
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
-
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v2
+    - name: Install PHP
+      uses: shivammathur/setup-php@2
       with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
+        php-version: ${{ matrix.php-version }}
+        coverage: none
+        extensions: ${{ env.PHP_EXTENSIONS }}
+        ini-values: ${{ env.PHP_INI_VALUES }}
+        tools: composer
 
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
+      - name: Run tests with phpunit
+        run: vendor/bin/phpunit --coverage-clover=coverage.xml
 
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
-
-    # - name: Run test suite
-    #   run: composer run-script test
+      - name: Send code coverage report to Codecov.io
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
