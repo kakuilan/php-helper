@@ -41,10 +41,10 @@ jobs:
         ini-values: ${{ env.PHP_INI_VALUES }}
         tools: composer
 
-      - name: Run tests with phpunit
-        run: vendor/bin/phpunit --coverage-clover=coverage.xml
+    - name: Run tests with phpunit
+      run: vendor/bin/phpunit --coverage-clover=coverage.xml
 
-      - name: Send code coverage report to Codecov.io
-        uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+    - name: Send code coverage report to Codecov.io
+      uses: codecov/codecov-action@v2
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
