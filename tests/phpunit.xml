@@ -1,44 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/|version|/phpunit.xsd"
-        bootstrap="./bootstrap.php"
-        backupGlobals="false"
-        backupStaticAttributes="false"
-        colors="false"
-        convertErrorsToExceptions="true"
-        convertNoticesToExceptions="true"
-        convertWarningsToExceptions="true"
-        forceCoversAnnotation="false"
-        printerClass="PHPUnit\TextUI\ResultPrinter"
-        processIsolation="false"
-        stopOnError="false"
-        stopOnFailure="false"
-        stopOnIncomplete="false"
-        stopOnSkipped="false"
-        stopOnRisky="false"
-        testSuiteLoaderClass="PHPUnit\Runner\StandardTestSuiteLoader"
-        timeoutForSmallTests="1"
-        timeoutForMediumTests="10"
-        timeoutForLargeTests="60"
-        verbose="false">
-    <!-- testsuites 指定测试目录集-->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/|version|/phpunit.xsd"
+         bootstrap="./bootstrap.php"
+         cacheResultFile=".phpunit.cache/test-results"
+         executionOrder="depends,defects"
+         forceCoversAnnotation="true"
+         beStrictAboutCoversAnnotation="true"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutTodoAnnotatedTests="true"
+         failOnRisky="true"
+         failOnWarning="true"
+         verbose="true">
     <testsuites>
-        <testsuite name="Unit">
-            <directory suffix="Test.php">./Unit</directory>
-        </testsuite>
-        <testsuite name="Feature">
-            <directory suffix="Test.php">./Feature</directory>
+        <testsuite name="default">
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
-    <!-- 覆盖率的测试文件，whitelist 白名单(统计覆盖率的测试文件)  -->
-    <filter>
-        <whitelist  processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">../src</directory>
-        </whitelist>
-    </filter>
-    <!-- 生成单元测试覆盖率-->
-    <logging>
-        <log type="coverage-clover" target="clover.xml"/>
-    </logging>
+
+    <coverage cacheDirectory=".phpunit.cache/code-coverage"
+              processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+    </coverage>
 </phpunit>
