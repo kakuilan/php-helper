@@ -49,7 +49,7 @@ class EncryptHelper {
      * @param string $data 数据
      * @param string $key 密钥
      * @param bool $encode 操作:true时为加密,false时为解密
-     * @param int $expiry 有效期/秒,0为不限制
+     * @param int $expiry 有效期/秒,为0时代表永久(100年)
      * @return array
      */
     public static function authcode(string $data, string $key, bool $encode = true, int $expiry = 0): array {
@@ -74,9 +74,10 @@ class EncryptHelper {
         $keyLength = strlen($cryptkey);
 
         if ($encode) {
-            if ($expiry != 0) {
-                $expiry = $expiry + $now;
+            if ($expiry == 0) {
+                $expiry = 3153600000; //100年
             }
+            $expiry = $expiry + $now;
             $expMd5 = substr(md5($data . $keyb), 0, 16);
             $data   = sprintf('%010d', $expiry) . $expMd5 . $data;
         } else {
@@ -111,13 +112,18 @@ class EncryptHelper {
             $res = $keyc . self::base64UrlEncode($res);
             return [$res, $expiry];
         } else {
-            if (strlen($res) > 26) {
-                $expTime = intval(substr($res, 0, 10));
-                if (($expTime == 0 || $expTime - $now > 0) && substr($res, 10, 16) == substr(md5(substr($res, 26) . $keyb), 0, 16)) {
-                    return [substr($res, 26), $expTime];
-                }
+            if (strlen($res) <= 26) {
+                return ['', 0];
+            } elseif (substr($res, 10, 16) != substr(md5(substr($res, 26) . $keyb), 0, 16)) {
+                return ['', 0];
             }
-            return ['', 0];
+
+            $expTime = intval(substr($res, 0, 10));
+            if ($expTime - $now > 0) {
+                return [substr($res, 26), $expTime];
+            }
+
+            return ['', $expTime];
         }
     }
 
