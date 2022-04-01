@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.4.5]- 2022-04-01
+
+#### Added
+
+- none
+
+#### Fixed
+
+- 优化`EncryptHelper::authcode`
+
+#### Changed
+
+- none
+
+#### Removed
+
+- none
+
 ## [v0.4.4]- 2022-01-14
 
 #### Added
