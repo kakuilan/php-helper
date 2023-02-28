@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.4.6]- 2023-02-28
+
+#### Added
+
+- 新增`BaseService::setResult`
+- 新增`BaseService::getResult`
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- none
+
+#### Removed
+
+- none
+
 ## [v0.4.5]- 2022-04-01
 
 #### Added
