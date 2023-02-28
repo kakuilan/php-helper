@@ -36,6 +36,13 @@ class BaseService extends StrictObject {
 
 
     /**
+     * 处理结果
+     * @var array
+     */
+    public $result = [];
+
+
+    /**
      * BaseService constructor.
      * @param array $vars
      * @throws Throwable
@@ -103,5 +110,23 @@ class BaseService extends StrictObject {
         ];
     }
 
+
+    /**
+     * 设置结果
+     * @param array $arr
+     * @return void
+     */
+    public function setResult(array $arr): void {
+        $this->result = $arr;
+    }
+
+
+    /**
+     * 获取结果
+     * @return array
+     */
+    public function getResult(): array {
+        return $this->result;
+    }
 
 }
