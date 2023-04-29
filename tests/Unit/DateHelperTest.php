@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2020 LKK All rights reserved
  * User: kakuilan
@@ -15,10 +16,12 @@ use Exception;
 use Kph\Helpers\DateHelper;
 
 
-class DateHelperTest extends TestCase {
+class DateHelperTest extends TestCase
+{
 
 
-    public function testSmartDatetime() {
+    public function testSmartDatetime()
+    {
         $now  = time();
         $res1 = DateHelper::smartDatetime($now - 5);
         $res2 = DateHelper::smartDatetime($now - 65);
@@ -36,7 +39,8 @@ class DateHelperTest extends TestCase {
     }
 
 
-    public function testGetMonthDays() {
+    public function testGetMonthDays()
+    {
         $res1 = DateHelper::getMonthDays();
         $res2 = DateHelper::getMonthDays(1);
         $res3 = DateHelper::getMonthDays(13);
@@ -55,7 +59,8 @@ class DateHelperTest extends TestCase {
     }
 
 
-    public function testSecond2time() {
+    public function testSecond2time()
+    {
         $res1 = DateHelper::second2time(0);
         $res2 = DateHelper::second2time(10);
         $res3 = DateHelper::second2time(120);
@@ -70,7 +75,8 @@ class DateHelperTest extends TestCase {
     }
 
 
-    public function testGetMicrosecond() {
+    public function testGetMicrosecond()
+    {
         $res = DateHelper::getMicrosecond();
         $len = strlen($res);
         $this->assertGreaterThan(0, $res);
@@ -78,7 +84,8 @@ class DateHelperTest extends TestCase {
     }
 
 
-    public function testGetMillitime() {
+    public function testGetMillitime()
+    {
         $res = DateHelper::getMillitime();
         $len = strlen($res);
         $this->assertGreaterThan(0, $res);
@@ -86,7 +93,8 @@ class DateHelperTest extends TestCase {
     }
 
 
-    public function testGetXingZuo() {
+    public function testGetXingZuo()
+    {
         $time  = 1582368688;
         $tests = [
             [123456, ''],
@@ -125,7 +133,8 @@ class DateHelperTest extends TestCase {
     }
 
 
-    public function testGetShengXiao() {
+    public function testGetShengXiao()
+    {
         $time  = 1582368688;
         $tests = [
             ['hello', ''],
@@ -153,7 +162,8 @@ class DateHelperTest extends TestCase {
     }
 
 
-    public function testGetLunarYear() {
+    public function testGetLunarYear()
+    {
         $time  = 1582368688;
         $tests = [
             ['hello', ''],
@@ -172,7 +182,8 @@ class DateHelperTest extends TestCase {
     }
 
 
-    public function testStartOfHour() {
+    public function testStartOfHour()
+    {
         $tests = [
             [-1, null],
             [0, null],
@@ -195,7 +206,8 @@ class DateHelperTest extends TestCase {
     }
 
 
-    public function testEndOfHour() {
+    public function testEndOfHour()
+    {
         $tests = [
             [-1, null],
             [0, null],
@@ -218,7 +230,8 @@ class DateHelperTest extends TestCase {
     }
 
 
-    public function testStartOfDay() {
+    public function testStartOfDay()
+    {
         $tests = [
             [-1, null],
             [0, null],
@@ -241,7 +254,8 @@ class DateHelperTest extends TestCase {
     }
 
 
-    public function testEndOfDay() {
+    public function testEndOfDay()
+    {
         $tests = [
             [-1, null],
             [0, null],
@@ -264,7 +278,8 @@ class DateHelperTest extends TestCase {
     }
 
 
-    public function testStartOfMonth() {
+    public function testStartOfMonth()
+    {
         $tests = [
             [-1, null],
             [0, null],
@@ -287,7 +302,8 @@ class DateHelperTest extends TestCase {
     }
 
 
-    public function testEndOfMonth() {
+    public function testEndOfMonth()
+    {
         $tests = [
             [-1, null],
             [0, null],
@@ -310,7 +326,8 @@ class DateHelperTest extends TestCase {
     }
 
 
-    public function testStartOfYear() {
+    public function testStartOfYear()
+    {
         $tests = [
             [-1, null],
             [0, null],
@@ -333,7 +350,8 @@ class DateHelperTest extends TestCase {
     }
 
 
-    public function testEndOfYear() {
+    public function testEndOfYear()
+    {
         $tests = [
             [-1, null],
             [0, null],
@@ -356,7 +374,8 @@ class DateHelperTest extends TestCase {
     }
 
 
-    public function testStartOfWeek() {
+    public function testStartOfWeek()
+    {
         $tests = [
             [-1, 1, null],
             [0, 1, null],
@@ -378,7 +397,8 @@ class DateHelperTest extends TestCase {
     }
 
 
-    public function testEndOfWeek() {
+    public function testEndOfWeek()
+    {
         $tests = [
             [-1, 1, null],
             [0, 1, null],
@@ -404,5 +424,25 @@ class DateHelperTest extends TestCase {
         }
     }
 
+    public function testIsBetween()
+    {
+        $tests = [
+            ['2023-02-01', '2023-01-01', '2023-03-01', true],
+            ['2022-02-01', '2023-01-01', '2023-03-01', false],
+            ['2023-02-01', '2023-01-01', null, true],
+            ['2023-02-01', null, '2023-03-01', true],
+            ['2023-05-01', null, '2023-03-01', false],
+            ['2023-05-01', '2023-01-01', null, true],
+        ];
 
+        foreach ($tests as $key => $test) {
+            $time = $test[0];
+            $start = $test[1];
+            $end = $test[2];
+            $expected = $test[3];
+            $result = DateHelper::isBetween($time, $start, $end);
+
+            $this->assertEquals($expected, $result, '['.$key . '] 不符预期'.print_r($test, true));
+        }
+    }
 }
