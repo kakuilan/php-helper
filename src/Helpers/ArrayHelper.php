@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2020 LKK All rights reserved
  * User: kakuilan
@@ -12,6 +13,7 @@ namespace Kph\Helpers;
 
 use ArrayIterator;
 use IteratorAggregate;
+use SimpleXMLElement;
 
 /**
  * Class ArrayHelper
@@ -418,7 +420,7 @@ class ArrayHelper {
             }
             array_push($sortConditions, $arr);
 
-            array_multisort(... $sortConditions);
+            array_multisort(...$sortConditions);
             return end($sortConditions);
         }
 
@@ -577,13 +579,13 @@ class ArrayHelper {
             foreach ($arr1 as $key => $item) {
                 $item2 = $arr2[$key];
                 if (is_array($item) && is_array($item2)) {
-                    if (ValidateHelper::isAssocArray($item) && ValidateHelper::isAssocArray($item2)) {//两个都是关联数组
+                    if (ValidateHelper::isAssocArray($item) && ValidateHelper::isAssocArray($item2)) { //两个都是关联数组
                         $check = self::compareSchema($item, $item2, $recursive);
                         if (!$check) {
                             $res = false;
                             break;
                         }
-                    } elseif ((ValidateHelper::isIndexArray($item) && ValidateHelper::isIndexArray($item2)) || (empty($item) && empty($item2))) {//两个都是索引数组或空数组
+                    } elseif ((ValidateHelper::isIndexArray($item) && ValidateHelper::isIndexArray($item2)) || (empty($item) && empty($item2))) { //两个都是索引数组或空数组
                         continue;
                     } else {
                         $res = false;
@@ -600,4 +602,46 @@ class ArrayHelper {
     }
 
 
+    /**
+     * XML转为数组
+     *
+     * @Author gjw
+     * @DateTime 2023-04-29
+     *
+     * @param string $xml
+     *
+     * @return array
+     */
+    public static function xmlToArray(string $xml): array {
+        $xmlObj = simplexml_load_string($xml);
+        $json = json_encode($xmlObj);
+        $array = json_decode($json, true);
+        return $array;
+    }
+
+    /**
+     * 数组转为XML
+     *
+     * @Author gjw
+     * @DateTime 2023-04-29
+     *
+     * @param array $array
+     * @param string|null $rootElement
+     * @param SimpleXMLElement|null $xml
+     *
+     * @return string
+     */
+    public static function arrayToXml(array $array, string $rootElement = null, SimpleXMLElement $xml = null): string {
+        if ($xml === null) {
+            $xml = new SimpleXMLElement($rootElement !== null ? "<$rootElement/>" : "<root/>");
+        }
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                self::arrayToXml($value, $key, $xml->addChild($key));
+            } else {
+                $xml->addChild($key, $value);
+            }
+        }
+        return $xml->asXML();
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2020 LKK All rights reserved
  * User: kakuilan
@@ -404,5 +405,24 @@ class DateHelperTest extends TestCase {
         }
     }
 
+    public function testIsBetween() {
+        $tests = [
+            ['2023-02-01', '2023-01-01', '2023-03-01', true],
+            ['2022-02-01', '2023-01-01', '2023-03-01', false],
+            ['2023-02-01', '2023-01-01', null, true],
+            ['2023-02-01', null, '2023-03-01', true],
+            ['2023-05-01', null, '2023-03-01', false],
+            ['2023-05-01', '2023-01-01', null, true],
+        ];
 
+        foreach ($tests as $key => $test) {
+            $time = $test[0];
+            $start = $test[1];
+            $end = $test[2];
+            $expected = $test[3];
+            $result = DateHelper::isBetween($time, $start, $end);
+
+            $this->assertEquals($expected, $result, '[' . $key . '] 不符预期' . print_r($test, true));
+        }
+    }
 }
