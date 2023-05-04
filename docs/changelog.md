@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.4.7]- 2023-05-04
+
+#### Added
+
+- 新增`ArrayHelper::xmlToArray`
+- 新增`ArrayHelper::arrayToXml`
+- 新增`DateHelper::timestamp`
+- 新增`DateHelper::year`
+- 新增`DateHelper::month`
+- 新增`DateHelper::day`
+- 新增`DateHelper::hour`
+- 新增`DateHelper::minute`
+- 新增`DateHelper::second`
+- 新增`DateHelper::yearMonth`
+- 新增`DateHelper::monthDay`
+- 新增`DateHelper::format`
+- 新增`DateHelper::dateTime`
+- 新增`DateHelper::isBetween`
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- none
+
+#### Removed
+
+- none
+
 ## [v0.4.6]- 2023-02-28
 
 #### Added
