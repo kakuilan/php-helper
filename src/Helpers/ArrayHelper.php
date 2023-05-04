@@ -19,8 +19,7 @@ use SimpleXMLElement;
  * Class ArrayHelper
  * @package Kph\Helpers
  */
-class ArrayHelper
-{
+class ArrayHelper {
 
 
     /**
@@ -30,8 +29,7 @@ class ArrayHelper
      * @param int $sort 排序类型:SORT_DESC/SORT_ASC
      * @return array
      */
-    public static function multiArraySort(array $arr, string $sortKey, int $sort = SORT_DESC): array
-    {
+    public static function multiArraySort(array $arr, string $sortKey, int $sort = SORT_DESC): array {
         $keyArr = [];
         foreach ($arr as $subArr) {
             if (!is_array($subArr) || !isset($subArr[$sortKey])) {
@@ -51,8 +49,7 @@ class ArrayHelper
      * @param bool $keepKey 是否保留键名
      * @return array
      */
-    public static function multiArrayUnique(array $arr, bool $keepKey = false): array
-    {
+    public static function multiArrayUnique(array $arr, bool $keepKey = false): array {
         $hasArr = $res = [];
         foreach ($arr as $k => $v) {
             $hash = md5(serialize($v));
@@ -77,8 +74,7 @@ class ArrayHelper
      * @param array $vals 结果
      * @return array
      */
-    public static function multiArrayValues(array $arr, &$vals = []): array
-    {
+    public static function multiArrayValues(array $arr, &$vals = []): array {
         foreach ($arr as $v) {
             if (is_array($v)) {
                 self::multiArrayValues($v, $vals);
@@ -97,8 +93,7 @@ class ArrayHelper
      * @param callable $fn 回调函数
      * @return array
      */
-    public static function mapRecursive(array $arr, callable $fn): array
-    {
+    public static function mapRecursive(array $arr, callable $fn): array {
         $res = [];
         foreach ($arr as $k => $v) {
             $res[$k] = is_array($v) ? (self::mapRecursive($v, $fn)) : call_user_func($fn, $v);
@@ -114,8 +109,7 @@ class ArrayHelper
      * @param mixed ...$keys 要剪切的元素键,一个或多个
      * @return array
      */
-    public static function cutItems(array &$arr, bool $keepKey = false, ...$keys): array
-    {
+    public static function cutItems(array &$arr, bool $keepKey = false, ...$keys): array {
         $res = [];
 
         if (!empty($keys)) {
@@ -145,8 +139,7 @@ class ArrayHelper
      * @param string $separator 分隔符
      * @return array
      */
-    private static function _combinationValue(array $arr, int $len, string $separator = ''): array
-    {
+    private static function _combinationValue(array $arr, int $len, string $separator = ''): array {
         $res = [];
         if ($len <= 1) {
             return $arr;
@@ -179,8 +172,7 @@ class ArrayHelper
      * @param string $separator
      * @return array
      */
-    private static function _combinationPosition(array $arr, string $separator = ''): array
-    {
+    private static function _combinationPosition(array $arr, string $separator = ''): array {
         $len = count($arr);
         $res = self::combinationAll($arr, $separator);
         if ($len >= 2) {
@@ -204,8 +196,7 @@ class ArrayHelper
      * @param string $separator 分隔符
      * @return array
      */
-    public static function combinationAll(array $arr, string $separator = '')
-    {
+    public static function combinationAll(array $arr, string $separator = '') {
         $len = count($arr);
         if ($len == 0) {
             return [];
@@ -255,8 +246,7 @@ class ArrayHelper
      * @param bool $unique 组合中的元素是否唯一.设为true时,只考虑元素值而忽略元素位置,则[a,b]与[b,a]是相同的组合;设为false时,同时考虑元素值和元素位置,则[a,b]与[b,a]是不同的组合.
      * @return array
      */
-    public static function combinationFull(array $arr, string $separator = '', bool $unique = true): array
-    {
+    public static function combinationFull(array $arr, string $separator = '', bool $unique = true): array {
         $res = [];
         $len = count($arr);
 
@@ -287,8 +277,7 @@ class ArrayHelper
      * @param bool $delSource 若匹配,是否删除原数组的该元素
      * @return bool|mixed
      */
-    public static function searchItem(&$arr, array $conditions, bool $delSource = false)
-    {
+    public static function searchItem(&$arr, array $conditions, bool $delSource = false) {
         if (!is_array($arr) && !($arr instanceof ArrayIterator) && !($arr instanceof IteratorAggregate)) {
             return false;
         } elseif (empty($arr) || empty($conditions)) {
@@ -328,8 +317,7 @@ class ArrayHelper
      * @param bool $delSource 若匹配,是否删除原数组的该元素
      * @return array
      */
-    public static function searchMutil(&$arr, array $conditions, bool $delSource = false): array
-    {
+    public static function searchMutil(&$arr, array $conditions, bool $delSource = false): array {
         $res = [];
         if (!is_array($arr) && !($arr instanceof ArrayIterator) && !($arr instanceof IteratorAggregate)) {
             return $res;
@@ -371,8 +359,7 @@ class ArrayHelper
      * @param bool $keepKey 是否保留外层键名
      * @return array
      */
-    public static function sortByField(array $arr, string $key, string $sort = 'desc', bool $keepKey = false): array
-    {
+    public static function sortByField(array $arr, string $key, string $sort = 'desc', bool $keepKey = false): array {
         $res    = [];
         $values = [];
         $sort   = strtolower(trim($sort));
@@ -407,8 +394,7 @@ class ArrayHelper
      * @param array ...$sorts 多个排序信息.其中的元素必须是数组,形如['field', SORT_ASC],或者['field'];若没有排序类型,则默认 SORT_DESC .
      * @return array
      */
-    public static function sortByMultiFields(array $arr, array ...$sorts): array
-    {
+    public static function sortByMultiFields(array $arr, array ...$sorts): array {
         if (empty($arr)) {
             return [];
         }
@@ -448,8 +434,7 @@ class ArrayHelper
      * @param bool $recursive 是否递归
      * @return bool
      */
-    public static function regularSort(array &$arr, bool $recursive = false): bool
-    {
+    public static function regularSort(array &$arr, bool $recursive = false): bool {
         $res = false;
 
         if ($recursive) {
@@ -477,8 +462,7 @@ class ArrayHelper
      * @param int|string $keyb 键b
      * @return bool
      */
-    public static function swapItem(array &$arr, $keya, $keyb): bool
-    {
+    public static function swapItem(array &$arr, $keya, $keyb): bool {
         $keya = strval($keya);
         $keyb = strval($keyb);
         if (isset($arr[$keya]) && isset($arr[$keyb])) {
@@ -496,8 +480,7 @@ class ArrayHelper
      * @param mixed $key 键,可带点的多级,如row.usr.name
      * @param mixed $value 值
      */
-    public static function setDotKey(array &$arr, $key, $value): void
-    {
+    public static function setDotKey(array &$arr, $key, $value): void {
         if (is_null($key) || $key == '') {
             $arr = is_array($value) ? $value : (array)$value;
             return;
@@ -530,8 +513,7 @@ class ArrayHelper
      * @param mixed $default 默认值
      * @return mixed|null
      */
-    public static function getDotKey(array $arr, $key = null, $default = null)
-    {
+    public static function getDotKey(array $arr, $key = null, $default = null) {
         if (is_null($key) || $key == '') {
             return $arr;
         }
@@ -560,8 +542,7 @@ class ArrayHelper
      * @param mixed $key 键,可带点的多级,如row.usr.name
      * @return bool
      */
-    public static function hasDotKey(array $arr, $key = null): bool
-    {
+    public static function hasDotKey(array $arr, $key = null): bool {
         if (is_null($key) || $key == '') {
             return false;
         }
@@ -591,8 +572,7 @@ class ArrayHelper
      * @param bool $recursive 是否递归(比较多维数组)
      * @return bool
      */
-    public static function compareSchema(array $arr1, array $arr2, bool $recursive = false): bool
-    {
+    public static function compareSchema(array $arr1, array $arr2, bool $recursive = false): bool {
         $diff = (count($arr1) > count($arr2)) ? array_diff_key($arr1, $arr2) : array_diff_key($arr2, $arr1);
         $res  = empty($diff);
         if ($res && $recursive) {
@@ -632,8 +612,7 @@ class ArrayHelper
      *
      * @return array
      */
-    public static function xmlToArray(string $xml): array
-    {
+    public static function xmlToArray(string $xml): array {
         $xmlObj = simplexml_load_string($xml);
         $json = json_encode($xmlObj);
         $array = json_decode($json, true);
@@ -652,8 +631,7 @@ class ArrayHelper
      *
      * @return string
      */
-    public static function arrayToXml(array $array, string $rootElement = null, SimpleXMLElement $xml = null): string
-    {
+    public static function arrayToXml(array $array, string $rootElement = null, SimpleXMLElement $xml = null): string {
         if ($xml === null) {
             $xml = new SimpleXMLElement($rootElement !== null ? "<$rootElement/>" : "<root/>");
         }
