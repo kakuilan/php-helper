@@ -15,7 +15,6 @@ use Error;
 use Exception;
 use Kph\Helpers\DateHelper;
 
-
 class DateHelperTest extends TestCase {
 
 
@@ -423,6 +422,91 @@ class DateHelperTest extends TestCase {
             $result = DateHelper::isBetween($time, $start, $end);
 
             $this->assertEquals($expected, $result, '[' . $key . '] 不符预期' . print_r($test, true));
+        }
+    }
+
+    public function testTimestamp() {
+        $tests = [
+            ['aaaa', null],
+            ['2023-05-07 12:34:98', null],
+            ['2023-05-07', 1683417600],
+            ['2023-05-07 12:34:23', 1683462863],
+            ['12:34:23', 1683462863],
+        ];
+
+        foreach ($tests as $key => $test) {
+            $time = $test[0];
+            $expected = $test[1];
+
+            try {
+                $result = DateHelper::timestamp($time);
+                $this->assertEquals($expected, $result, '[' . $key . '] 不符预期' . print_r($test, true));
+            } catch (Exception $e) {
+                $this->assertTrue(is_null($expected), '[' . $key . '] 异常不符预期' . print_r($test, true));
+            }
+        }
+    }
+
+    public function testTimeDiff() {
+        $tests = [
+            ['2023-05-07', '2023-05-08', 'd', 1],
+            ['2023-05-07', '2023-05-0833', 'd', null],
+        ];
+
+        foreach ($tests as $key => $test) {
+            $time1 = $test[0];
+            $time2 = $test[1];
+            $type = $test[2];
+            $expected = $test[3];
+
+            try {
+                $result = DateHelper::timeDiff($time1, $time2, $type);
+                $this->assertEquals($expected, $result, '[' . $key . '] 不符预期' . print_r($test, true));
+            } catch (Exception $e) {
+                $this->assertTrue(is_null($expected), '[' . $key . '] 异常不符预期' . print_r($test, true));
+            }
+        }
+    }
+
+    public function testTimeAdd() {
+        $tests = [
+            [1, 'd', '2023-05-07', '2023-05-08'],
+            [1, 'd', '2023-05-233', null],
+        ];
+
+        foreach ($tests as $key => $test) {
+            $interval = $test[0];
+            $type = $test[1];
+            $start_time = $test[2];
+            $expected = $test[3];
+
+            try {
+                $result = DateHelper::timeAdd($interval, $type, $start_time, 'Y-m-d');
+                $this->assertEquals($expected, $result, '[' . $key . '] 不符预期' . print_r($test, true));
+            } catch (Exception $e) {
+                $this->assertTrue(is_null($expected), '[' . $key . '] 异常不符预期' . print_r($test, true));
+            }
+        }
+    }
+
+    public function testBirthdayToAge() {
+        $tests = [
+            ['2020-01-01', '2023-01-01', 3],
+            ['2020-05-01', '2023-02-01', 2],
+            ['2020-01-011111', '2023-01-01', null]
+        ];
+
+        foreach ($tests as $key => $test) {
+            $birthday = $test[0];
+            $reference = $test[1];
+            $expected = $test[2];
+
+            try {
+                $result = DateHelper::birthdayToAge($birthday, $reference);
+                $this->assertEquals($expected, $result, '[' . $key . '] 不符预期' . print_r($test, true));
+            } catch (Exception $e) {
+                $this->assertTrue(is_null($expected), '[' . $key . '] 异常不符预期' . print_r($test, true));
+            }
         }
     }
 }

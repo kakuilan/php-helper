@@ -605,7 +605,7 @@ class ArrayHelper {
     /**
      * XML转为数组
      *
-     * @Author gjw
+     * @Author nece001@163.com
      * @DateTime 2023-04-29
      *
      * @param string $xml
@@ -622,7 +622,7 @@ class ArrayHelper {
     /**
      * 数组转为XML
      *
-     * @Author gjw
+     * @Author nece001@163.com
      * @DateTime 2023-04-29
      *
      * @param array $array

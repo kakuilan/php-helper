@@ -700,4 +700,52 @@ EOF;
     }
 
 
+    public function testMark(){
+        $tests = [
+            ['123456', 3, 2, '123**6'],
+            ['将电池寿命延长', 3, 2, '将电池**延长'],
+        ];
+
+        foreach($tests as $key=>$test){
+            $origin = $test[0];
+            $start = $test[1];
+            $length = $test[2];
+            $expected = $test[3];
+
+            $result = StringHelper::mask($origin, $start, $length);
+            $this->assertEquals($expected, $result, '[' . $key . '] 不符预期' . print_r($test, true));
+        }
+    }
+
+    public function testBirthdayFromIdCard(){
+        $tests = [
+            ['235407195106112745', '1951-06-11'],
+            ['210203197503102721', '1975-03-10'],
+            ['420106640901234', '1964-09-01'],
+        ];
+
+        foreach($tests as $key=>$test){
+            $id_card = $test[0];
+            $expected = $test[1];
+
+            $result = StringHelper::getBirthdayFromIdCard($id_card);
+            $this->assertEquals($expected, $result, '[' . $key . '] 不符预期' . print_r($test, true));
+        }
+    }
+
+    public function testGenderFromIdCard(){
+        $tests = [
+            ['142623196210312318', 1],
+            ['371521199003091409', 2],
+            ['420106640901234', 1],
+        ];
+
+        foreach($tests as $key=>$test){
+            $id_card = $test[0];
+            $expected = $test[1];
+
+            $result = StringHelper::getGenderFromIdCard($id_card);
+            $this->assertEquals($expected, $result, '[' . $key . '] 不符预期' . print_r($test, true));
+        }
+    }
 }

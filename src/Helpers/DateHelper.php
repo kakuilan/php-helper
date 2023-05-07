@@ -10,6 +10,7 @@
 
 namespace Kph\Helpers;
 
+use Exception;
 
 /**
  * Class DateHelper
@@ -491,7 +492,7 @@ class DateHelper {
     /**
      * 时间转时间戳
      *
-     * @Author gjw
+     * @Author nece001@163.com
      * @DateTime 2023-04-29
      *
      * @param string|int $time 要转成时间戳的时间
@@ -501,19 +502,55 @@ class DateHelper {
     public static function timestamp($time = null): int {
         if (is_string($time)) {
             $time = strtotime($time);
+            if ($time === false) {
+                throw new Exception('时间格式有误，无法转为时间戳');
+            }
         }
 
         if (!$time) {
             $time = time();
         }
 
-        return $time;
+        if (is_int($time)) {
+            return $time;
+        } else {
+            throw new Exception('时间类型有误，请使用字符串或数字类型');
+        }
+    }
+
+    /**
+     * 获取当前时间
+     *
+     * @Author nece001@163.com
+     * @DateTime 2023-05-07
+     *
+     * @param string $format
+     *
+     * @return string
+     */
+    public static function now(string $format = 'Y-m-d H:i:s'): string {
+        return date($format);
+    }
+
+    /**
+     * 获取日期
+     *
+     * @Author nece001@163.com
+     * @DateTime 2023-05-07
+     *
+     * @param string|int $time
+     * @param string $format
+     *
+     * @return string
+     */
+    public static function date($time = null, string $format = 'Y-m-d'): string {
+        return date($format, self::timestamp($time));
     }
 
     /**
      * 获取年份
      *
-     * @Author gjw
+     * @Author nece001@163.com
      * @DateTime 2023-04-29
      *
      * @param string|int $time 要取年份的时间
@@ -528,7 +565,7 @@ class DateHelper {
     /**
      * 获取月份
      *
-     * @Author gjw
+     * @Author nece001@163.com
      * @DateTime 2023-04-29
      *
      * @param string|int $time 要取月份的时间
@@ -543,7 +580,7 @@ class DateHelper {
     /**
      * 获取日
      *
-     * @Author gjw
+     * @Author nece001@163.com
      * @DateTime 2023-04-29
      *
      * @param string|int $time 要取日的时间
@@ -558,7 +595,7 @@ class DateHelper {
     /**
      * 获取时
      *
-     * @Author gjw
+     * @Author nece001@163.com
      * @DateTime 2023-04-29
      *
      * @param string|int $time 要取时的时间
@@ -573,7 +610,7 @@ class DateHelper {
     /**
      * 获取分钟
      *
-     * @Author gjw
+     * @Author nece001@163.com
      * @DateTime 2023-04-29
      *
      * @param string|int $time 要取分钟的时间
@@ -588,7 +625,7 @@ class DateHelper {
     /**
      * 获取秒钟
      *
-     * @Author gjw
+     * @Author nece001@163.com
      * @DateTime 2023-04-29
      *
      * @param string|int $time 要取秒钟的时间
@@ -603,7 +640,7 @@ class DateHelper {
     /**
      * 获取年月
      *
-     * @Author gjw
+     * @Author nece001@163.com
      * @DateTime 2023-04-29
      *
      * @param string|int $time 要取年月的时间
@@ -618,7 +655,7 @@ class DateHelper {
     /**
      * 获取月日
      *
-     * @Author gjw
+     * @Author nece001@163.com
      * @DateTime 2023-04-29
      *
      * @param string|int $time 要取月日的时间
@@ -633,7 +670,7 @@ class DateHelper {
     /**
      * 格式化时间
      *
-     * @Author gjw
+     * @Author nece001@163.com
      * @DateTime 2023-04-29
      *
      * @param string|int $time 待格式化的时间
@@ -648,7 +685,7 @@ class DateHelper {
     /**
      * 获取日期时间
      *
-     * @Author gjw
+     * @Author nece001@163.com
      * @DateTime 2023-04-29
      *
      * @param string $format 格式
@@ -663,7 +700,7 @@ class DateHelper {
     /**
      * 测试给定时间是否在两个时间之间
      *
-     * @Author gjw
+     * @Author nece001@163.com
      * @DateTime 2023-04-29
      *
      * @param string|int $time 给定时间
@@ -695,5 +732,92 @@ class DateHelper {
         }
 
         return false;
+    }
+
+    /**
+     * 计算时间差
+     *
+     * @Author nece001@163.com
+     * @DateTime 2023-05-07
+     *
+     * @param string|int $time1
+     * @param string|int $time2
+     * @param string $type 时间单位：s=秒（默认）,i=分,h=时,d=日,w=星期
+     *
+     * @return integer
+     */
+    public static function timeDiff($time1, $time2, string $type = 's'): int {
+        $units = array('i' => 60, 'h' => 3600, 'd' => 86400, 'w' => 86400 * 7);
+        $stamp1 = self::timestamp($time1);
+        $stamp2 = self::timestamp($time2);
+        $diff = abs($stamp1 - $stamp2);
+
+        if (isset($units[$type])) {
+            return round($diff / $units[$type], 2);
+        }
+
+        return $diff;
+    }
+
+    /**
+     * 增加时间
+     *
+     * @Author nece001@163.com
+     * @DateTime 2023-05-07
+     *
+     * @param int $interval 要增加的时间数（负数为减掉）
+     * @param string $type 要增加的时间的单位：s=秒（默认）,i=分,h=时,d=日,w=星期
+     * @param string|int $start_time 起始时间
+     * @param string $format 返回格式
+     *
+     * @return string
+     */
+    public static function timeAdd(int $interval, string $type = 's', $start_time = null, string $format = 'Y-m-d H:i:s'): string {
+        $units = array('i' => 60, 'h' => 3600, 'd' => 86400, 'w' => 86400 * 7);
+        $start = self::timestamp($start_time);
+        if (isset($units[$type])) {
+            $interval *= $units[$type];
+        }
+
+        return self::format($start + $interval, $format);
+    }
+
+    /**
+     * 生日转年龄(周岁)
+     *
+     * @author nece001@163.com
+     * @created 2023-02-13 14:59:57
+     *
+     * @param string|int $birthday
+     * @param string|int $reference
+     * @return integer
+     */
+    public static function birthdayToAge($birthday, $reference = null) {
+        try {
+            $birthday_time = self::timestamp($birthday);
+        } catch (Exception $e) {
+            throw new Exception('生日时间有误');
+        }
+
+        try {
+            $now = self::timestamp($reference);
+        } catch (Exception $e) {
+            throw new Exception('参照时间有误');
+        }
+
+        $birth_year = intval(self::year($birthday_time));
+        $now_year = intval(self::year($now));
+        $age = abs($now_year - $birth_year);
+
+        $birth_date = self::date($birthday_time, '1970-m-d');
+        $now_date = self::date($now, '1970-m-d');
+
+        $birth_date_time = strtotime($birth_date);
+        $now_date_time = strtotime($now_date);
+
+        if ($birth_date_time > $now_date_time) {
+            $age -= 1;
+        }
+        return $age;
     }
 }
