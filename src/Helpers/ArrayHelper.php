@@ -644,4 +644,42 @@ class ArrayHelper {
         }
         return $xml->asXML();
     }
+
+    /**
+     * 比较两个数组的不同之处，支持多维数组
+     *
+     * @Author nece001@163.com
+     * @DateTime 2023-05-09
+     *
+     * @param array $arr1
+     * @param array $arr2
+     *
+     * @return array
+     */
+    public static function diff(array $arr1, array $arr2): array {
+        $diff = [];
+        foreach ($arr1 as $key => $value) {
+            if (is_array($value) && isset($arr2[$key]) && is_array($arr2[$key])) {
+                $childDiff = self::diff($value, $arr2[$key]);
+                if (!empty($childDiff)) {
+                    $diff[$key] = $childDiff;
+                }
+            } elseif (!isset($arr2[$key]) || $arr2[$key] !== $value) {
+                $diff[$key] = $value;
+            }
+        }
+
+        foreach ($arr2 as $key => $value) {
+            if (is_array($value) && isset($arr1[$key]) && is_array($arr1[$key])) {
+                $childDiff = self::diff($arr1[$key], $value);
+                if (!empty($childDiff)) {
+                    $diff[$key] = $childDiff;
+                }
+            } elseif (!isset($arr1[$key]) || $arr1[$key] !== $value) {
+                $diff[$key] = $value;
+            }
+        }
+
+        return $diff;
+    }
 }

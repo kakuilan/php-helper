@@ -748,4 +748,39 @@ EOF;
             $this->assertEquals($expected, $result, '[' . $key . '] 不符预期' . print_r($test, true));
         }
     }
+
+    public function testLeftPart(){
+        $tests = [
+            ['abcd123456efg', '45', 0, 'abcd123'],
+            ['adsf123凯撒的房间4556jalsd', '房间45', 9, 'adsf123凯撒的']
+        ];
+
+        foreach($tests as $key=>$test){
+            $str = $test[0];
+            $substr = $test[1];
+            $start = $test[2];
+            $expected = $test[3];
+
+            $result = StringHelper::leftPart($str, $substr, $start);
+            $this->assertEquals($expected, $result, '[' . $key . '] 不符预期' . print_r($test, true));
+        }
+    }
+
+    public function testRightPart(){
+        $tests = [
+            ['abcd123456efg', '45', 0, '6efg'],
+            ['adsf123凯撒的房间4556jalsd', '房间45', 9, '56jalsd'],
+            ['ad房间45sf123凯撒的房间4556jalsd', '房间45', 3, '56jalsd'],
+        ];
+
+        foreach($tests as $key=>$test){
+            $str = $test[0];
+            $substr = $test[1];
+            $start = $test[2];
+            $expected = $test[3];
+
+            $result = StringHelper::rightPart($str, $substr, $start);
+            $this->assertEquals($expected, $result, '[' . $key . '] 不符预期' . print_r($test, true));
+        }
+    }
 }

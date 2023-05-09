@@ -614,4 +614,20 @@ class ArrayHelperTest extends TestCase {
     }
 
 
+    public function testDiff(){
+        $tests = [
+            [[1,2,3], [1,2,4], 1],
+            [[[1,2],[1,3]], [[1,4],[1,5],[1,6]], 3],
+            [[['a'=>1, 'b'=>2],['c'=>3, 'd'=>4]], [['a'=>1, 'b'=>2],['c'=>3, 'd'=>5], ['f'=>6]], 2]
+        ];
+
+        foreach($tests as $test){
+            $arr1 = $test[0];
+            $arr2 = $test[1];
+            $expected = $test[2];
+
+            $result = ArrayHelper::diff($arr1, $arr2);
+            $this->assertEquals($expected, count($result));
+        }
+    }
 }
