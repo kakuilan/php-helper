@@ -10,6 +10,7 @@
 
 namespace Kph\Helpers;
 
+use \DateTime;
 
 /**
  * Class DateHelper
@@ -17,6 +18,38 @@ namespace Kph\Helpers;
  */
 class DateHelper {
 
+    /**
+     * 时间转时间戳
+     * @Author nece001@163.com
+     * @DateTime 2023-04-29
+     * @param DateTime|int|string|null $time 要转成时间戳的时间,为null或空则默认当前
+     * @return int
+     */
+    public static function timestamp($time = null): int {
+        if (is_string($time) && !is_numeric($time)) {
+            $res = strtotime($time);
+        } elseif ($time instanceof DateTime) {
+            $res = $time->getTimestamp();
+        } elseif (!$time) {
+            $res = time();
+        } else {
+            $res = max(intval($time), 0);
+        }
+
+        return $res;
+    }
+
+    /**
+     * 格式化时间
+     * @Author nece001@163.com
+     * @DateTime 2023-04-29
+     * @param DateTime|int|string|null $time 待格式化的时间
+     * @param string $format 格式
+     * @return string
+     */
+    public static function format($time = null, $format = 'Y-m-d H:i:s'): string {
+        return date($format, self::timestamp($time));
+    }
 
     /**
      * 智能时间格式
@@ -349,13 +382,11 @@ class DateHelper {
 
     /**
      * 获取日期中当时的开始时间
-     * @param int $time
+     * @param DateTime|int|string|null $time 日期/时间
      * @return int
      */
-    public static function startOfHour(int $time = 0): int {
-        if ($time <= 0) {
-            $time = time();
-        }
+    public static function startOfHour($time = null): int {
+        $time = self::timestamp($time);
 
         return strtotime(date("Y-m-d H:00:00", $time));
     }
@@ -363,13 +394,11 @@ class DateHelper {
 
     /**
      * 获取日期中当时的结束时间
-     * @param int $time 时间戳
+     * @param DateTime|int|string|null $time 日期/时间
      * @return int
      */
-    public static function endOfHour(int $time = 0): int {
-        if ($time <= 0) {
-            $time = time();
-        }
+    public static function endOfHour($time = null): int {
+        $time = self::timestamp($time);
 
         return strtotime(date("Y-m-d H:59:59", $time));
     }
@@ -377,13 +406,11 @@ class DateHelper {
 
     /**
      * 获取日期中当天的开始时间
-     * @param int $time 时间戳
+     * @param DateTime|int|string|null $time 日期/时间
      * @return int
      */
-    public static function startOfDay(int $time = 0): int {
-        if ($time <= 0) {
-            $time = time();
-        }
+    public static function startOfDay($time = null): int {
+        $time = self::timestamp($time);
 
         return strtotime(date("Y-m-d", $time));
     }
@@ -391,13 +418,11 @@ class DateHelper {
 
     /**
      * 获取日期中当天的结束时间
-     * @param int $time 时间戳
+     * @param DateTime|int|string|null $time 日期/时间
      * @return int
      */
-    public static function endOfDay(int $time = 0): int {
-        if ($time <= 0) {
-            $time = time();
-        }
+    public static function endOfDay($time = null): int {
+        $time = self::timestamp($time);
 
         return strtotime(date("Y-m-d 23:59:59", $time));
     }
@@ -405,13 +430,11 @@ class DateHelper {
 
     /**
      * 获取日期中当月的开始时间
-     * @param int $time 时间戳
+     * @param DateTime|int|string|null $time 日期/时间
      * @return int
      */
-    public static function startOfMonth(int $time = 0): int {
-        if ($time <= 0) {
-            $time = time();
-        }
+    public static function startOfMonth($time = null): int {
+        $time = self::timestamp($time);
 
         return strtotime(date("Y-m-1", $time));
     }
@@ -419,13 +442,11 @@ class DateHelper {
 
     /**
      * 获取日期中当月的结束时间
-     * @param int $time 时间戳
+     * @param DateTime|int|string|null $time 日期/时间
      * @return int
      */
-    public static function endOfMonth(int $time = 0): int {
-        if ($time <= 0) {
-            $time = time();
-        }
+    public static function endOfMonth($time = null): int {
+        $time = self::timestamp($time);
 
         return strtotime(date("Y-m-t 23:59:59", $time));
     }
@@ -433,13 +454,11 @@ class DateHelper {
 
     /**
      * 获取日期中当年的开始时间
-     * @param int $time 时间戳
+     * @param DateTime|int|string|null $time 日期/时间
      * @return int
      */
-    public static function startOfYear(int $time = 0): int {
-        if ($time <= 0) {
-            $time = time();
-        }
+    public static function startOfYear($time = null): int {
+        $time = self::timestamp($time);
 
         return strtotime(date("Y-1-1", $time));
     }
@@ -447,13 +466,11 @@ class DateHelper {
 
     /**
      * 获取日期中当年的结束时间
-     * @param int $time 时间戳
+     * @param DateTime|int|string|null $time 日期/时间
      * @return int
      */
-    public static function endOfYear(int $time = 0): int {
-        if ($time <= 0) {
-            $time = time();
-        }
+    public static function endOfYear($time = null): int {
+        $time = self::timestamp($time);
 
         return strtotime(date("Y-12-31 23:59:59", $time));
     }
@@ -461,11 +478,11 @@ class DateHelper {
 
     /**
      * 获取日期中当周的开始时间
-     * @param int $time 时间戳
+     * @param DateTime|int|string|null $time 日期/时间
      * @param int $weekStartDay 周几作为周的第一天;从 1 （表示星期一）到 7 （表示星期日）
      * @return int
      */
-    public static function startOfWeek(int $time = 0, int $weekStartDay = 1): int {
+    public static function startOfWeek($time = null, int $weekStartDay = 1): int {
         $base       = self::startOfDay($time);
         $curWeekDay = date('w', $base);
         $diff       = $curWeekDay - $weekStartDay;
@@ -473,52 +490,28 @@ class DateHelper {
             $diff += 7;
         }
 
-        return $base - 86400 * $diff;
+        return max($base - 86400 * $diff, 0);
     }
 
 
     /**
      * 获取日期中当周的结束时间
-     * @param int $time 时间戳
+     * @param DateTime|int|string|null $time 日期/时间
      * @param int $weekStartDay 周几作为周的第一天;从 1 （表示星期一）到 7 （表示星期日）
      * @return int
      */
-    public static function endOfWeek(int $time = 0, int $weekStartDay = 1): int {
+    public static function endOfWeek($time = null, int $weekStartDay = 1): int {
         $start = self::startOfWeek($time, $weekStartDay);
         return $start + 604799;
     }
 
-    /**
-     * 时间转时间戳
-     *
-     * @Author gjw
-     * @DateTime 2023-04-29
-     *
-     * @param string|int $time 要转成时间戳的时间
-     *
-     * @return int
-     */
-    public static function timestamp($time = null): int {
-        if (is_string($time)) {
-            $time = strtotime($time);
-        }
-
-        if (!$time) {
-            $time = time();
-        }
-
-        return $time;
-    }
 
     /**
      * 获取年份
-     *
-     * @Author gjw
+     * @Author nece001@163.com
      * @DateTime 2023-04-29
-     *
-     * @param string|int $time 要取年份的时间
+     * @param DateTime|int|string|null $time 日期/时间
      * @param string $format 格式
-     *
      * @return string
      */
     public static function year($time = null, string $format = 'Y'): string {
@@ -527,28 +520,22 @@ class DateHelper {
 
     /**
      * 获取月份
-     *
-     * @Author gjw
+     * @Author nece001@163.com
      * @DateTime 2023-04-29
-     *
-     * @param string|int $time 要取月份的时间
+     * @param DateTime|int|string|null $time 日期/时间
      * @param string $format 格式
-     *
      * @return string
      */
-    public static function month($time = null, string $format = 'Y'): string {
+    public static function month($time = null, string $format = 'm'): string {
         return date($format, self::timestamp($time));
     }
 
     /**
      * 获取日
-     *
-     * @Author gjw
+     * @Author nece001@163.com
      * @DateTime 2023-04-29
-     *
-     * @param string|int $time 要取日的时间
+     * @param DateTime|int|string|null $time 日期/时间
      * @param string $format 格式
-     *
      * @return string
      */
     public static function day($time = null, string $format = 'd'): string {
@@ -557,13 +544,10 @@ class DateHelper {
 
     /**
      * 获取时
-     *
-     * @Author gjw
+     * @Author nece001@163.com
      * @DateTime 2023-04-29
-     *
-     * @param string|int $time 要取时的时间
+     * @param DateTime|int|string|null $time 日期/时间
      * @param string $format 格式
-     *
      * @return string
      */
     public static function hour($time = null, string $format = 'h'): string {
@@ -572,13 +556,10 @@ class DateHelper {
 
     /**
      * 获取分钟
-     *
-     * @Author gjw
+     * @Author nece001@163.com
      * @DateTime 2023-04-29
-     *
-     * @param string|int $time 要取分钟的时间
+     * @param DateTime|int|string|null $time 日期/时间
      * @param string $format 格式
-     *
      * @return string
      */
     public static function minute($time = null, string $format = 'i'): string {
@@ -587,13 +568,10 @@ class DateHelper {
 
     /**
      * 获取秒钟
-     *
-     * @Author gjw
+     * @Author nece001@163.com
      * @DateTime 2023-04-29
-     *
-     * @param string|int $time 要取秒钟的时间
+     * @param DateTime|int|string|null $time 日期/时间
      * @param string $format 格式
-     *
      * @return string
      */
     public static function second($time = null, string $format = 's'): string {
@@ -601,99 +579,24 @@ class DateHelper {
     }
 
     /**
-     * 获取年月
-     *
-     * @Author gjw
+     * 比较给定时间是否在两个时间之间
+     * @Author nece001@163.com
      * @DateTime 2023-04-29
-     *
-     * @param string|int $time 要取年月的时间
-     * @param string $format 格式
-     *
-     * @return string
-     */
-    public static function yearMonth($time = null, string $format = 'Y-m'): string {
-        return date($format, self::timestamp($time));
-    }
-
-    /**
-     * 获取月日
-     *
-     * @Author gjw
-     * @DateTime 2023-04-29
-     *
-     * @param string|int $time 要取月日的时间
-     * @param string $format 格式
-     *
-     * @return string
-     */
-    public static function monthDay($time = null, string $format = 'm-d'): string {
-        return date($format, self::timestamp($time));
-    }
-
-    /**
-     * 格式化时间
-     *
-     * @Author gjw
-     * @DateTime 2023-04-29
-     *
-     * @param string|int $time 待格式化的时间
-     * @param string $format 格式
-     *
-     * @return string
-     */
-    public static function format($time = null, $format = 'Y-m-d H:i:s'): string {
-        return date($format, self::timestamp($time));
-    }
-
-    /**
-     * 获取日期时间
-     *
-     * @Author gjw
-     * @DateTime 2023-04-29
-     *
-     * @param string $format 格式
-     * @param string|int $time 要取日期时间的时间
-     *
-     * @return string
-     */
-    public static function dateTime(string $format = 'Y-m-d H:i:s', $time = null): string {
-        return date($format, self::timestamp($time));
-    }
-
-    /**
-     * 测试给定时间是否在两个时间之间
-     *
-     * @Author gjw
-     * @DateTime 2023-04-29
-     *
-     * @param string|int $time 给定时间
-     * @param string|int $start 开始时间
-     * @param string|int $end 结束时间
-     *
+     * @param DateTime|int|string|null $time 给定时间
+     * @param DateTime|int|string|null $start 开始时间
+     * @param DateTime|int|string|null $end 结束时间
      * @return boolean
      */
     public static function isBetween($time, $start = null, $end = null): bool {
-        $timestamp = self::timestamp($time);
-        $start_time = $start ? self::timestamp($start) : null;
-        $end_time = $end ? self::timestamp($end) : null;
+        $time  = self::timestamp($time);
+        $start = self::timestamp($start);
+        $end   = self::timestamp($end);
 
-        if ($start_time || $end_time) {
-            $is_between = true;
-            if ($start_time && $timestamp < $start_time) {
-                return false;
-            }
-
-            if ($end_time) {
-                if ($timestamp <= $end_time) {
-                    return $is_between && true;
-                } else {
-                    return false;
-                }
-            }
-
-            return $is_between;
+        $res = false;
+        if ($time != 0 && $start <= $time && $time <= $end) {
+            $res = true;
         }
 
-        return false;
+        return $res;
     }
 }

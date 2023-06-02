@@ -18,6 +18,31 @@ use Kph\Helpers\DateHelper;
 
 class DateHelperTest extends TestCase {
 
+    public function testTimestamp() {
+        $str   = '2023-06-01 18:07:51';
+        $obj   = new \DateTime($str);
+        $now   = time();
+        $tests = [
+            [null, 0],
+            [0, 0],
+            [-1, 0],
+            [-999, 0],
+            ['', 0],
+            [$str, 1685614071],
+            [$obj, 1685614071],
+            [1685614116, 1685614116],
+        ];
+        foreach ($tests as $test) {
+            $time     = $test[0];
+            $expected = $test[1];
+            $res      = DateHelper::timestamp($test[0]);
+            if ($time) {
+                $this->assertEquals($expected, $res);
+            } else {
+                $this->assertGreaterThanOrEqual($res, $now);
+            }
+        }
+    }
 
     public function testSmartDatetime() {
         $now  = time();
@@ -175,8 +200,9 @@ class DateHelperTest extends TestCase {
 
     public function testStartOfHour() {
         $tests = [
-            [-1, null],
-            [0, null],
+            [-1, '1970-01-01 08:00:00'],
+            [0, date('Y-m-d H:00:00')],
+            [null, date('Y-m-d H:00:00')],
             [strtotime('2020-01-12 18:51:27'), '2020-01-12 18:00:00'],
             [strtotime('2020-03-10 23:04:35'), '2020-03-10 23:00:00'],
             [strtotime('2020-5-6 22:45:49'), '2020-05-06 22:00:00'],
@@ -186,20 +212,16 @@ class DateHelperTest extends TestCase {
         foreach ($tests as $test) {
             $time     = $test[0];
             $expected = DateHelper::startOfHour($time);
-            if ($time <= 0) {
-                $this->assertGreaterThan(0, $expected);
-                $this->assertEquals(date('Y-m-d H:00:00'), date('Y-m-d H:i:s', $expected));
-            } else {
-                $this->assertEquals($test[1], date('Y-m-d H:i:s', $expected));
-            }
+            $this->assertEquals($test[1], date('Y-m-d H:i:s', $expected));
         }
     }
 
 
     public function testEndOfHour() {
         $tests = [
-            [-1, null],
-            [0, null],
+            [-1, '1970-01-01 08:59:59'],
+            [0, date('Y-m-d H:59:59')],
+            [null, date('Y-m-d H:59:59')],
             [strtotime('2020-01-12 18:51:27'), '2020-01-12 18:59:59'],
             [strtotime('2020-03-10 23:04:35'), '2020-03-10 23:59:59'],
             [strtotime('2020-5-6 22:45:49'), '2020-05-06 22:59:59'],
@@ -209,20 +231,16 @@ class DateHelperTest extends TestCase {
         foreach ($tests as $test) {
             $time     = $test[0];
             $expected = DateHelper::endOfHour($time);
-            if ($time <= 0) {
-                $this->assertGreaterThan(0, $expected);
-                $this->assertEquals(date('Y-m-d H:59:59'), date('Y-m-d H:i:s', $expected));
-            } else {
-                $this->assertEquals($test[1], date('Y-m-d H:i:s', $expected));
-            }
+            $this->assertEquals($test[1], date('Y-m-d H:i:s', $expected));
         }
     }
 
 
     public function testStartOfDay() {
         $tests = [
-            [-1, null],
-            [0, null],
+            [-1, '1970-01-01 00:00:00'],
+            [0, date('Y-m-d 00:00:00')],
+            [null, date('Y-m-d 00:00:00')],
             [strtotime('2020-01-12 18:51:27'), '2020-01-12 00:00:00'],
             [strtotime('2020-03-10 23:04:35'), '2020-03-10 00:00:00'],
             [strtotime('2020-5-6 22:45:49'), '2020-05-06 00:00:00'],
@@ -232,20 +250,16 @@ class DateHelperTest extends TestCase {
         foreach ($tests as $test) {
             $time     = $test[0];
             $expected = DateHelper::startOfDay($time);
-            if ($time <= 0) {
-                $this->assertGreaterThan(0, $expected);
-                $this->assertEquals(date('Y-m-d 00:00:00'), date('Y-m-d H:i:s', $expected));
-            } else {
-                $this->assertEquals($test[1], date('Y-m-d H:i:s', $expected));
-            }
+            $this->assertEquals($test[1], date('Y-m-d H:i:s', $expected));
         }
     }
 
 
     public function testEndOfDay() {
         $tests = [
-            [-1, null],
-            [0, null],
+            [-1, '1970-01-01 23:59:59'],
+            [0, date('Y-m-d 23:59:59')],
+            [null, date('Y-m-d 23:59:59')],
             [strtotime('2020-01-12 18:51:27'), '2020-01-12 23:59:59'],
             [strtotime('2020-03-10 23:04:35'), '2020-03-10 23:59:59'],
             [strtotime('2020-5-6 22:45:49'), '2020-05-06 23:59:59'],
@@ -255,20 +269,16 @@ class DateHelperTest extends TestCase {
         foreach ($tests as $test) {
             $time     = $test[0];
             $expected = DateHelper::endOfDay($time);
-            if ($time <= 0) {
-                $this->assertGreaterThan(0, $expected);
-                $this->assertEquals(date('Y-m-d 23:59:59'), date('Y-m-d H:i:s', $expected));
-            } else {
-                $this->assertEquals($test[1], date('Y-m-d H:i:s', $expected));
-            }
+            $this->assertEquals($test[1], date('Y-m-d H:i:s', $expected));
         }
     }
 
 
     public function testStartOfMonth() {
         $tests = [
-            [-1, null],
-            [0, null],
+            [-1, '1970-01-01 00:00:00'],
+            [0, date('Y-m-01 00:00:00')],
+            [null, date('Y-m-01 00:00:00')],
             [strtotime('2020-01-12 18:51:27'), '2020-01-01 00:00:00'],
             [strtotime('2020-03-10 23:04:35'), '2020-03-01 00:00:00'],
             [strtotime('2020-5-6 22:45:49'), '2020-05-01 00:00:00'],
@@ -278,20 +288,16 @@ class DateHelperTest extends TestCase {
         foreach ($tests as $test) {
             $time     = $test[0];
             $expected = DateHelper::startOfMonth($time);
-            if ($time <= 0) {
-                $this->assertGreaterThan(0, $expected);
-                $this->assertEquals(date('Y-m-01 00:00:00'), date('Y-m-d H:i:s', $expected));
-            } else {
-                $this->assertEquals($test[1], date('Y-m-d H:i:s', $expected));
-            }
+            $this->assertEquals($test[1], date('Y-m-d H:i:s', $expected));
         }
     }
 
 
     public function testEndOfMonth() {
         $tests = [
-            [-1, null],
+            [-1, '1970-01-31 23:59:59'],
             [0, null],
+            [null, null],
             [strtotime('2020-01-12 18:51:27'), '2020-01-31 23:59:59'],
             [strtotime('2020-03-10 23:04:35'), '2020-03-31 23:59:59'],
             [strtotime('2020-5-6 22:45:49'), '2020-05-31 23:59:59'],
@@ -301,9 +307,10 @@ class DateHelperTest extends TestCase {
         foreach ($tests as $test) {
             $time     = $test[0];
             $expected = DateHelper::endOfMonth($time);
-            if ($time <= 0) {
-                $this->assertGreaterThan(0, $expected);
-                $this->assertEquals(date('Y-m 23:59:59'), date('Y-m H:i:s', $expected));
+            if (!$time) {
+                $d   = DateHelper::getMonthDays(DateHelper::month($time), DateHelper::year($time));
+                $fmt = "Y-m-{$d} 23:59:59";
+                $this->assertEquals(date($fmt), date('Y-m-d H:i:s', $expected));
             } else {
                 $this->assertEquals($test[1], date('Y-m-d H:i:s', $expected));
             }
@@ -313,8 +320,9 @@ class DateHelperTest extends TestCase {
 
     public function testStartOfYear() {
         $tests = [
-            [-1, null],
-            [0, null],
+            [-1, '1970-01-01 00:00:00'],
+            [0, date('Y-01-01 00:00:00')],
+            [null, date('Y-01-01 00:00:00')],
             [strtotime('2017-01-12 18:51:27'), '2017-01-01 00:00:00'],
             [strtotime('2018-03-10 23:04:35'), '2018-01-01 00:00:00'],
             [strtotime('2019-5-6 22:45:49'), '2019-01-01 00:00:00'],
@@ -324,20 +332,16 @@ class DateHelperTest extends TestCase {
         foreach ($tests as $test) {
             $time     = $test[0];
             $expected = DateHelper::startOfYear($time);
-            if ($time <= 0) {
-                $this->assertGreaterThan(0, $expected);
-                $this->assertEquals(date('Y-01-01 00:00:00'), date('Y-m-d H:i:s', $expected));
-            } else {
-                $this->assertEquals($test[1], date('Y-m-d H:i:s', $expected));
-            }
+            $this->assertEquals($test[1], date('Y-m-d H:i:s', $expected));
         }
     }
 
 
     public function testEndOfYear() {
         $tests = [
-            [-1, null],
-            [0, null],
+            [-1, '1970-12-31 23:59:59'],
+            [0, date('Y-12-31 23:59:59')],
+            [null, date('Y-12-31 23:59:59')],
             [strtotime('2017-01-12 18:51:27'), '2017-12-31 23:59:59'],
             [strtotime('2018-03-10 23:04:35'), '2018-12-31 23:59:59'],
             [strtotime('2019-5-6 22:45:49'), '2019-12-31 23:59:59'],
@@ -347,20 +351,13 @@ class DateHelperTest extends TestCase {
         foreach ($tests as $test) {
             $time     = $test[0];
             $expected = DateHelper::endOfYear($time);
-            if ($time <= 0) {
-                $this->assertGreaterThan(0, $expected);
-                $this->assertEquals(date('Y-12-31 23:59:59'), date('Y-m-d H:i:s', $expected));
-            } else {
-                $this->assertEquals($test[1], date('Y-m-d H:i:s', $expected));
-            }
+            $this->assertEquals($test[1], date('Y-m-d H:i:s', $expected));
         }
     }
 
 
     public function testStartOfWeek() {
         $tests = [
-            [-1, 1, null],
-            [0, 1, null],
             [strtotime('2020-1-2 22:45:49'), 1, '2019-12-30 00:00:00'],
             [strtotime('2020-1-2 22:45:49'), 2, '2019-12-31 00:00:00'],
             [strtotime('2020-1-2 22:45:49'), 3, '2020-01-01 00:00:00'],
@@ -375,14 +372,13 @@ class DateHelperTest extends TestCase {
             $weekStartDay = $test[1];
             $expected     = DateHelper::startOfWeek($time, $weekStartDay);
             $this->assertEquals($weekStartDay, date('N', $expected));
+            $this->assertEquals($test[2], date('Y-m-d H:i:s', $expected));
         }
     }
 
 
     public function testEndOfWeek() {
         $tests = [
-            [-1, 1, null],
-            [0, 1, null],
             [strtotime('2020-1-2 22:45:49'), 1, '2020-01-05 23:59:59'],
             [strtotime('2020-1-2 22:45:49'), 2, '2020-01-06 23:59:59'],
             [strtotime('2020-1-2 22:45:49'), 3, '2020-01-07 23:59:59'],
@@ -396,32 +392,28 @@ class DateHelperTest extends TestCase {
             $time         = $test[0];
             $weekStartDay = $test[1];
             $expected     = DateHelper::endOfWeek($time, $weekStartDay);
-            if ($time <= 0) {
-                $this->assertGreaterThan(0, $expected);
-                $this->assertEquals(7, date('N', $expected));
-            } else {
-                $this->assertEquals($test[2], date('Y-m-d H:i:s', $expected));
-            }
+            $this->assertEquals($test[2], date('Y-m-d H:i:s', $expected));
         }
     }
+
 
     public function testIsBetween() {
         $tests = [
             ['2023-02-01', '2023-01-01', '2023-03-01', true],
             ['2022-02-01', '2023-01-01', '2023-03-01', false],
             ['2023-02-01', '2023-01-01', null, true],
-            ['2023-02-01', null, '2023-03-01', true],
-            ['2023-05-01', null, '2023-03-01', false],
-            ['2023-05-01', '2023-01-01', null, true],
+            ['2023-02-01', null, '2023-03-01', false],
+            ['2023-02-13', '2023-03-01', null, false],
+            ['2023-05-04', '2023-01-01', null, true],
+            ['2023-05-05', null, null, false],
         ];
 
         foreach ($tests as $key => $test) {
-            $time = $test[0];
-            $start = $test[1];
-            $end = $test[2];
+            $time     = $test[0];
+            $start    = $test[1];
+            $end      = $test[2];
             $expected = $test[3];
-            $result = DateHelper::isBetween($time, $start, $end);
-
+            $result   = DateHelper::isBetween($time, $start, $end);
             $this->assertEquals($expected, $result, '[' . $key . '] 不符预期' . print_r($test, true));
         }
     }
