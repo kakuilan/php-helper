@@ -26,32 +26,34 @@ jobs:
           - "7.2"
           - "7.3"
           - "7.4"
-          #- "8.0"
+          - "8.0"
+          - "8.1"
+          - "8.2"
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    - name: Install PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: ${{ matrix.php-version }}
-        coverage: xdebug2
-        extensions: ${{ env.PHP_EXTENSIONS }}
-        ini-values: ${{ env.PHP_INI_VALUES }}
-        tools: composer
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: xdebug2
+          extensions: ${{ env.PHP_EXTENSIONS }}
+          ini-values: ${{ env.PHP_INI_VALUES }}
+          tools: composer
 
-    - name: Update dependencies with composer
-      run: composer update --no-ansi --no-interaction --no-progress
+      - name: Update dependencies with composer
+        run: composer update --no-ansi --no-interaction --no-progress
 
-    - name: Run tests with phpunit
-      run: vendor/bin/phpunit --bootstrap=tests/bootstrap.php --coverage-clover=coverage.xml ./tests/
+      - name: Run tests with phpunit
+        run: vendor/bin/phpunit --bootstrap=tests/bootstrap.php --coverage-clover=coverage.xml ./tests/
 
-    - name: Show info
-      run: ls -a -h ./ && ls -a -h ./tests
+      - name: Show info
+        run: ls -a -h ./ && ls -a -h ./tests
 
-    - name: Send code coverage report to Codecov.io
-      uses: codecov/codecov-action@v2
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        #directory: ./tests/
+      - name: Send code coverage report to Codecov.io
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          #directory: ./tests/

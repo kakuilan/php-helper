@@ -390,7 +390,7 @@ class OsHelper {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
             $dataBlock = curl_exec($ch);
-            //var_dump('--------curl error:', curl_error($ch));
+
             curl_close($ch);
         }
         if (empty($dataBlock)) {
