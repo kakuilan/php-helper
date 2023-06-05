@@ -1087,61 +1087,12 @@ class StringHelper {
     /**
      * 计算密码安全等级
      * @param string $str 密码
-     * @return int 等级0~4
+     * @return int 等级0~4:为0 极弱,为1 弱,为2 一般,为3 很好,为4 极佳.
      */
     public static function passwdSafeGrade(string $str): int {
-        $special = '/[\W_]/'; //特殊字符
-        $partArr = [
-            '/[0-9]/',
-            '/[a-z]/',
-            '/[A-Z]/',
-            $special,
-        ];
-        $score   = 0;
-        $leng    = strlen($str);
-
-        //根据长度加分
-        if ($leng > 0) {
-            $score += ($leng >= 6) ? $leng : 1;
-            //根据类型加分
-            foreach ($partArr as $part) {
-                //某类型存在加分
-                if (preg_match($part, $str)) {
-                    $score += ($part == $special) ? 7 : 3;
-                }
-
-                $regexCount = preg_match_all($part, $str, $out);//某类型存在，并且存在个数大于2加2分，个数大于5加6分
-                if ($regexCount >= 5) {
-                    $score += 6;
-                } elseif ($regexCount >= 2) {
-                    $score += 2;
-                }
-            }
-        }
-
-        //重复检测
-        $repeatChar  = '';
-        $repeatCount = 0;
-        for ($i = 0; $i < $leng; $i++) {
-            if ($str[$i] == $repeatChar) {
-                $repeatCount++;
-            } else {
-                $repeatChar = $str[$i];
-            }
-        }
-        $score -= $repeatCount * 2;
-
-        //等级
-        if ($score <= 0) { //极弱
-            $level = 0;
-        } elseif ($score <= 20) { //弱
-            $level = 1;
-        } elseif ($score <= 30) { //一般
-            $level = 2;
-        } elseif ($score <= 40) { //很好
-            $level = 3;
-        } else { //极佳
-            $level = 4;
+        $length = strlen($str);
+        if ($length == 0) {
+            return 0;
         }
 
         //如果是弱密码
@@ -1174,9 +1125,56 @@ class StringHelper {
         ];
         foreach ($weakPwds as $weakPwd) {
             if ($str == $weakPwd || stripos($weakPwd, $str) !== false) {
-                $level = 1;
-                break;
+                return 1;
             }
+        }
+
+        $scoreTotal       = 0; //总分
+        $scoreAlphaNumber = 0; //字母数字得分
+        $scoreSpecial     = 0; //特殊字符得分
+        $chars            = []; //字符集合
+
+        //根据长度加分
+        $scoreTotal += ($length >= 6) ? $length : 1;
+
+        for ($i = 0; $i < $length; $i++) {
+            $char = $str[$i];
+            $key  = md5($char);
+            if (isset($chars[$key])) {
+                $chars[$key] += 1;
+            } else {
+                $chars[$key] = 1;
+            }
+
+            if (!ValidateHelper::isAlphaNum($char)) {
+                $scoreSpecial += ($scoreSpecial == 0) ? 6 : 2;
+            } elseif ($scoreAlphaNumber == 0) {
+                $scoreAlphaNumber = 3;
+            } else {
+                $scoreTotal += 1;
+            }
+        }
+
+        $scoreTotal += $scoreAlphaNumber + $scoreSpecial;
+
+        //重复性检查
+        foreach ($chars as $char => $num) {
+            if ($num > 1) {
+                $scoreTotal -= 1;
+            }
+        }
+
+        //等级
+        if ($scoreTotal <= 0) { //极弱
+            $level = 0;
+        } elseif ($scoreTotal <= 20) { //弱
+            $level = 1;
+        } elseif ($scoreTotal <= 30) { //一般
+            $level = 2;
+        } elseif ($scoreTotal <= 40) { //很好
+            $level = 3;
+        } else { //极佳
+            $level = 4;
         }
 
         return $level;

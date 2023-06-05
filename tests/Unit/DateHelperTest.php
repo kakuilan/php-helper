@@ -37,8 +37,8 @@ class DateHelperTest extends TestCase {
         foreach ($tests as $test) {
             $time     = $test[0];
             $expected = $test[1];
-            $res      = DateHelper::timestamp($time);
-            $this->assertGreaterThanOrEqual($res, $expected);
+            $actual      = DateHelper::timestamp($time);
+            $this->assertGreaterThanOrEqual($expected, $actual);
         }
     }
 
@@ -144,8 +144,9 @@ class DateHelperTest extends TestCase {
         ];
 
         foreach ($tests as $test) {
-            $expected = DateHelper::getXingZuo($test[0]);
-            $this->assertEquals($test[1], $expected);
+            $expected = $test[1];
+            $actual = DateHelper::getXingZuo($test[0]);
+            $this->assertEquals($expected, $actual);
         }
     }
 
@@ -172,8 +173,9 @@ class DateHelperTest extends TestCase {
         ];
 
         foreach ($tests as $test) {
-            $expected = DateHelper::getShengXiao($test[0]);
-            $this->assertEquals($test[1], $expected);
+            $expected = $test[1];
+            $actual = DateHelper::getShengXiao($test[0]);
+            $this->assertEquals($expected, $actual);
         }
     }
 

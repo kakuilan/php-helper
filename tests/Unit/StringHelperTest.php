@@ -590,16 +590,22 @@ EOF;
         $tests = [
             ['', 0],
             ['12abc', 1],
-            ['123456', 1],
+            ['01234567890', 1],
             ['1223456', 1],
             ['abc123456', 1],
+            ['HelloWorld', 1],
+            ["abc@123456", 2],
+            ["abc@123aPPT", 2],
             ['pwd@12345', 2],
-            ['pwd@123aPPT', 3],
+            ['pwd@123aPPT', 2],
+            ["tcl@123a#PPT", 3],
+            ['SGVsbG8gV29ybGQhIOS9oOWlve+8gQ==', 4],
             ['bom7o++iQ,B)aWxD>a?MkmXR9', 4],
         ];
         foreach ($tests as $test) {
-            $expected = StringHelper::passwdSafeGrade($test[0]);
-            $this->assertEquals($expected, $test[1]);
+            $expected = $test[1];
+            $actual   = StringHelper::passwdSafeGrade($test[0]);
+            $this->assertEquals($expected, $actual);
         }
     }
 
