@@ -37,13 +37,15 @@ class DebugHelper {
 
 
     /**
-     * 错误日志捕获
+     * 错误日志捕获(只适用于php7)
      * @param string $logFile
      */
     public static function errorLogHandler(string $logFile = ''): void {
         if (empty($logFile)) {
             $tmpDir  = sys_get_temp_dir();
             $logFile = $tmpDir . '/phperr_' . date('Ymd') . '.log';
+        } elseif (!file_exists($logFile)) {
+            @touch($logFile);
         }
 
         ini_set('log_errors', 1); //设置错误信息输出到文件

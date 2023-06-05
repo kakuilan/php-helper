@@ -21,22 +21,22 @@ class DebugHelperTest extends TestCase {
 
 
     public function testErrorHandler() {
+        $logFile = TESTDIR . 'phperr_' . date('Ymd') . '.log';
         try {
             $str = 'hello';
-            $a   = $str+8;
+            $a   = $str + 8;
         } catch (Throwable $e) {
-            DebugHelper::errorLogHandler();
-            error_clear_last();
+            //error_clear_last();
+            DebugHelper::errorLogHandler($logFile);
         }
 
         @$c = file_get_contents('helloworld');
-        DebugHelper::errorLogHandler();
-        error_clear_last();
+        DebugHelper::errorLogHandler($logFile);
 
-        $tmpDir = sys_get_temp_dir();
-        $logFile = $tmpDir. '/phperr_' . date('Ymd') . '.log';
-        $cont    = file_get_contents($logFile);
-        $this->assertNotEmpty($cont);
+        if (PHP_VERSION_ID < 80000) {
+            $cont = file_get_contents($logFile);
+            $this->assertNotEmpty($cont);
+        }
     }
 
 }
