@@ -26,14 +26,14 @@ class DateHelper {
      * @return int
      */
     public static function timestamp($time = null): int {
-        if (is_string($time) && !is_numeric($time)) {
-            $res = strtotime($time);
+        if (is_null($time) || $time === '') {
+            $res = time();
+        } elseif (is_string($time) && !is_numeric($time)) {
+            $res = strtotime(trim($time));
         } elseif ($time instanceof DateTime) {
             $res = $time->getTimestamp();
-        } elseif (!$time) {
-            $res = time();
         } else {
-            $res = max(intval($time), 0);
+            $res = intval($time);
         }
 
         return $res;
