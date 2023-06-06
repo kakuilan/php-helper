@@ -42,6 +42,13 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
 
 
     /**
+     * 已销毁字段
+     * @var array
+     */
+    private $unsetFields = [];
+
+
+    /**
      * StrictObject constructor.
      * @param array $vars
      * @throws Throwable
@@ -158,6 +165,12 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
             }
         }
 
+        //从销毁字段中移除
+        $idx = array_search($name, $this->unsetFields);
+        if ($idx != false) {
+            unset($this->unsetFields[$name]);
+        }
+
         return $this->__undefinedSetWarn($name);
     }
 
@@ -168,13 +181,14 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
      * @return bool
      */
     public function isset($name): bool {
-        $res = isset($this->$name);
-        if (!$res) {
-            try {
-                $res = is_null($this->$name);
-            } catch (Error $e) {
-            } catch (Throwable $e) {
-            }
+        if (is_null($name) || $name == '') {
+            return false;
+        }
+
+        $res = isset($this->$name); //不能检查null值
+        if (!$res && !in_array($name, $this->unsetFields)) {
+            $fields = get_class_vars($this);
+            $res    = array_key_exists($name, $fields);
         }
 
         return $res;
@@ -186,7 +200,16 @@ class StrictObject extends BaseObject implements JsonSerializable, Arrayable, Js
      * @param $name
      */
     public function unset($name): void {
-        unset($this->$name, $this->jsonFields[$name]);
+        if (is_null($name) || $name == '') {
+            return;
+        }
+
+        if (is_null($this->jsonFields)) {
+            $this->getJsonFields();
+        }
+
+        unset($this->$name);
+        array_push($this->unsetFields, $name);
     }
 
 

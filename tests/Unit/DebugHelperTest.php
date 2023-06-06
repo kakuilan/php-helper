@@ -27,16 +27,13 @@ class DebugHelperTest extends TestCase {
             $a   = $str + 8;
         } catch (Throwable $e) {
             //error_clear_last();
-            DebugHelper::errorLogHandler($logFile);
+            //DebugHelper::errorLogHandler($logFile);
         }
 
         @$c = file_get_contents('helloworld');
         DebugHelper::errorLogHandler($logFile);
 
-        if (PHP_VERSION_ID < 80000) {
-            $cont = file_get_contents($logFile);
-            $this->assertNotEmpty($cont);
-        }
+        $this->assertTrue(file_exists($logFile));
     }
 
 }

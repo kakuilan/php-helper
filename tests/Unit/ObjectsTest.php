@@ -11,7 +11,7 @@ namespace Kph\Tests\Unit;
 
 use Kph\Helpers\ValidateHelper;
 use PHPUnit\Framework\TestCase;
-usE Kph\Helpers\ArrayHelper;
+use Kph\Helpers\ArrayHelper;
 use Kph\Objects\ArrayObject;
 use Kph\Objects\BaseObject;
 use Kph\Tests\Objects\BaseCls;
@@ -135,12 +135,16 @@ class ObjectsTest extends TestCase {
             $this->assertTrue(stripos($e->getMessage(), 'Undefined writable property') !== false);
         }
 
-        // 销毁属性
+        // 属性值为null
         $key = 'name';
         $this->assertEquals(true, $striObj->isset($key));
+        $striObj->set($key, null);
+        $this->assertEquals(true, $striObj->isset($key));
+
+        // 销毁属性
         $striObj->unset($key);
         $this->assertEquals(false, $striObj->isset($key));
-        $this->assertEquals(false, $striObj->isset('null'));
+        $this->assertEquals(false, $striObj->isset(null));
 
         // json化
         $json1 = json_encode($striObj);
