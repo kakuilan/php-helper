@@ -1,8 +1,15 @@
 # php-helper
 
-k`s php helper/library/utils  
-php 常用函数库/工具集,仅测试支持php 7.2/7.3/7.4/8.0/8.1/8.2  
-包括数组、文件、验证、字符串、加解密等操作,具体见src/Helpers
+k's php helper/library/utils  
+php 常用函数库/工具集,包括数组、文件、验证、字符串、加解密等操作,具体见`src/Helpers`.  
+支持的php版本有:
+
+- 7.2
+- 7.3
+- 7.4
+- 8.0
+- 8.1
+- 8.2
 
 ### 相关
 

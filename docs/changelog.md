@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.4.8]- 2023-06-06
+
+#### Added
+
+- none
+
+#### Fixed
+
+- 修复`StrictObject::isset`
+
+#### Changed
+
+- 优化`DateHelper::timestamp`
+- 优化`DateHelper::isBetween`
+- 优化`StringHelper::passwdSafeGrade`
+
+#### Removed
+
+- 移除`DateHelper::dateTime`
+- 移除`DateHelper::yearMonth`
+- 移除`DateHelper::monthDay`
+
 ## [v0.4.7]- 2023-05-04
 
 #### Added
