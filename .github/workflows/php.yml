@@ -46,7 +46,7 @@ jobs:
         run: composer update --no-ansi --no-interaction --no-progress
 
       - name: Run tests with phpunit
-        run: vendor/bin/phpunit --version && vendor/bin/phpunit
+        run: vendor/bin/phpunit --version && vendor/bin/phpunit --bootstrap=tests/bootstrap.php ./tests/
 
       - name: Show info
         run: ls -a -h ./ && ls -a -h ./tests
