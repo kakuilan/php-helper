@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.4.9]- 2023-06-15
+
+#### Added
+
+- none
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- 修改`BaseService::$result`类型为mixed
+
+#### Removed
+
+- none
+
 ## [v0.4.8]- 2023-06-06
 
 #### Added
