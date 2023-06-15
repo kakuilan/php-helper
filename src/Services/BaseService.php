@@ -37,9 +37,9 @@ class BaseService extends StrictObject {
 
     /**
      * 处理结果
-     * @var array
+     * @var mixed
      */
-    public $result = [];
+    public $result = null;
 
 
     /**
@@ -113,19 +113,19 @@ class BaseService extends StrictObject {
 
     /**
      * 设置结果
-     * @param array $arr
+     * @param mixed $arr
      * @return void
      */
-    public function setResult(array $arr): void {
+    public function setResult($arr): void {
         $this->result = $arr;
     }
 
 
     /**
      * 获取结果
-     * @return array
+     * @return mixed
      */
-    public function getResult(): array {
+    public function getResult(): mixed {
         return $this->result;
     }
 
