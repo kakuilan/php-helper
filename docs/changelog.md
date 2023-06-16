@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.5.0]- 2023-06-16
+
+#### Added
+
+- none
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- 修改`BaseService::getResult`,取消类型限制
+
+#### Removed
+
+- none
+
 ## [v0.4.9]- 2023-06-15
 
 #### Added
