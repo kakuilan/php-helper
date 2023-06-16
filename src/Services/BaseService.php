@@ -125,7 +125,7 @@ class BaseService extends StrictObject {
      * 获取结果
      * @return mixed
      */
-    public function getResult(): mixed {
+    public function getResult() {
         return $this->result;
     }
 
