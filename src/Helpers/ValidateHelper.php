@@ -154,7 +154,7 @@ class ValidateHelper {
      * @return bool
      */
     public static function isUrl(string $val): bool {
-        return !empty($val) && filter_var($val, FILTER_VALIDATE_URL) && preg_match(RegularHelper::$patternUrl, $val);
+        return !empty($val) && (filter_var($val, FILTER_VALIDATE_URL) || preg_match(RegularHelper::$patternUrl, $val));
     }
 
 

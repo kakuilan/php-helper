@@ -223,7 +223,9 @@ class ValidateHelperTest extends TestCase {
             ['hello', false],
             ["a.com", false],
             ["http://192.168.1.2:8080/abc/hell?name=li&age=4", true],
-            ["http://google.com", true],
+            ["https://test_shouhuodingdan.pinduoduou.com/api/pay/order", true],
+            ["https://www.google.com/search?source=hp&ei=tDUwXejNGs6DoATYkqCYCA&q=golang&oq=golang&gs_l=psy-ab.3..35i39l2j0i67l8.1729.2695..2888...1.0..0.126.771.2j5......0....1..gws-wiz.....10..0.fFQmXkC_LcQ&ved=0ahUKEwjo9-H7jb7jAhXOAYgKHVgJCIMQ4dUDCAU&uact=5", true],
+            ["http://baidu.com", true],
         ];
         foreach ($tests as $test) {
             $expected = ValidateHelper::isUrl($test[0]);
