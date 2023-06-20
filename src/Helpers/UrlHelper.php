@@ -229,11 +229,16 @@ class UrlHelper {
             $server = $_SERVER;
         }
 
-        $protocal  = ($server['SERVER_PORT'] ?? '') == '443' ? 'https://' : 'http://';
-        $phpSelf   = $server['PHP_SELF'] ?? $server['SCRIPT_NAME'];
-        $pathInfo  = $server['PATH_INFO'] ?? '';
-        $relateUrl = $server['REQUEST_URI'] ?? ltrim($phpSelf, '/') . (isset($server['QUERY_STRING']) ? '?' . $server['QUERY_STRING'] : $pathInfo);
-        return $protocal . ($server['HTTP_HOST'] ?? '') . $relateUrl;
+        $host     = $server['HTTP_HOST'] ?? '';
+        $uri      = $server['REQUEST_URI'] ?? '';
+        $protocal = $server['REQUEST_SCHEME'] ?? 'http';
+        if (empty($host)) {
+            return '';
+        }
+
+        $res = "{$protocal}://{$host}{$uri}";
+
+        return $res;
     }
 
 

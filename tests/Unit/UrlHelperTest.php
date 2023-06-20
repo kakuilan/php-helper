@@ -110,7 +110,7 @@ class UrlHelperTest extends TestCase {
         $this->assertEquals('test.loc', $res6);
 
         $res7 = UrlHelper::getUrl();
-        $chk = ValidateHelper::isUrl($res7);
+        $chk  = ValidateHelper::isUrl($res7);
         var_dump('---------------:', $res7, $chk);
         $this->assertFalse($chk);
 
