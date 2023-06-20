@@ -111,7 +111,6 @@ class UrlHelperTest extends TestCase {
 
         $res7 = UrlHelper::getUrl();
         $chk  = ValidateHelper::isUrl($res7);
-        var_dump('---------------:', $res7, $chk);
         $this->assertFalse($chk);
 
         $res8 = UrlHelper::getUri();
