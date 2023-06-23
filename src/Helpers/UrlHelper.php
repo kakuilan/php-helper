@@ -229,14 +229,25 @@ class UrlHelper {
             $server = $_SERVER;
         }
 
-        $host     = $server['HTTP_HOST'] ?? '';
-        $uri      = $server['REQUEST_URI'] ?? '';
-        $protocal = $server['REQUEST_SCHEME'] ?? 'http';
+        $host = $server['HTTP_HOST'] ?? '';
+        $uri  = $server['REQUEST_URI'] ?? '';
+
+        $scheme = $server['HTTP_X_FORWARDED_PROTO'] ?? '';
+        if (empty($scheme) && isset($server['HTTP_CF_VISITOR'])) {
+            $obj = json_decode(strval($server['HTTP_CF_VISITOR']), true);
+            if ($obj && is_object($obj)) {
+                $scheme = $obj->scheme ?? '';
+            }
+        }
+        if (empty($scheme)) {
+            $scheme = $server['REQUEST_SCHEME'] ?? 'http';
+        }
+
         if (empty($host)) {
             return '';
         }
 
-        $res = "{$protocal}://{$host}{$uri}";
+        $res = "{$scheme}://{$host}{$uri}";
 
         return $res;
     }
