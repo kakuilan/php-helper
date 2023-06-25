@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.5.2]- 2023-06-25
+
+#### Added
+
+- none
+
+#### Fixed
+
+- 修复`UrlHelper::getUrl`
+
+#### Changed
+
+- none
+
+#### Removed
+
+- none
+
 ## [v0.5.1]- 2023-06-20
 
 #### Added
