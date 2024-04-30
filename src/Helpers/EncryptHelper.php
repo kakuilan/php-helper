@@ -74,7 +74,7 @@ class EncryptHelper {
         $keyLength = strlen($cryptkey);
 
         if ($encode) {
-            if ($expiry == 0) {
+            if ($expiry <= 0) {
                 $expiry = 3153600000; //100年
             }
             $expiry = $expiry + $now;

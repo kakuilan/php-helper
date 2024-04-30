@@ -12,11 +12,17 @@ namespace Kph\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use Error;
 use Exception;
+use Kph\Consts;
 use Kph\Helpers\EncryptHelper;
 use Kph\Helpers\StringHelper;
 
 
 class EncryptHelperTest extends TestCase {
+    private static $strHello      = "Hello World! 你好，世界！";
+    private static $strHelloEmoji = "Hello World! 你好，世界！안녕, 세계！ Olá mundo,With Emojis:😃🐳📜💯⌚";
+    private static $strJson       = '{"id":9999,"url":"https://baidu.com"}';
+    private static $emptyMd5      = "d41d8cd98f00b204e9800998ecf8427e";
+
 
     public function testBase64UrlEncodeDecode() {
         $str  = "https://tool.google.com.net/encrypt?type=4Hello World! 你好！";
@@ -33,7 +39,7 @@ class EncryptHelperTest extends TestCase {
         $origin = 'hello world!';
         $key    = '123456';
 
-        $enres = EncryptHelper::authcode($origin, $key, true, 3600);
+        $enres = EncryptHelper::authcode($origin, $key, true, Consts::TTL_ONE_YEAR);
         $deres = EncryptHelper::authcode($enres[0], $key, false);
         $this->assertEquals($origin, $deres[0]);
         $this->assertEquals($enres[1], $deres[1]);
@@ -48,6 +54,25 @@ class EncryptHelperTest extends TestCase {
 
         $res4 = EncryptHelper::authcode('681ff2aaPIUK-k3oHs4StYD', $key, false);
         $this->assertEquals('', $res4[0]);
+
+        $enres = EncryptHelper::authcode(self::$strHello, self::$emptyMd5, true, 0);
+        //res:8c9eb7905a6SdXZfm-GoJpYKu6CzMgF0I-7neF-x3UKIUpYuIZSnK_2ZqaYSZlZw0Ofzwa2Bn0QZ6b4SLzSz
+        $deres = EncryptHelper::authcode($enres[0], self::$emptyMd5, false);
+        $this->assertEquals(self::$strHello, $deres[0]);
+        $this->assertEquals($enres[1], $deres[1]);
+
+        $enres = EncryptHelper::authcode(self::$strHelloEmoji, self::$emptyMd5, true, 0);
+        //res:b42374af3DqX22zi207OJXsz6xP2vEXto39TPK_UzcJOdDZV0kQHPUFm5JOw-aWISFi0snglsrYtp5tpYGRuhgw50TPY8UnFSf912uZI38vGON0KHqAgCatmtdoBZ4VJI6IkHio-JLxbt8hkuCz1HCOElUkZxBMnGUle
+        $deres = EncryptHelper::authcode($enres[0], self::$emptyMd5, false);
+        $this->assertEquals(self::$strHelloEmoji, $deres[0]);
+        $this->assertEquals($enres[1], $deres[1]);
+
+        $key   = substr(self::$emptyMd5, 0, 16);
+        $enres = EncryptHelper::authcode(self::$strJson, $key, true, 0);
+        //res:52a0945eK4NyxvnjEBnPlToROzO4KLKE9VvrqtxAiLPVPDK-HkvzahyMbxydmSifc3TQIo4mbsi9gzq7vbJ64YzpB_DP
+        $deres = EncryptHelper::authcode($enres[0], $key, false);
+        $this->assertEquals(self::$strJson, $deres[0]);
+        $this->assertEquals($enres[1], $deres[1]);
     }
 
 

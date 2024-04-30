@@ -28,6 +28,7 @@ class Consts {
     //有效期时间
     const TTL_LONG       = 0; //永久
     const TTL_DEFAULT    = 1800; //默认时间30分钟
+    const TTL_ONE_YEAR   = 31536000; //时间1年
     const TTL_ONE_MONTH  = 2592000; //时间1月
     const TTL_HALF_MONTH = 1296000; //时间0.5月
     const TTL_ONE_WEEK   = 604800; //时间1周
