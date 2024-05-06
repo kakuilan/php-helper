@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.5.3]- 2024-05-06
+
+#### Added
+
+- none
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- 优化`EncryptHelper::authcode`
+
+#### Removed
+
+- none
+
 ## [v0.5.2]- 2023-06-25
 
 #### Added
