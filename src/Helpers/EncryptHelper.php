@@ -49,7 +49,7 @@ class EncryptHelper {
      * @param string $data 数据
      * @param string $key 密钥
      * @param bool $encode 操作:true时为加密,false时为解密
-     * @param int $expiry 有效期/秒,为0时代表永久(100年)
+     * @param int $expiry 有效期/秒,0为永久(100年),负数为已过期
      * @return array
      */
     public static function authcode(string $data, string $key, bool $encode = true, int $expiry = 0): array {
@@ -74,7 +74,7 @@ class EncryptHelper {
         $keyLength = strlen($cryptkey);
 
         if ($encode) {
-            if ($expiry <= 0) {
+            if ($expiry == 0) {
                 $expiry = 3153600000; //100年
             }
             $expiry = $expiry + $now;
